@@ -10,13 +10,17 @@ const directories = fs
 if (process.argv.includes("lint")) {
   directories.forEach((dir) => {
     try {
-      console.log(`Running "npm run lint" in directory: ${dir}`);
+      console.log();
+      console.log();
+      console.log(`=== Running "npm run lint" in directory: ${dir} ===`);
       execSync("npm run lint", {
         cwd: dir,
         stdio: "inherit", // This will output the command's result to the console
       });
     } catch (error) {
-      console.error(`Error running "npm run lint" in directory: ${dir}`);
+      console.error(
+        `!!! Error running "npm run lint" in directory: ${dir} !!!`
+      );
     }
   });
 }
