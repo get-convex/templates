@@ -1,0 +1,40 @@
+{
+  "name": "create-convex",
+  "version": "0.0.4",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Convex, Inc. <team@convex.dev>",
+  "repository": "https://github.com/get-convex/create-convex",
+  "homepage": "https://convex.dev",
+  "bin": {
+    "create-convex": "index.js"
+  },
+  "files": [
+    "index.js",
+    "template-*",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.3",
+    "@types/degit": "^2.8.4",
+    "@types/minimist": "^1.2.2",
+    "@types/prompts": "^2.4.4",
+    "cross-spawn": "^7.0.3",
+    "kolorist": "^1.8.0",
+    "minimist": "^1.2.8",
+    "prompts": "^2.4.2",
+    "unbuild": "^2.0.0"
+  },
+  "dependencies": {
+    "degit": "^2.8.4"
+  }
+}
