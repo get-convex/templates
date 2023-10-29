@@ -35,19 +35,29 @@ function consistency() {
   const nextShadcnDirectories = directories.filter((dir) =>
     dir.startsWith("template-nextjs-")
   );
-  const shouldBeConsistent = [
-    reactShadcnDirectories.map((dir) => `${dir}/.eslintrc.cjs`),
-    nextShadcnDirectories.map((dir) => `${dir}/.eslintrc.cjs`),
-    reactShadcnDirectories.map((dir) => `${dir}/src/lib`),
-    // [].concat(
-    //   reactShadcnDirectories.map((dir) => `${dir}/src/components/ui`),
-    //   nextShadcnDirectories.map((dir) => `${dir}/components/ui`)
-    // ),
-    // [].concat(
-    //   reactShadcnDirectories.map((dir) => `${dir}/src/components/typography`),
-    //   nextShadcnDirectories.map((dir) => `${dir}/components/typography`)
-    // ),
-  ];
+  const shouldBeConsistent = [].concat(
+    [
+      ".eslintrc.cjs",
+      "src/lib",
+      "src/components",
+      ".gitignore",
+      "tailwind.config.js",
+      "post.config.js",
+    ].map((path) => reactShadcnDirectories.map((dir) => `${dir}/${path}`)),
+    [
+      "components",
+      ".eslintrc.cjs",
+      ".gitignore",
+      "tailwind.config.js",
+      "post.config.js",
+    ].map((path) => nextShadcnDirectories.map((dir) => `${dir}/${path}`)),
+    [
+      [].concat(
+        reactShadcnDirectories.map((dir) => `${dir}/src/lib`),
+        nextShadcnDirectories.map((dir) => `${dir}/lib`)
+      ),
+    ]
+  );
 
   shouldBeConsistent.forEach((paths) => {
     const first = paths[0];
