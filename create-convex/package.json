@@ -1,10 +1,14 @@
 {
   "name": "create-convex",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Convex, Inc. <team@convex.dev>",
-  "repository": "https://github.com/get-convex/create-convex",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/get-convex/templates.git",
+    "directory": "create-convex"
+  },
   "homepage": "https://convex.dev",
   "bin": {
     "create-convex": "index.js"
