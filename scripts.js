@@ -7,20 +7,61 @@ const directories = fs
   .map((dirent) => dirent.name)
   .filter((name) => !name.startsWith("."));
 
+let failed = false;
+
 if (process.argv.includes("lint")) {
+  // eslint();
+  consistency();
+}
+
+function eslint() {
   directories.forEach((dir) => {
     try {
-      console.log();
-      console.log();
-      console.log(`=== Running "npm run lint" in directory: ${dir} ===`);
-      execSync("npm run lint", {
-        cwd: dir,
-        stdio: "inherit", // This will output the command's result to the console
-      });
+      console.log(`\n\n=== Running "npm run lint" in directory: ${dir} ===`);
+      execSync("npm run lint", { cwd: dir, stdio: "inherit" });
     } catch (error) {
       console.error(
-        `!!! Error running "npm run lint" in directory: ${dir} !!!`
+        `[ERROR]: Error running "npm run lint" in directory: ${dir}`
       );
+      failed = true;
     }
   });
 }
+
+function consistency() {
+  const reactShadcnDirectories = directories.filter((dir) =>
+    dir.startsWith("template-react-vite-")
+  );
+  const nextShadcnDirectories = directories.filter((dir) =>
+    dir.startsWith("template-nextjs-")
+  );
+  const shouldBeConsistent = [
+    reactShadcnDirectories.map((dir) => `${dir}/.eslintrc.cjs`),
+    nextShadcnDirectories.map((dir) => `${dir}/.eslintrc.cjs`),
+    reactShadcnDirectories.map((dir) => `${dir}/src/lib`),
+    // [].concat(
+    //   reactShadcnDirectories.map((dir) => `${dir}/src/components/ui`),
+    //   nextShadcnDirectories.map((dir) => `${dir}/components/ui`)
+    // ),
+    // [].concat(
+    //   reactShadcnDirectories.map((dir) => `${dir}/src/components/typography`),
+    //   nextShadcnDirectories.map((dir) => `${dir}/components/typography`)
+    // ),
+  ];
+
+  shouldBeConsistent.forEach((paths) => {
+    const first = paths[0];
+    paths.forEach((path) => {
+      const result = execSync(`git diff --no-index ${first} ${path}`, {
+        encoding: "utf8",
+      });
+      if (result.length > 0) {
+        console.error(`\n[ERROR]: ${first} differs from ${path}\n`);
+        console.error(result);
+        failed = true;
+      }
+    });
+  });
+}
+
+process.exit(failed ? 1 : 0);
