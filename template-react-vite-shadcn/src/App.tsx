@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { Link } from "@/components/typography/link";
 
 function App() {
   const numbers = useQuery(api.myFunctions.listNumbers, { count: 10 });
@@ -46,13 +47,9 @@ function App() {
       </p>
       <p>
         Check out{" "}
-        <a
-          className="font-medium text-primary underline underline-offset-4"
-          target="_blank"
-          href="https://docs.convex.dev/home"
-        >
+        <Link target="_blank" href="https://docs.convex.dev/home">
           Convex docs
-        </a>
+        </Link>
       </p>
     </main>
   );

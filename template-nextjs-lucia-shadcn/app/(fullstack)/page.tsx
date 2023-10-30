@@ -3,13 +3,14 @@
 import { Code } from "@/components/typography/code";
 import { Link } from "@/components/typography/link";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import {
-  SignOutButton,
-  SignUpSignIn,
   useMutationWithAuth,
   useQueryWithAuth,
   useSessionId,
+  useSignOut,
+  useSignUpSignIn,
 } from "@convex-dev/convex-lucia-auth/react";
 import { useMutation } from "convex/react";
 
@@ -37,13 +38,7 @@ function SignedIn() {
     <>
       <p className="flex gap-4 items-center">
         Welcome {viewer}!
-        <SignOutButton
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors
-        focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
-        disabled:pointer-events-none disabled:opacity-50
-        bg-primary text-primary-foreground shadow hover:bg-primary/90
-        h-9 px-4 py-2"
-        />
+        <SignOutButton />
       </p>
       <p>
         Click the button below and open this page in another window - this data
@@ -86,38 +81,51 @@ function SignedIn() {
   );
 }
 
+function SignOutButton() {
+  const signOut = useSignOut();
+  return <Button onClick={signOut}>Sign out</Button>;
+}
+
 function AuthForm() {
-  const signIn = useMutationWithAuth(api.auth.signIn);
-  const signUp = useMutationWithAuth(api.auth.signUp);
+  const { flow, toggleFlow, error, onSubmit } = useSignUpSignIn({
+    signIn: useMutationWithAuth(api.auth.signIn),
+    signUp: useMutationWithAuth(api.auth.signUp),
+  });
+  console.log(error);
+
   return (
     <div className="flex flex-col items-center px-20 gap-4">
-      <SignUpSignIn
-        signIn={signIn}
-        signUp={signUp}
-        onError={(flow) => {
-          alert(
-            flow === "signIn"
-              ? "Could not sign in, did you mean to sign up?"
-              : "Could not sign up, did you mean to sign in?"
-          );
+      <form
+        className="flex flex-col w-[18rem]"
+        onSubmit={(event) => {
+          void onSubmit(event);
         }}
-        labelClassName="mb-4"
-        inputClassName="
-          flex h-9 rounded-md border border-input bg-transparent px-3 py-1
-          text-sm shadow-sm transition-colors file:border-0 file:bg-transparent
-          file:text-sm file:font-medium placeholder:text-muted-foreground
-          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
-          disabled:cursor-not-allowed disabled:opacity-50
-          mb-4 w-[18rem]"
-        buttonClassName="
-          inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors
-          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
-          disabled:pointer-events-none disabled:opacity-50
-          bg-primary text-primary-foreground shadow hover:bg-primary/90
-          h-9 px-4 py-2
-          cursor-pointer w-full mb-4"
-        flowToggleClassName="block font-medium text-primary cursor-pointer text-center hover:underline underline-offset-4"
-      />
+      >
+        <label htmlFor="username">Email</label>
+        <Input name="email" id="email" className="mb-4" />
+        <label htmlFor="password">Password</label>
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          className="mb-4 "
+        />
+        <Button type="submit">
+          {flow === "signIn" ? "Sign in" : "Sign up"}
+        </Button>
+      </form>
+      <Button variant="link" onClick={toggleFlow}>
+        {flow === "signIn"
+          ? "Don't have an account? Sign up"
+          : "Already have an account? Sign in"}
+      </Button>
+      <div className="font-medium text-sm text-red-500">
+        {error !== undefined
+          ? flow === "signIn"
+            ? "Could not sign in, did you mean to sign up?"
+            : "Could not sign up, did you mean to sign in?"
+          : null}
+      </div>
     </div>
   );
 }

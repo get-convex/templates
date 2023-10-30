@@ -12,7 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@convex-dev/convex-lucia-auth": "^0.0.2",
+    "@convex-dev/convex-lucia-auth": "^0.0.4",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
