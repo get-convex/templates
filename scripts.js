@@ -42,14 +42,14 @@ function consistency() {
       "src/components",
       ".gitignore",
       "tailwind.config.js",
-      "post.config.js",
+      "postcss.config.js",
     ].map((path) => reactShadcnDirectories.map((dir) => `${dir}/${path}`)),
     [
       "components",
       ".eslintrc.cjs",
       ".gitignore",
       "tailwind.config.js",
-      "post.config.js",
+      "postcss.config.js",
     ].map((path) => nextShadcnDirectories.map((dir) => `${dir}/${path}`)),
     [
       [].concat(
@@ -62,12 +62,13 @@ function consistency() {
   shouldBeConsistent.forEach((paths) => {
     const first = paths[0];
     paths.forEach((path) => {
-      const result = execSync(`git diff --no-index ${first} ${path}`, {
-        encoding: "utf8",
-      });
-      if (result.length > 0) {
+      try {
+        execSync(`git diff --color=always --no-index ${first} ${path}`, {
+          encoding: "utf8",
+        });
+      } catch (error) {
         console.error(`\n[ERROR]: ${first} differs from ${path}\n`);
-        console.error(result);
+        console.error(error.stdout);
         failed = true;
       }
     });
