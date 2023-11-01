@@ -13,7 +13,7 @@ via additional command line options. For example, to scaffold a Convex project
 with no client, run:
 
 ```bash
-npm create convex@latest my-app -- -t bare
+npm create convex@latest my-app -t bare
 ```
 
 `-t` is a shorthand for `--template`
@@ -33,14 +33,15 @@ You can use `.` for the project name to scaffold in the current directory:
 npm create convex@latest .
 ```
 
-You can use any repository on GitHub as a template by providing the owner and repo names:
+You can use any repository on GitHub as a template by providing the owner and
+repo names:
 
 ```sh
-npm create convex@latest my-app -- -t thomasballinger/convex-clerk-users-table
+npm create convex@latest my-app -t thomasballinger/convex-clerk-users-table
 ```
 
 optionally with a branch name:
 
 ```sh
-npm create convex@latest my-app -- -t 'thomasballinger/convex-clerk-users-table#branch'
+npm create convex@latest my-app -t 'thomasballinger/convex-clerk-users-table#branch'
 ```
