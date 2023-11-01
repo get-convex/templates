@@ -134,6 +134,10 @@ async function init() {
         },
         {
           type: (framework) => {
+            if (argTemplate) {
+              return null;
+            }
+
             if (framework.name === "other") {
               throw new Error(
                 red("✖") +
@@ -142,11 +146,7 @@ async function init() {
               );
             }
 
-            return argTemplate
-              ? null
-              : framework.name === "bare"
-              ? null
-              : "select";
+            return framework.name === "bare" ? null : "select";
           },
           name: "auth",
           hint: "Use arrow-keys, <return> to confirm",
