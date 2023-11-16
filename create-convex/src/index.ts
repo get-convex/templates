@@ -231,21 +231,19 @@ async function init() {
   const cdProjectName = path.relative(cwd, root);
   if (root !== cwd) {
     process.chdir(root);
-
-    try {
-      await installDependencies();
-      console.log(`\n${green(`✔`)} Done. Now run:\n`);
-    } catch (error) {
-      console.log(red("✖ Failed to install dependencies."));
-    }
-
+  }
+  try {
+    await installDependencies();
+    console.log(`\n${green(`✔`)} Done. Now run:\n`);
+  } catch (error) {
+    console.log(red("✖ Failed to install dependencies."));
+  }
+  if (root !== cwd) {
     console.log(
-      `  cd ${
-        cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
+      `  cd ${cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
       }`
     );
   }
-  console.log(`  npm i`);
   console.log(`  npm run dev`);
   console.log();
 }
