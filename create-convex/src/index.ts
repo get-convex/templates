@@ -245,6 +245,7 @@ async function init() {
       }`
     );
   }
+  console.log(`  npm i`);
   console.log(`  npm run dev`);
   console.log();
 }
