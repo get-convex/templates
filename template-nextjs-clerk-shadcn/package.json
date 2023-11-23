@@ -9,7 +9,7 @@
     "predev": "convex dev --until-success && convex dashboard",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "tsc && next lint"
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.25.2",
