@@ -10,7 +10,7 @@ const directories = fs
 let failed = false;
 
 if (process.argv.includes("lint")) {
-  // eslint();
+  eslint();
   consistency();
 }
 
@@ -23,6 +23,18 @@ function eslint() {
       console.error(
         `[ERROR]: Error running "npm run lint" in directory: ${dir}`
       );
+      failed = true;
+    }
+  });
+}
+
+function typecheck() {
+  directories.forEach((dir) => {
+    try {
+      console.log(`\n\n=== Running "npx tsc" in directory: ${dir} ===`);
+      execSync("npx tsc", { cwd: dir, stdio: "inherit" });
+    } catch (error) {
+      console.error(`[ERROR]: Error running "npx tsc" in directory: ${dir}`);
       failed = true;
     }
   });
