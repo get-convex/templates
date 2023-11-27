@@ -16,6 +16,12 @@ module.exports = {
     // TypeScript, and can be removed for stricter
     // linting down the line.
 
+    // Only warn on unused variables, and ignore variables starting with `_`
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
+    ],
+
     // Allow escaping the compiler
     "@typescript-eslint/ban-ts-comment": "error",
 
