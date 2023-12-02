@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query, mutation, action } from "./_generated/server";
+import { mutation, action } from "./_generated/server";
 import { api } from "./_generated/api";
 import { queryWithAuth } from "@convex-dev/convex-lucia-auth";
 
@@ -17,10 +17,14 @@ export const listNumbers = queryWithAuth({
   handler: async (ctx, args) => {
     //// Read the database as many times as you need here.
     //// See https://docs.convex.dev/database/reading-data.
-    const numbers = await ctx.db.query("numbers").take(args.count);
+    const numbers = await ctx.db
+      .query("numbers")
+      // Ordered by _creationTime, return most recent
+      .order("desc")
+      .take(args.count);
     return {
       viewer: ctx.session?.user.email,
-      numbers: numbers.map((number) => number.value),
+      numbers: numbers.toReversed().map((number) => number.value),
     };
   },
 });
