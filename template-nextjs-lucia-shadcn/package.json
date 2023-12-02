@@ -9,7 +9,7 @@
     "predev": "convex dev --until-success && convex dashboard",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc && next lint"
+    "lint": "tsc && eslint convex --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && next lint --report-unused-disable-directives error --max-warnings 0"
   },
   "dependencies": {
     "@convex-dev/convex-lucia-auth": "^0.0.4",

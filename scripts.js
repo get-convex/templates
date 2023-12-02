@@ -10,8 +10,8 @@ const directories = fs
 let failed = false;
 
 if (process.argv.includes("lint")) {
-  eslint();
   consistency();
+  eslint();
 }
 
 function eslint() {
@@ -23,18 +23,6 @@ function eslint() {
       console.error(
         `[ERROR]: Error running "npm run lint" in directory: ${dir}`
       );
-      failed = true;
-    }
-  });
-}
-
-function typecheck() {
-  directories.forEach((dir) => {
-    try {
-      console.log(`\n\n=== Running "npx tsc" in directory: ${dir} ===`);
-      execSync("npx tsc", { cwd: dir, stdio: "inherit" });
-    } catch (error) {
-      console.error(`[ERROR]: Error running "npx tsc" in directory: ${dir}`);
       failed = true;
     }
   });
@@ -55,6 +43,7 @@ function consistency() {
       ".gitignore",
       "tailwind.config.js",
       "postcss.config.js",
+      "tsconfig.json",
     ].map((path) => reactShadcnDirectories.map((dir) => `${dir}/${path}`)),
     [
       "components",
@@ -62,11 +51,16 @@ function consistency() {
       ".gitignore",
       "tailwind.config.js",
       "postcss.config.js",
+      "tsconfig.json",
     ].map((path) => nextShadcnDirectories.map((dir) => `${dir}/${path}`)),
     [
       [].concat(
         reactShadcnDirectories.map((dir) => `${dir}/src/lib`),
         nextShadcnDirectories.map((dir) => `${dir}/lib`)
+      ),
+      [].concat(
+        reactShadcnDirectories.map((dir) => `${dir}/convex/tsconfig.json`),
+        nextShadcnDirectories.map((dir) => `${dir}/convex/tsconfig.json`)
       ),
     ]
   );
