@@ -24,7 +24,7 @@ export default function Layout() {
         </StickySidebar>
         <main className="h-[calc(100vh-(5rem+2px))] p-4">
           <div className="w-full h-full overflow-scroll">
-            <div className="p-4 bg-slate-100">
+            <div className="p-4 bg-muted">
               <Paragraph>Main content</Paragraph>
               <FakeParagraphs words={80} count={4} />
             </div>
