@@ -16,7 +16,7 @@ export default function Layout() {
         </aside>
         <main className="flex-grow p-4">
           <div className="h-full overflow-scroll">
-            <div className="p-4 bg-slate-100">
+            <div className="p-4 bg-muted">
               <Paragraph>Main content</Paragraph>
               <FakeParagraphs words={80} count={7} />
             </div>
