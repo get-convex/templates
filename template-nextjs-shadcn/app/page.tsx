@@ -38,7 +38,7 @@ export default function Home() {
         Edit <Code>convex/myFunctions.ts</Code> to change your backend
       </p>
       <p>
-        Edit <Code>app/(fullstack)/page.tsx</Code> to change your frontend
+        Edit <Code>app/page.tsx</Code> to change your frontend
       </p>
       <p>
         Check out{" "}
