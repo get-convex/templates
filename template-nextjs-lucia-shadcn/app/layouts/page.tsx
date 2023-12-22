@@ -138,7 +138,6 @@ export default function Layouts() {
           </div>
         </div>
       </Link>
-
       <p>
         Done with layouts? Simply delete the <Code>app/(layouts)</Code>{" "}
         directory.
