@@ -1,5 +1,5 @@
-// OPTIONAL: Rename this file to `schema.ts` to declare the shape
-// of the data in your database.
+// NOTE: You can remove this file. Declaring the shape
+// of the database is entirely optional in Convex.
 // See https://docs.convex.dev/database/schemas.
 
 import { defineSchema, defineTable } from "convex/server";
@@ -12,6 +12,10 @@ export default defineSchema(
       fieldTwo: v.object({
         subFieldOne: v.array(v.number()),
       }),
+    }),
+    // This definition matches the example query and mutation code:
+    numbers: defineTable({
+      value: v.number(),
     }),
   },
   // If you ever get an error about schema mismatch
