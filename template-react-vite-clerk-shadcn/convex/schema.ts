@@ -1,5 +1,5 @@
-// OPTIONAL: Rename this file to `schema.ts` to declare the shape
-// of the data in your database.
+// NOTE: You can remove this file. Declaring the shape
+// of the database is entirely optional in Convex.
 // See https://docs.convex.dev/database/schemas.
 
 import { defineSchema, defineTable } from "convex/server";
