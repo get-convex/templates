@@ -12,6 +12,7 @@ const argv = minimist<{
   t?: string;
   template?: string;
   "dry-run"?: string;
+  verbose?: boolean;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
 
@@ -71,6 +72,7 @@ init().catch((e) => {
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
+  const verbose = argv.verbose;
 
   let targetDir = argTargetDir || defaultTargetDir;
   const getProjectName = () =>
@@ -209,7 +211,13 @@ async function init() {
   }
 
   try {
-    await degit(repo).clone(root);
+    const degitInstance = degit(repo, { verbose });
+    if (verbose) {
+      degitInstance.on("info", (info) => {
+        console.error(info.message);
+      });
+    }
+    await degitInstance.clone(root);
   } catch (error) {
     console.log(red(`✖ Failed to download template from \`${repo}\``));
     return;
@@ -240,7 +248,8 @@ async function init() {
   }
   if (root !== cwd) {
     console.log(
-      `  cd ${cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
+      `  cd ${
+        cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
       }`
     );
   }
