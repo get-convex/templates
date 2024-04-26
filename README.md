@@ -4,7 +4,7 @@
 
 Check out the `create-convex` command [README](./create-convex/README.md).
 
-# What is Convex?
+# 🧑‍🏫 What is Convex?
 
 [Convex](https://convex.dev) is a hosted backend platform with a
 built-in database that lets you write your
@@ -15,15 +15,16 @@ built-in database that lets you write your
 [cache](https://docs.convex.dev/functions/query-functions#caching--reactivity) and
 [subscribe](https://docs.convex.dev/client/react#reactivity) to data, powering a
 [realtime `useQuery` hook](https://docs.convex.dev/client/react#fetching-data) in our
-[React client](https://docs.convex.dev/client/react). There are also
+[React client](https://docs.convex.dev/client/react). There are also clients for
 [Python](https://docs.convex.dev/client/python),
 [Rust](https://docs.convex.dev/client/rust),
 [ReactNative](https://docs.convex.dev/client/react-native), and
-[Node](https://docs.convex.dev/client/javascript) clients, as well as a straightforward
-[HTTP API](https://github.com/get-convex/convex-js/blob/main/src/browser/http_client.ts#L40).
+[Node](https://docs.convex.dev/client/javascript), as well as a straightforward
+[HTTP API](https://docs.convex.dev/http-api/).
 
 The database supports
 [NoSQL-style documents](https://docs.convex.dev/database/document-storage) with
+[opt-in schema validation](https://docs.convex.dev/database/schemas),
 [relationships](https://docs.convex.dev/database/document-ids) and
 [custom indexes](https://docs.convex.dev/database/indexes/)
 (including on fields in nested objects).
@@ -52,8 +53,11 @@ Functions can run in the background via
 
 Development is cloud-first, with
 [hot reloads for server function](https://docs.convex.dev/cli#run-the-convex-dev-server) editing via the
-[CLI](https://docs.convex.dev/cli). There is a
-[dashbord UI](https://docs.convex.dev/dashboard) to
+[CLI](https://docs.convex.dev/cli),
+[preview deployments](https://docs.convex.dev/production/hosting/preview-deployments),
+[logging and exception reporting integrations](https://docs.convex.dev/production/integrations/),
+There is a
+[dashboard UI](https://docs.convex.dev/dashboard) to
 [browse and edit data](https://docs.convex.dev/dashboard/deployments/data),
 [edit environment variables](https://docs.convex.dev/production/environment-variables),
 [view logs](https://docs.convex.dev/dashboard/deployments/logs),
@@ -62,10 +66,12 @@ Development is cloud-first, with
 There are built-in features for
 [reactive pagination](https://docs.convex.dev/database/pagination),
 [file storage](https://docs.convex.dev/file-storage),
-[reactive search](https://docs.convex.dev/text-search),
+[reactive text search](https://docs.convex.dev/text-search),
+[vector search](https://docs.convex.dev/vector-search),
 [https endpoints](https://docs.convex.dev/functions/http-actions) (for webhooks),
-[streaming import/export](https://docs.convex.dev/database/import-export/), and
-[runtime data validation](https://docs.convex.dev/database/schemas#validators) for
+[snapshot import/export](https://docs.convex.dev/database/import-export/),
+[streaming import/export](https://docs.convex.dev/production/integrations/streaming-import-export), and
+[runtime validation](https://docs.convex.dev/database/schemas#validators) for
 [function arguments](https://docs.convex.dev/functions/args-validation) and
 [database data](https://docs.convex.dev/database/schemas#schema-validation).
 
