@@ -59,7 +59,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
 function authOptions(framework: Framework) {
   return AUTH.filter(
     ({ frameworks }) =>
-      frameworks === undefined || frameworks.includes(framework.name)
+      frameworks === undefined || frameworks.includes(framework.name),
   );
 }
 
@@ -144,7 +144,7 @@ async function init() {
               throw new Error(
                 red("✖") +
                   " Follow one of the quickstarts at " +
-                  bold("https://docs.convex.dev/quickstarts")
+                  bold("https://docs.convex.dev/quickstarts"),
               );
             }
 
@@ -166,7 +166,7 @@ async function init() {
         onCancel: () => {
           throw new Error(red("✖") + " Operation cancelled");
         },
-      }
+      },
     );
   } catch (cancelled: any) {
     console.log(cancelled.message);
@@ -229,7 +229,7 @@ async function init() {
   };
 
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8")
+    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
   );
 
   pkg.name = packageName || getProjectName();
@@ -250,7 +250,7 @@ async function init() {
     console.log(
       `  cd ${
         cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
-      }`
+      }`,
     );
   }
   console.log(`  npm run dev`);
@@ -298,7 +298,7 @@ function copy(src: string, dest: string) {
 
 function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName
+    projectName,
   );
 }
 
@@ -322,7 +322,7 @@ function copyDir(srcDir: string, destDir: string) {
 
 function isEmpty(path: string) {
   const files = fs.readdirSync(path);
-  return files.length === 0 || (files.length === 1 && files[0] === ".git");
+  return files.length === 0;
 }
 
 function emptyDir(dir: string) {
