@@ -12,7 +12,7 @@
     "lint": "tsc && eslint convex --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && next lint --report-unused-disable-directives error --max-warnings 0"
   },
   "dependencies": {
-    "@convex-dev/convex-lucia-auth": "^0.0.4",
+    "@convex-dev/convex-lucia-auth": "^0.0.5",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -49,7 +49,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "convex": "^1.10.0",
+    "convex": "^1.12.0",
     "date-fns": "^2.30.0",
     "eslint": "8.49.0",
     "eslint-config-next": "^14.1.4",
