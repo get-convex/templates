@@ -6,11 +6,7 @@ import { AfterSSR } from "@/components/helpers/AfterSSR";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-export default function ConvexClientProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function ConvexClientProvider({ children }: { children: ReactNode }) {
   return (
     <AfterSSR>
       <ConvexProvider client={convex}>
