@@ -23,12 +23,12 @@ type Framework = {
 
 const FRAMEWORKS: Framework[] = [
   {
-    name: "nextjs",
-    display: "Next.js App Router",
-  },
-  {
     name: "react-vite",
     display: "React (Vite)",
+  },
+  {
+    name: "nextjs",
+    display: "Next.js App Router",
   },
   {
     name: "bare",
@@ -41,11 +41,15 @@ const FRAMEWORKS: Framework[] = [
 ];
 
 const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
-  {
-    name: "lucia",
-    display: "Email & Password",
-    frameworks: ["nextjs"],
-  },
+  ...(process.env.CONVEX_AUTH_TEMPLATE !== undefined
+    ? [
+        {
+          name: "convexauth",
+          display: "Convex Auth",
+          frameworks: ["react-vite"],
+        },
+      ]
+    : []),
   {
     name: "clerk",
     display: "Clerk (requires Clerk account)",
@@ -196,6 +200,8 @@ async function init() {
     ? givenTemplate.includes("#")
       ? givenTemplate
       : givenTemplate + "#main"
+    : givenTemplate === "react-vite-convexauth-shadcn"
+    ? `get-convex/template-react-vite-convexauth-shadcn#main`
     : `get-convex/templates/template-${givenTemplate}#main`;
 
   console.log(`\nSetting up...`);
