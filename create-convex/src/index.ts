@@ -41,15 +41,11 @@ const FRAMEWORKS: Framework[] = [
 ];
 
 const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
-  ...(process.env.CONVEX_AUTH_TEMPLATE !== undefined
-    ? [
-        {
-          name: "convexauth",
-          display: "Convex Auth",
-          frameworks: ["react-vite"],
-        },
-      ]
-    : []),
+  {
+    name: "convexauth",
+    display: "Convex Auth",
+    frameworks: ["react-vite"],
+  },
   {
     name: "clerk",
     display: "Clerk (requires Clerk account)",
