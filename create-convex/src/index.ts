@@ -192,12 +192,14 @@ async function init() {
         : (auth !== "none" ? "-" + auth : "") + "-shadcn")
     : argTemplate!;
 
+  const SEPARATE_REPOS = ["react-vite-convexauth-shadcn", "nextjs-shadcn"];
+
   const template = givenTemplate.includes("/")
     ? givenTemplate.includes("#")
       ? givenTemplate
       : givenTemplate + "#main"
-    : givenTemplate === "react-vite-convexauth-shadcn"
-    ? `get-convex/template-react-vite-convexauth-shadcn#main`
+    : SEPARATE_REPOS.includes(givenTemplate)
+    ? `get-convex/template-${givenTemplate}#main`
     : `get-convex/templates/template-${givenTemplate}#main`;
 
   console.log(`\nSetting up...`);
