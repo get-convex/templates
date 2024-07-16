@@ -30,5 +30,7 @@ For patch, adapt this as needed:
 ```sh
 cd create-convex
 npm version patch
+git commit -a -m <version number>
+git tag v<version number>
 npm publish
 ```
