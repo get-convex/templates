@@ -8,6 +8,16 @@ This repo contains:
 To understand submodules read at least the first few sections of
 https://git-scm.com/book/en/v2/Git-Tools-Submodules
 
+There are 3 kinds of repos at play:
+
+1. This main repo called `templates`
+2. Each submodule is a checkout of a branch from one of the repos called
+   `generate-template-*`. One of these can be the source for serveral submodules
+   (and hence templates).
+3. Each submodule corresponds to a published `template-*` repo. This is what
+   `npm create-convex` clones, because the library we're using doesn't support
+   cloning submodules.
+
 ## Cloning this repo
 
 You must clone this repo with this command:
@@ -72,7 +82,8 @@ or some client code), you can do the following:
 6. Run `just absorb-rebase`. Hopefully you won't get rebase conflicts. If you
    do, resolve them, stage the resolved files, and run `git rebase --continue`.
    Repeat until the full rebase finishes.
-7. Run `just commit "My message"` to commit the changes you just made to the
+7. Run `git push -f` to push the changes to the `generate-*` repo
+8. Run `just commit "My message"` to commit the changes you just made to the
    main `templates` repo. The main repo will have a commit showing the previous
    commit the branch was at and the new one. This way we can keep track of
    changes to these templates.
@@ -90,5 +101,17 @@ a particular commit, do:
 4. Save and close the file/interface.
 5. Make your changes, stage them, and run `git rebase --continue`.
 6. Repeat until the full rebase finishes.
-7. Run `just commit "My message"` to commit the changes you just made to the
+7. Run `git push -f` to push the changes to the `generate-*` repo
+8. Run `just commit "My message"` to commit the changes you just made to the
    main `templates` repo.
+
+### Publish a new template version
+
+After you made changes and pushed them to both repos, you can publish the
+template (assuming you are still in its directory):
+
+```sh
+just template-publish
+```
+
+All it does is `git push -f` to the standalone `template-*` repo.
