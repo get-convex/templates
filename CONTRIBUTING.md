@@ -66,6 +66,15 @@ The `generate-` repo has a clean history. This is important so that we can go
 and rebuild it from a fresh `npx create-next-app`. This is the only way to make
 maintainting a large number of templates over time tracktable.
 
+After you make changes with one of the workflows below, you'll also want to
+rebase all the stacked branches. For now you can do this with:
+
+```sh
+git rebase --onto <branch_you_changed> <the_old_commit_at_this_branch> <stacked_branch>
+```
+
+Manually for each stacked branch. We'll automate this later™.
+
 #### Absorb workflow
 
 If you just want to make a simple code change to the code we wrote (in `convex/`
