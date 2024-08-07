@@ -1,5 +1,10 @@
+# To run these commands, read CONTRIBUTING.md
+
+# Affects authoring this Justfile:
+# https://github.com/casey/just?tab=readme-ov-file#positional-arguments
 set positional-arguments
 
+# List all available commands when running `just` without arguments
 _default:
   @just --list
 
