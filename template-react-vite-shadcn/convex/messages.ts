@@ -1,6 +1,5 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
-import { auth } from "./auth";
 
 export const list = query({
   args: {},
@@ -8,26 +7,14 @@ export const list = query({
     // Grab the most recent messages.
     const messages = await ctx.db.query("messages").order("desc").take(100);
     // Reverse the list so that it's in a chronological order.
-    return Promise.all(
-      messages
-        .reverse()
-        // Add the author's name to each message.
-        .map(async (message) => {
-          const { name, email } = (await ctx.db.get(message.userId))!;
-          return { ...message, author: name ?? email! };
-        }),
-    );
+    return messages.reverse();
   },
 });
 
 export const send = mutation({
-  args: { body: v.string() },
-  handler: async (ctx, { body }) => {
-    const userId = await auth.getUserId(ctx);
-    if (userId === null) {
-      throw new Error("Not signed in");
-    }
+  args: { body: v.string(), author: v.string() },
+  handler: async (ctx, { body, author }) => {
     // Send a new message.
-    await ctx.db.insert("messages", { body, userId });
+    await ctx.db.insert("messages", { body, author });
   },
 });
