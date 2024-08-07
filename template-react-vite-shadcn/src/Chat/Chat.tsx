@@ -15,13 +15,10 @@ export function Chat({ viewer }: { viewer: string }) {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    sendMessage({ body: newMessageText, author: viewer })
-      .then(() => {
-        setNewMessageText("");
-      })
-      .catch((error) => {
-        console.error("Failed to send message:", error);
-      });
+    setNewMessageText("");
+    sendMessage({ body: newMessageText, author: viewer }).catch((error) => {
+      console.error("Failed to send message:", error);
+    });
   };
 
   return (
