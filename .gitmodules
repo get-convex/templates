@@ -1,0 +1,4 @@
+[submodule "template-nextjs-shadcn"]
+	path = template-nextjs-shadcn
+	url = https://github.com/get-convex/generate-template-nextjs.git
+	branch = convex
