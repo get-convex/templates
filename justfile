@@ -32,14 +32,19 @@ commit message:
     git add template-*
     git commit -m "$1"
 
+# Publish the template to its own repo
 [no-cd]
 [no-exit-message]
 template-publish:
     @echo Publishing $(echo "{{invocation_directory()}}" | sed "s|^{{justfile_directory()}}/||")...
-
     @read -p "Do you want to immediately publish this version of the template? [Y/n] " answer; \
     if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [ "$answer" = "" ]; then \
         git push -f https://github.com/get-convex/$(echo "{{invocation_directory()}}" | sed "s|^{{justfile_directory()}}/||") HEAD:main; \
     else \
         echo "Not publishing."; exit 1; \
     fi
+
+# Add a new template given: 1. generate repo URL; 2. template name; 3. branch name
+template-add repo-url template-name branch-name:
+    git submodule add -b $3 $1 $2
+    
