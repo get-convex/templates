@@ -10,8 +10,8 @@ _default:
 
 # `npm install` without adding `package-lock.json`
 [no-cd]
-install:
-    npm install --package-lock false
+install *ARGS:
+    npm install --package-lock false "$@"
 
 # After making some changes, run this to create fixup commits
 [no-cd]
