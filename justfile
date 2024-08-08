@@ -8,6 +8,11 @@ set positional-arguments
 _default:
   @just --list
 
+# `npm install` without adding `package-lock.json`
+[no-cd]
+install:
+    npm install --package-lock false
+
 # After making some changes, run this to create fixup commits
 [no-cd]
 absorb-prepare:
