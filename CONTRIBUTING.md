@@ -128,12 +128,16 @@ All it does is `git push -f` to the standalone `template-*` repo.
 ### Add a new template
 
 First you will need a `generate-*` repo. It might be an existing one or a new
-one, if the initial commit is different.
+one, if the initial commit is different from all existing templates.
 
-Once you have it pushed to GitHub, you can add a checkout of it to this repo:
+You will also need a branch in this repo specific to this template.
+
+Once you have the branch pushed to GitHub, you can add a checkout of it to this
+repo:
 
 ```sh
+# Change the names here as needed
 just template-add https://github.com/get-convex/generate-<something>.git template-<some_name> <branch_name>
 ```
 
-Make sure to commit/PR your changes to the `templates` repo.
+Make sure to commit/PR your changes to the main `templates` repo.
