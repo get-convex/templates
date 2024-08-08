@@ -6,3 +6,7 @@
 	path = template-react-vite-shadcn
 	url = https://github.com/get-convex/generate-template-react-vite.git
 	branch = convex
+[submodule "template-react-vite-convexauth-shadcn"]
+	path = template-react-vite-convexauth-shadcn
+	url = https://github.com/get-convex/generate-template-react-vite.git
+	branch = convex-auth
