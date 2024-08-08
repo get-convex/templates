@@ -75,6 +75,10 @@ git rebase --onto <branch_you_changed> <the_old_commit_at_this_branch> <stacked_
 
 Manually for each stacked branch. We'll automate this later™.
 
+Also remember that many templates share the same `generate-*` repo. So when you
+make a change that's shared across templates, you should update the other
+templates as well and commit them all changing together.
+
 #### Absorb workflow
 
 If you just want to make a simple code change to the code we wrote (in `convex/`
