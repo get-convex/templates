@@ -129,6 +129,9 @@ just template-publish
 
 All it does is `git push -f` to the standalone `template-*` repo.
 
+If you just created a new template, you need to create the repo for it first. It
+should be public, in `get-convex`, and match the template directory name.
+
 ### Add a new template
 
 First you will need a `generate-*` repo. It might be an existing one or a new
