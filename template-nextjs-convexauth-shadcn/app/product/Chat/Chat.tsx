@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "convex/react";
 import { FormEvent, useState } from "react";
 import { api } from "../../../convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
-export function Chat({ viewer }: { viewer: string }) {
+export function Chat({ viewer }: { viewer: Id<"users"> }) {
   const [newMessageText, setNewMessageText] = useState("");
   const messages = useQuery(api.messages.list);
   const sendMessage = useMutation(api.messages.send);
@@ -25,7 +26,12 @@ export function Chat({ viewer }: { viewer: string }) {
     <>
       <MessageList messages={messages}>
         {messages?.map((message) => (
-          <Message key={message._id} author={message.author} viewer={viewer}>
+          <Message
+            key={message._id}
+            authorName={message.author}
+            authorId={message.userId}
+            viewerId={viewer}
+          >
             {message.body}
           </Message>
         ))}
