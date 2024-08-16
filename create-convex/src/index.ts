@@ -44,7 +44,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
     name: "convexauth",
     display: "Convex Auth",
-    frameworks: ["react-vite"],
+    frameworks: ["react-vite", "nextjs"],
   },
   {
     name: "clerk",
@@ -194,6 +194,7 @@ async function init() {
 
   const SEPARATE_REPOS = [
     "react-vite-convexauth-shadcn",
+    "nextjs-convexauth-shadcn",
     "nextjs-shadcn",
     "react-vite-shadcn",
   ];
