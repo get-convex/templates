@@ -1,7 +1,7 @@
 [submodule "template-nextjs-shadcn"]
 	path = template-nextjs-shadcn
 	url = https://github.com/get-convex/generate-template-nextjs.git
-	branch = convex
+	branch = template-nextjs-shadcn
 [submodule "template-react-vite-shadcn"]
 	path = template-react-vite-shadcn
 	url = https://github.com/get-convex/generate-template-react-vite.git
@@ -13,4 +13,4 @@
 [submodule "template-nextjs-convexauth-shadcn"]
 	path = template-nextjs-convexauth-shadcn
 	url = https://github.com/get-convex/generate-template-nextjs.git
-	branch = convex-auth
+	branch = template-nextjs-convexauth-shadcn
