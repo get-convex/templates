@@ -37,6 +37,10 @@ commit message:
     git add template-*
     git commit -m "$1"
 
+# Show the diff of a template given a `templates` repo commit
+template-diff commit_sha template_name:
+    git diff "$1"^ "$1" -- "$2" | awk '/Subproject commit/ {print $3}' | xargs -n2 git -C "$2" diff
+
 # Publish the template to its own repo
 [no-cd]
 [no-exit-message]
