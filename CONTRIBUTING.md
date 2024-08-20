@@ -24,17 +24,17 @@ There are 3 kinds of repos at play:
 │   ┌────────────────────────────────────────┐            │
 │   │folder: template-foo-bla                │  publishes │  ┌──────────────────────────────────┐
 │   │repo: get-convex/generate-template-foo  ├────────────┼─►│repo: get-convex/template-foo-bla │
-│   │branch: bla                             │            │  └──────────────────────────────────┘
+│   │branch: template-foo-bla                │            │  └──────────────────────────────────┘
 │   └────────────────────────────────────────┘            │
 │   ┌────────────────────────────────────────┐            │
 │   │folder: template-foo-da                 │ publishes  │  ┌──────────────────────────────────┐
 │   │repo: get-convex/generate-template-foo  ┼────────────┼─►│repo: get-convex/template-foo-bla │
-│   │branch: da                              │            │  └──────────────────────────────────┘
+│   │branch: template-foo-da                 │            │  └──────────────────────────────────┘
 │   └────────────────────────────────────────┘            │
 │   ┌────────────────────────────────────────┐            │
 │   │folder: template-bar-bla                │ publishes  │  ┌──────────────────────────────────┐
 │   │repo: get-convex/generate-template-bar  ┼────────────┼─►│repo: get-convex/template-bar-bla │
-│   │branch: bla                             │            │  └──────────────────────────────────┘
+│   │branch: template-bar-bla                │            │  └──────────────────────────────────┘
 │   └────────────────────────────────────────┘            │
 └─────────────────────────────────────────────────────────┘
 ```
