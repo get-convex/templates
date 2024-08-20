@@ -50,6 +50,17 @@ git clone --recurse-submodules https://github.com/get-convex/templates/
 If you don't use `--recurse-submodules` you won't clone the individual
 templates.
 
+## Pulling this repo
+
+If you have this repo checked out already, run:
+
+```sh
+git pull --recurse-submodules
+```
+
+to pull changes and update your local submodules (make sure all your template-\*
+folders are clean checkouts without uncommitted changes).
+
 ## Tooling
 
 ### Setup
@@ -84,8 +95,26 @@ https://github.com/get-convex/generate-template-nextjs.git repo at the `convex`
 branch.
 
 The `generate-` repo has a clean history. This is important so that we can go
-and rebuild it from a fresh `npx create-next-app`. This is the only way to make
-maintainting a large number of templates over time tracktable.
+and rebuild it from a fresh `npx create-next-app` etc. This is the only way to
+make maintainting a large number of templates over time tracktable.
+
+To make a change, follow these steps:
+
+1. `cd` into the relevant template directory
+2. Make the change by amending some commit or adding a new commit (see the
+   workflows below)
+3. Rebase any other affected branches
+4. Force push all changed branches
+5. `cd` into the main directory
+6. Run `git submodule update --remote` to checkout the updated branches (note
+   that this will leave the template-\* checkouts in detached HEAD state, but
+   you can update your local branches with `get fetch --all`)
+7. Run `just commit "Some message"` to commit the changes in the
+   `get-convex/templates` repo
+8. Push to `get-convex/templates`
+9. Publish all templates that need updating
+
+#### Updating stacked branches
 
 After you make changes with one of the workflows below, you'll also want to
 rebase all the stacked branches. For now you can do this with:
@@ -95,10 +124,6 @@ git rebase --onto <branch_you_changed> <the_old_commit_at_this_branch> <stacked_
 ```
 
 Manually for each stacked branch. We'll automate this later™.
-
-Also remember that many templates share the same `generate-*` repo. So when you
-make a change that's shared across templates, you should update the other
-templates as well and commit them all changing together.
 
 #### Manual workflow
 
