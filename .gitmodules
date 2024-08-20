@@ -5,11 +5,11 @@
 [submodule "template-react-vite-shadcn"]
 	path = template-react-vite-shadcn
 	url = https://github.com/get-convex/generate-template-react-vite.git
-	branch = convex
+	branch = template-react-vite-shadcn
 [submodule "template-react-vite-convexauth-shadcn"]
 	path = template-react-vite-convexauth-shadcn
 	url = https://github.com/get-convex/generate-template-react-vite.git
-	branch = convex-auth
+	branch = template-react-vite-convexauth-shadcn
 [submodule "template-nextjs-convexauth-shadcn"]
 	path = template-nextjs-convexauth-shadcn
 	url = https://github.com/get-convex/generate-template-nextjs.git
