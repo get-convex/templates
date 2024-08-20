@@ -100,6 +100,23 @@ Also remember that many templates share the same `generate-*` repo. So when you
 make a change that's shared across templates, you should update the other
 templates as well and commit them all changing together.
 
+#### Manual workflow
+
+If you need to make other changes, including rerunning the commands used to make
+a particular commit, do:
+
+1. `cd template-foo`
+2. Run `npx rebase -i --root`
+3. Mark the commits you want to edit as `edit`. This is easier if you install
+   GitLens extension in VS Code and configure Git to use VS Code as the editor
+   via `git config --global core.editor "code --wait"`
+4. Save and close the file/interface.
+5. Make your changes, stage them, and run `git rebase --continue`.
+6. Repeat until the full rebase finishes.
+7. Run `git push -f` to push the changes to the `generate-*` repo
+8. Run `just commit "My message"` to commit the changes you just made to the
+   main `templates` repo.
+
 #### Absorb workflow
 
 If you just want to make a simple code change to the code we wrote (in `convex/`
@@ -121,23 +138,6 @@ or some client code), you can do the following:
    main `templates` repo. The main repo will have a commit showing the previous
    commit the branch was at and the new one. This way we can keep track of
    changes to these templates.
-
-#### Manual workflow
-
-If you need to make other changes, including rerunning the commands used to make
-a particular commit, do:
-
-1. `cd template-foo`
-2. Run `npx rebase -i --root`
-3. Mark the commits you want to edit as `edit`. This is easier if you install
-   GitLens extension in VS Code and configure Git to use VS Code as the editor
-   via `git config --global core.editor "code --wait"`
-4. Save and close the file/interface.
-5. Make your changes, stage them, and run `git rebase --continue`.
-6. Repeat until the full rebase finishes.
-7. Run `git push -f` to push the changes to the `generate-*` repo
-8. Run `just commit "My message"` to commit the changes you just made to the
-   main `templates` repo.
 
 ### Publish a new template version
 
