@@ -126,7 +126,8 @@ To make a change, follow these steps:
 7. Run `just commit "Some message"` to commit the changes in the
    `get-convex/templates` repo
 8. Push to `get-convex/templates`
-9. Publish all templates that need updating via `just template-publish`
+9. Publish all templates that need updating, either all via
+   `just template-publish-all` or individually via `just template-publish`
 
 #### Updating stacked branches
 

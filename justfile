@@ -52,11 +52,23 @@ template-diff commit_sha template_name:
 # Publish the template to its own repo
 [no-cd]
 [no-exit-message]
-template-publish:
+template-publish force:
     @echo Publishing $(echo "{{invocation_directory()}}" | sed "s|^{{justfile_directory()}}/||")...
-    @read -p "Do you want to immediately publish this version of the template? [Y/n] " answer; \
+    @if [ "$1" = "true" ]; then \
+        answer="y"; \
+    else \
+        read -p "Do you want to immediately publish this version of the template? [Y/n] " answer; \
+    fi; \
     if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [ "$answer" = "" ]; then \
         git push -f https://github.com/get-convex/$(echo "{{invocation_directory()}}" | sed "s|^{{justfile_directory()}}/||") HEAD:main; \
+    else \
+        echo "Not publishing."; exit 1; \
+    fi
+
+template-publish-all:
+    @read -p "Do you want to immediately publish all templates? [Y/n] " answer; \
+    if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [ "$answer" = "" ]; then \
+        git submodule foreach 'just template-publish true'; \
     else \
         echo "Not publishing."; exit 1; \
     fi
