@@ -63,6 +63,20 @@ folders are clean checkouts without uncommitted changes).
 
 ## Tooling
 
+### Git setup
+
+Add these to your git config:
+
+```
+[push]
+	autoSetupRemote = true
+[rebase]
+   updateRefs = true
+```
+
+The first one will make git push automatically setup tracking of remote
+branches. The second one will update parent branches when you rebase a stack.
+
 ### Setup
 
 Install `just`: https://github.com/casey/just?tab=readme-ov-file#installation
