@@ -120,13 +120,13 @@ To make a change, follow these steps:
 3. Rebase any other affected branches
 4. Force push all changed branches
 5. `cd` into the main directory
-6. Run `git submodule update --remote` to checkout the updated branches (note
-   that this will leave the template-\* checkouts in detached HEAD state, but
-   you can update your local branches with `get fetch --all`)
+6. Run `just submodules-update` to update all templates to their remote state
+   (ie, for each template this will check out the local branch for that template
+   and reset it to its remote state)
 7. Run `just commit "Some message"` to commit the changes in the
    `get-convex/templates` repo
 8. Push to `get-convex/templates`
-9. Publish all templates that need updating
+9. Publish all templates that need updating via `just template-publish`
 
 #### Updating stacked branches
 

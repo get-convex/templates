@@ -32,6 +32,14 @@ absorb-rebase:
 absorb-revert:
     @echo Run '`git reset --soft <the commit hash of you were on>`'
 
+submodules-update:
+    @read -p "Do you want to update all submodules to their remote state now? Make sure you have pushed all branches. [Y/n] " answer; \
+    if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [ "$answer" = "" ]; then \
+        bash ./submodules-update.bash; \
+    else \
+        echo "Ok, doing nothing."; exit 1; \
+    fi
+
 # Commit a template change in the `templates` repo
 commit message:
     git add template-*
