@@ -70,7 +70,7 @@ async function templateTrackBranchesAndCheckoutBranch(submoduleName: string) {
   await $`git fetch --prune origin`.quiet();
   for (const remoteBranch of remoteBranches) {
     const branchName = remoteBranch.split("/").at(-1);
-    await $`git fetch --update-head-ok origin ${branchName}:${branchName}`.quiet();
+    await $`git fetch --force --update-head-ok origin ${branchName}:${branchName}`.quiet();
     await $`git branch --set-upstream-to=${remoteBranch} ${branchName}`.quiet();
   }
 
