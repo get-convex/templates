@@ -35,7 +35,7 @@ absorb-revert:
 submodules-update:
     @read -p "Do you want to update all submodules to their remote state now? Make sure you have pushed all branches. [Y/n] " answer; \
     if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [ "$answer" = "" ]; then \
-        bash ./submodules-update.bash; \
+        bun ./submodules-update.ts; \
     else \
         echo "Ok, doing nothing."; exit 1; \
     fi
