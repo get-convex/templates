@@ -1,4 +1,5 @@
 import { $ } from "bun";
+import { join } from "path";
 
 const submoduleNames = (await $`git submodule status`.text())
   .trim()
@@ -21,8 +22,12 @@ for (const submoduleName of submoduleNames) {
 // Initialize and update submodules
 await $`git submodule update --init --remote`;
 
+const pwd = (await $`pwd`.text()).trim();
+
 // Setup tracking for all branches and checkout branch
 for (const submoduleName of submoduleNames) {
+  $.cwd(join(pwd, submoduleName));
+
   const didCheckout = await templateTrackBranchesAndCheckoutBranch(
     submoduleName,
   );
@@ -30,9 +35,7 @@ for (const submoduleName of submoduleNames) {
   const oldCommit = commitAndBranchesBeforeUpdate.get(submoduleName).commit;
   const oldBranch = commitAndBranchesBeforeUpdate.get(submoduleName).branch;
   const newBranch = submoduleName;
-  const newCommit = (
-    await $`git -C ${submoduleName} rev-parse --short HEAD`.text()
-  ).trim();
+  const newCommit = (await $`git rev-parse --short HEAD`.text()).trim();
 
   if (oldCommit === newCommit && oldBranch === newBranch) {
     continue;
@@ -51,11 +54,9 @@ for (const submoduleName of submoduleNames) {
 }
 
 async function templateTrackBranchesAndCheckoutBranch(submoduleName: string) {
-  const currentCommit = (
-    await $`git -C ${submoduleName} rev-parse --short HEAD`.text()
-  ).trim();
+  const currentCommit = (await $`git rev-parse --short HEAD`.text()).trim();
   const currentBranch = (
-    await $`git -C ${submoduleName} symbolic-ref --short HEAD 2>/dev/null || echo "detached HEAD"`.text()
+    await $`git symbolic-ref --short HEAD 2>/dev/null || echo "detached HEAD"`.text()
   ).trim();
   const newBranch = submoduleName;
 
@@ -66,16 +67,15 @@ async function templateTrackBranchesAndCheckoutBranch(submoduleName: string) {
 
   // Fetch all remote branches and set up tracking, in case
   // a new branch was added.
+  await $`git fetch --prune origin`.quiet();
   for (const remoteBranch of remoteBranches) {
     const branchName = remoteBranch.split("/").at(-1);
-    $`git fetch origin ${branchName}:${branchName}`.quiet();
-    $`git branch --set-upstream-to=${remoteBranch} ${branchName}`.quiet();
+    await $`git fetch --update-head-ok origin ${branchName}:${branchName}`.quiet();
+    await $`git branch --set-upstream-to=${remoteBranch} ${branchName}`.quiet();
   }
 
   if (newBranch === currentBranch) {
-    const remoteCommit = (
-      await $`git -C ${submoduleName} rev-parse --short @{u}`.text()
-    ).trim();
+    const remoteCommit = (await $`git rev-parse --short @{u}`.text()).trim();
     if (currentCommit === remoteCommit) {
       return false;
     }
@@ -83,7 +83,7 @@ async function templateTrackBranchesAndCheckoutBranch(submoduleName: string) {
 
   printHeader(submoduleName);
 
-  await $`git -C ${submoduleName} checkout ${newBranch}`;
+  await $`git checkout ${newBranch}`;
   return true;
 }
 
