@@ -39,43 +39,20 @@ There are 3 kinds of repos at play:
 └─────────────────────────────────────────────────────────┘
 ```
 
-## Cloning this repo
+### Setup
+
+Install `just`: https://github.com/casey/just?tab=readme-ov-file#installation
+(`brew install just`)
+
+Install `git-absorb`:
+https://github.com/tummychow/git-absorb?tab=readme-ov-file#installing
+(`brew install git-absorb`)
 
 Install bun:
 
 ```
 npm install -g bun
 ```
-
-Clone this repo with this command:
-
-```sh
-git clone --recurse-submodules https://github.com/get-convex/templates/
-```
-
-If you don't use `--recurse-submodules` you won't clone the individual
-templates.
-
-Run:
-
-```sh
-just submodules-update
-```
-
-To set up local branches tracking remote branches.
-
-## Pulling this repo
-
-If you have this repo checked out already, run:
-
-```sh
-git pull --recurse-submodules
-```
-
-to pull changes and update your local submodules (make sure all your template-\*
-folders are clean checkouts without uncommitted changes).
-
-## Tooling
 
 ### Git setup
 
@@ -91,14 +68,50 @@ Add these to your git config:
 The first one will make git push automatically setup tracking of remote
 branches. The second one will update parent branches when you rebase a stack.
 
-### Setup
+## Cloning this repo
 
-Install `just`: https://github.com/casey/just?tab=readme-ov-file#installation
-(`brew install just`)
+1. Clone this repo with this command:
 
-Install `git-absorb`:
-https://github.com/tummychow/git-absorb?tab=readme-ov-file#installing
-(`brew install git-absorb`)
+   ```sh
+   git clone --recurse-submodules https://github.com/get-convex/templates/
+   ```
+
+   If you don't use `--recurse-submodules` you won't clone the individual
+   templates.
+
+2. Run `npm i`
+
+3. Then run:
+
+   ```sh
+   just submodules-update
+   ```
+
+   To set up local branches to track remote branches.
+
+## Pulling this repo
+
+1. Make sure all your template-\* folders are clean checkouts without
+   uncommitted changes.
+
+2. Run:
+
+   ```sh
+   git pull --recurse-submodules
+   ```
+
+   to pull changes in the main repo and in submodules.
+
+3. Run:
+
+   ```sh
+   just submodules-update
+   ```
+
+   to make sure all your branches match the remote repos and the right branch is
+   checked out.
+
+## Tooling
 
 ### Using tooling
 
@@ -119,19 +132,21 @@ just absorb-prepare
 Each template is a checkout of a repo at a particular branch.
 
 For example `template-nextjs-shadcn` is a check out of the
-https://github.com/get-convex/generate-template-nextjs.git repo at the `convex`
-branch.
+https://github.com/get-convex/generate-template-nextjs.git repo at the
+`template-nextjs-shadcn` branch.
 
 The `generate-` repo has a clean history. This is important so that we can go
 and rebuild it from a fresh `npx create-next-app` etc. This is the only way to
-make maintainting a large number of templates over time tracktable.
+make maintainting a large number of templates over time tractable.
 
 To make a change, follow these steps:
 
 1. `cd` into the relevant template directory
+   - if you're making a change that will affect multiple repos, it doesn't
+     really matter which specific template directory you choose. Pick one.
 2. Make the change by amending some commit or adding a new commit (see the
    workflows below)
-3. Rebase any other affected branches
+3. Rebase any other affected branches (see below)
 4. Force push all changed branches
 5. `cd` into the main directory
 6. Run `just submodules-update` to update all templates to their remote state
