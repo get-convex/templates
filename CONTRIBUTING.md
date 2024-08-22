@@ -41,7 +41,13 @@ There are 3 kinds of repos at play:
 
 ## Cloning this repo
 
-You must clone this repo with this command:
+Install bun:
+
+```
+npm install -g bun
+```
+
+Clone this repo with this command:
 
 ```sh
 git clone --recurse-submodules https://github.com/get-convex/templates/
@@ -49,6 +55,14 @@ git clone --recurse-submodules https://github.com/get-convex/templates/
 
 If you don't use `--recurse-submodules` you won't clone the individual
 templates.
+
+Run:
+
+```sh
+just submodules-update
+```
+
+To set up local branches tracking remote branches.
 
 ## Pulling this repo
 
