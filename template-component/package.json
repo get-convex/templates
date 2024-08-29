@@ -51,7 +51,7 @@
     }
   },
   "dependencies": {
-    "convex": "workspace:*"
+    "convex": "1.15.1-alpha.0"
   },
   "devDependencies": {
     "prettier": "3.2.5",
