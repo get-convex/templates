@@ -266,7 +266,9 @@ async function init() {
       }`
     );
   }
-  console.log(`  npm run dev`);
+  if (!component) {
+    console.log(`  npm run dev`);
+  }
   console.log();
 }
 
