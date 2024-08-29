@@ -13,6 +13,7 @@ const argv = minimist<{
   template?: string;
   "dry-run"?: string;
   verbose?: boolean;
+  component?: boolean;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
 
@@ -59,7 +60,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
 function authOptions(framework: Framework) {
   return AUTH.filter(
     ({ frameworks }) =>
-      frameworks === undefined || frameworks.includes(framework.name),
+      frameworks === undefined || frameworks.includes(framework.name)
   );
 }
 
@@ -73,6 +74,7 @@ async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
   const verbose = argv.verbose;
+  const component = !!argv.component;
 
   let targetDir = argTargetDir || defaultTargetDir;
   const getProjectName = () =>
@@ -122,7 +124,7 @@ async function init() {
             isValidPackageName(dir) || "Invalid package.json name",
         },
         {
-          type: argTemplate ? null : "select",
+          type: argTemplate || component ? null : "select",
           name: "framework",
           hint: "Use arrow-keys, <return> to confirm",
           message: reset("Choose a client:"),
@@ -136,7 +138,7 @@ async function init() {
         },
         {
           type: (framework) => {
-            if (argTemplate) {
+            if (argTemplate || component) {
               return null;
             }
 
@@ -144,7 +146,7 @@ async function init() {
               throw new Error(
                 red("✖") +
                   " Follow one of the quickstarts at " +
-                  bold("https://docs.convex.dev/quickstarts"),
+                  bold("https://docs.convex.dev/quickstarts")
               );
             }
 
@@ -166,7 +168,7 @@ async function init() {
         onCancel: () => {
           throw new Error(red("✖") + " Operation cancelled");
         },
-      },
+      }
     );
   } catch (cancelled: any) {
     console.log(cancelled.message);
@@ -185,7 +187,9 @@ async function init() {
   }
 
   // determine template
-  const givenTemplate: string = framework
+  const givenTemplate: string = component
+    ? "component"
+    : framework
     ? framework.name +
       (framework.name === "bare"
         ? ""
@@ -238,7 +242,7 @@ async function init() {
   };
 
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
+    fs.readFileSync(path.join(root, `package.json`), "utf-8")
   );
 
   pkg.name = packageName || getProjectName();
@@ -259,7 +263,7 @@ async function init() {
     console.log(
       `  cd ${
         cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
-      }`,
+      }`
     );
   }
   console.log(`  npm run dev`);
@@ -307,7 +311,7 @@ function copy(src: string, dest: string) {
 
 function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName,
+    projectName
   );
 }
 
