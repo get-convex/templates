@@ -1,18 +1,76 @@
 # Example Convex Component: Rate Limiter
 
-This package demonstrates how to package a component to be published on npm.
+This is a Convex component, ready to be published on npm.
 
-We recommend developers bundle the components they publish to npm.
+To create your own component:
 
-While it's possible to publish an npm package uncompiled (.ts instead of .js) if
-tsconfig.json files differ between the consuming package and the installed one
-there could be type or even runtime errors.
+- change the "name" field in package.json
+- modify src/component/convex.config.ts to use your component name
+
+To develop your component run a dev process in the example project.
+
+```
+cd example
+npm i
+npx convex dev
+```
+
+Modify the schema and index files in src/component/ to define your component.
+
+Optionally write a client forusing this component in src/client/index.ts.
+
+If you won't be adding frontend code (e.g. React components) to this
+component you can delete the following:
+
+- "prepack" and "postpack" scripts of package.json
+- "./frontend" exports in package.json
+- the "node10stubs.mjs" file
+
+### Component Directory structure
+
+```
+.
+├── README.md           Documentation for your component
+├── package.json        Component name, version number, other metadata
+├── package-lock.json   Components are like libraries, package-lock.json
+│                       is .gitignored and ignored by consumers.
+├── src
+│   ├── component/
+│   │   ├── _generated/ Files in here are generated.
+│   │   ├── convex.config.ts
+│   │   ├── index.ts    Define functions in whatever files you want
+│   │   └── schema.ts   Schema specific to this component
+│   ├── client.ts       "Fat" client code goes here
+│   └── frontend/       Code intented to be used on the frontend goes here.
+│       │               Your are free to delete this if this component
+│       │               does not provide code.
+│       └── index.ts
+├── example/            Example Convex app that uses this component
+│   │                   Run 'npx convex dev' from here during development.
+│   ├── package.json.ts "Fat" client code goes here
+│   └── convex/
+│       ├── _generated/
+│       ├── convex.config.ts  Imports and uses this component
+│       ├── myFunctions.ts    Functions that use the component
+│       ├── schema.ts         Example app schema
+│       └── tsconfig.json
+│  
+├── dist/               Publishing artifacts will be created here
+├── commonjs.json       Used during build by TypeScript.
+├── esm.json            Used during build by TypeScript.
+├── node10stubs.mjs     Script used during build for compatibility
+│                       with the Metro bundler used with React Native.
+├── eslint.config.mjs   Recommended lints for writing a component.
+│                       Feel free to customize.
+└── tsconfig.json       Recommended tsconfig.json for writing a component.
+                        Some settings can be customized, some are required.
+```
 
 ### Structure of a Convex Component
 
-Components are expected to expose the entry point convex.config.js. The on-disc
+Components are expected to expose the entry point convex.config.js. The on-disk
 location of this file must be a directory containing implementation files. These
-files should be compiled to ESM, not CommonJS.
+files should be compiled to ESM.
 
 The package.json should contain `"type": "module"` and the tsconfig.json should
 contain `"moduleResolution": "Bundler"` or Node16 in order to import other
@@ -51,73 +109,3 @@ in order to import code that lives in `dist/esm/frontend.js` from a path like
 Authors of Convex component that provide frontend components are encouraged to
 support these legacy "Node10-style" module resolution algorithms by generating
 stub directories with special pre- and post-pack scripts.
-
-### package.json template
-
-```json
-{
-  "name": "@convex-dev/ratelimiter",
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --project ./esm.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
-    "build:cjs": "tsc --project ./commonjs.json && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/esm/package.json",
-    "typecheck": "tsc --noEmit",
-    "dev": "convex dev",
-    "prepare": "npm run build",
-    "prepack": "node node10stubs.mjs",
-    "postpack": "node node10stubs.mjs --cleanup"
-  },
-  "files": ["dist", "src", "frontend"],
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": {
-        "types": "./dist/esm/client.d.ts",
-        "default": "./dist/esm/client.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/client.d.ts",
-        "default": "./dist/commonjs/client.js"
-      }
-    },
-    "./frontend": {
-      "import": {
-        "types": "./dist/esm/frontend.d.ts",
-        "default": "./dist/esm/frontend.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/frontend.d.ts",
-        "default": "./dist/commonjs/frontend.js"
-      }
-    },
-    "./convex.config.js": {
-      "import": {
-        "types": "./dist/esm/ratelimiter/convex.config.d.ts",
-        "default": "./dist/esm/ratelimiter/convex.config.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/ratelimiter/convex.config.d.ts",
-        "default": "./dist/commonjs/ratelimiter/convex.config.js"
-      }
-    }
-  },
-  "dependencies": {
-    "convex": "workspace:*"
-  },
-  "devDependencies": {
-    "prettier": "3.2.5",
-    "@types/node": "^18.17.0",
-    "typescript": "~5.0.3"
-  },
-  "main": "./dist/commonjs/client.js",
-  "types": "./dist/commonjs/client.d.ts",
-  "module": "./dist/esm/client.js"
-}
-```
-
-### Example App
-
-If a package includes an example it should live in a subdirectory. `example` is
-a good name for a directory.
