@@ -1,3 +1,5 @@
+/* prettier-ignore-start */
+
 /* eslint-disable */
 /**
  * Generated utilities for implementing server-side Convex query and mutation functions.
@@ -17,7 +19,6 @@ import {
   internalMutationGeneric,
   internalQueryGeneric,
   componentsGeneric,
-  createComponentArg,
 } from "convex/server";
 
 /**
@@ -92,4 +93,4 @@ export const httpAction = httpActionGeneric;
 
 export const components = componentsGeneric();
 
-export const componentArg = createComponentArg();
+/* prettier-ignore-end */

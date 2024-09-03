@@ -3,12 +3,13 @@ import { mutation, query, DatabaseReader } from "./_generated/server.js";
 
 const rateLimitArgs = {
   name: v.string(),
+  name2: v.string(),
   key: v.optional(v.string()),
   count: v.optional(v.number()),
   reserve: v.optional(v.boolean()),
   throws: v.optional(v.boolean()),
 };
-const rateLimitArgsObject = v.object(rateLimitArgs);
+const _rateLimitArgsObject = v.object(rateLimitArgs);
 
 const config = {
   kind: "token bucket",
@@ -75,7 +76,7 @@ export const resetRateLimit = mutation({
 
 async function checkRateLimitInternal(
   db: DatabaseReader,
-  args: Infer<typeof rateLimitArgsObject>,
+  args: Infer<typeof _rateLimitArgsObject>
 ) {
   const now = Date.now();
   const existing = await getExisting(db, args.name, args.key);
@@ -84,12 +85,12 @@ async function checkRateLimitInternal(
   if (args.reserve) {
     if (config.maxReserved && consuming > max + config.maxReserved) {
       throw new Error(
-        `Rate limit ${args.name} count ${consuming} exceeds ${max + config.maxReserved}.`,
+        `Rate limit ${args.name} count ${consuming} exceeds ${max + config.maxReserved}.`
       );
     }
   } else if (consuming > max) {
     throw new Error(
-      `Rate limit ${args.name} count ${consuming} exceeds ${max}.`,
+      `Rate limit ${args.name} count ${consuming} exceeds ${max}.`
     );
   }
   const state = existing ?? {
@@ -138,10 +139,10 @@ async function checkRateLimitInternal(
 async function getExisting(
   db: DatabaseReader,
   name: string,
-  key: string | undefined,
+  key: string | undefined
 ) {
   return await db
     .query("rateLimits")
-    .withIndex("name", (q: any) => q.eq("name", name).eq("key", key))
+    .withIndex("name", (q) => q.eq("name", name).eq("key", key))
     .unique();
 }

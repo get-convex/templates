@@ -50,14 +50,18 @@
     }
   },
   "dependencies": {
-    "convex": "1.15.1-alpha.0"
+    "convex": "1.15.1-alpha.2"
   },
   "devDependencies": {
-    "prettier": "3.2.5",
+    "@eslint/js": "^9.9.1",
     "@types/node": "^18.17.0",
-    "typescript": "~5.0.3"
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "prettier": "3.2.5",
+    "typescript": "~5.0.3",
+    "typescript-eslint": "^8.4.0"
   },
-  "main": "./dist/commonjs/client.js",
-  "types": "./dist/commonjs/client.d.ts",
-  "module": "./dist/esm/client.js"
+  "main": "./dist/commonjs/client/index.js",
+  "types": "./dist/commonjs/client/index.d.ts",
+  "module": "./dist/esm/client/index.js"
 }

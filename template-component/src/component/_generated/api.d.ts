@@ -1,3 +1,5 @@
+/* prettier-ignore-start */
+
 /* eslint-disable */
 /**
  * Generated `api` utility.
@@ -8,7 +10,6 @@
  * @module
  */
 
-import type * as http from "../http.js";
 import type * as index from "../index.js";
 
 import type {
@@ -25,7 +26,6 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  http: typeof http;
   index: typeof index;
 }>;
 declare const fullApiWithMounts: typeof fullApi & {
@@ -37,6 +37,7 @@ declare const fullApiWithMounts: typeof fullApi & {
         count?: number;
         key?: string;
         name: string;
+        name2: string;
         reserve?: boolean;
         throws?: boolean;
       },
@@ -49,6 +50,7 @@ declare const fullApiWithMounts: typeof fullApi & {
         count?: number;
         key?: string;
         name: string;
+        name2: string;
         reserve?: boolean;
         throws?: boolean;
       },
@@ -71,3 +73,5 @@ export declare const internal: FilterApi<
   typeof fullApiWithMounts,
   FunctionReference<any, "internal">
 >;
+
+/* prettier-ignore-end */

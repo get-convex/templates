@@ -1,3 +1,5 @@
+/* prettier-ignore-start */
+
 /* eslint-disable */
 /**
  * Generated utilities for implementing server-side Convex query and mutation functions.
@@ -158,6 +160,7 @@ export declare const components: {
           count?: number;
           key?: string;
           name: string;
+          name2: string;
           reserve?: boolean;
           throws?: boolean;
         },
@@ -170,6 +173,7 @@ export declare const components: {
           count?: number;
           key?: string;
           name: string;
+          name2: string;
           reserve?: boolean;
           throws?: boolean;
         },
@@ -184,3 +188,5 @@ export declare const components: {
     };
   };
 };
+
+/* prettier-ignore-end */
