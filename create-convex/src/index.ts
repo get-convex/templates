@@ -255,6 +255,10 @@ async function init() {
   }
   try {
     await installDependencies();
+    if (component && fs.existsSync("./example")) {
+      process.chdir("./example");
+      await installDependencies();
+    }
     console.log(`\n${green(`✔`)} Done. Now run:\n`);
   } catch (error) {
     console.log(red("✖ Failed to install dependencies."));
@@ -266,7 +270,10 @@ async function init() {
       }`
     );
   }
-  if (!component) {
+  if (component) {
+    console.log(`  cd example`);
+    console.log(`  npm run dev`);
+  } else {
     console.log(`  npm run dev`);
   }
   console.log();
