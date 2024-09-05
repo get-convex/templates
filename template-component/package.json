@@ -20,12 +20,12 @@
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/esm/client.d.ts",
-        "default": "./dist/esm/client.js"
+        "types": "./dist/esm/client/index.d.ts",
+        "default": "./dist/esm/client/index.js"
       },
       "require": {
-        "types": "./dist/commonjs/client.d.ts",
-        "default": "./dist/commonjs/client.js"
+        "types": "./dist/commonjs/client/index.d.ts",
+        "default": "./dist/commonjs/client/index.js"
       }
     },
     "./frontend": {
