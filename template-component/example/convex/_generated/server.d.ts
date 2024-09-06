@@ -151,40 +151,15 @@ export type DatabaseReader = GenericDatabaseReader<DataModel>;
 export type DatabaseWriter = GenericDatabaseWriter<DataModel>;
 
 export declare const components: {
-  theComponent: {
-    index: {
-      checkRateLimit: FunctionReference<
-        "query",
-        "internal",
-        {
-          count?: number;
-          key?: string;
-          name: string;
-          name2: string;
-          reserve?: boolean;
-          throws?: boolean;
-        },
-        { ok: boolean; retryAt?: number; ts?: number; value?: number }
-      >;
-      rateLimit: FunctionReference<
+  counter: {
+    public: {
+      add: FunctionReference<
         "mutation",
         "internal",
-        {
-          count?: number;
-          key?: string;
-          name: string;
-          name2: string;
-          reserve?: boolean;
-          throws?: boolean;
-        },
-        { ok: boolean; retryAt?: number }
+        { count: number; name: string; shards?: number },
+        null
       >;
-      resetRateLimit: FunctionReference<
-        "mutation",
-        "internal",
-        { key?: string; name: string },
-        any
-      >;
+      get: FunctionReference<"query", "internal", { name: string }, number>;
     };
   };
 };
