@@ -28,7 +28,7 @@ export const add = mutation({
   },
 });
 
-export const get = query({
+export const count = query({
   args: { name: v.string() },
   returns: v.number(),
   handler: async (ctx, args) => {

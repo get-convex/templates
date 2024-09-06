@@ -159,7 +159,7 @@ export declare const components: {
         { count: number; name: string; shards?: number },
         null
       >;
-      get: FunctionReference<"query", "internal", { name: string }, number>;
+      count: FunctionReference<"query", "internal", { name: string }, number>;
     };
   };
 };
