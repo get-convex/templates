@@ -1,7 +1,6 @@
 import {
   Expand,
   FunctionReference,
-  FunctionVisibility,
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
@@ -57,7 +56,7 @@ export type OpaqueIds<T> =
 export type UseApi<API> = Expand<{
   [mod in keyof API]: API[mod] extends FunctionReference<
     infer FType,
-    FunctionVisibility,
+    "public",
     infer FArgs,
     infer FReturnType,
     infer FComponentPath
