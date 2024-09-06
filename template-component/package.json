@@ -1,5 +1,5 @@
 {
-  "name": "@convex-dev/component",
+  "name": "@convex-dev/counter",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

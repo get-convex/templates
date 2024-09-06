@@ -4,12 +4,11 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
     "logs": "convex logs",
     "lint": "tsc -p convex && eslint convex"
   },
   "dependencies": {
-    "convex": "1.15.1-alpha.2"
+    "convex": "^1.15.1-alpha.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

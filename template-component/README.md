@@ -1,15 +1,13 @@
-# Example Convex Component: Rate Limiter
+# Example Convex Component: Sharded Counter
 
 This is a Convex component, ready to be published on npm.
 
-To create your own component:
-
-- change the "name" field in package.json
-- modify src/component/convex.config.ts to use your component name
+To create your own component, find and replace "counter" to your component's name.
 
 To develop your component run a dev process in the example project.
 
 ```
+npm i
 cd example
 npm i
 npx convex dev
