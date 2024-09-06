@@ -1,26 +1,35 @@
 import {
   Expand,
   FunctionReference,
+  FunctionVisibility,
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
 } from "convex/server";
-type ComponentApi = InternalizeApi<typeof api>;
+import { GenericId } from "convex/values";
 
-export class Client {
+export class Client<Shards extends Record<string, number>> {
   constructor(
-    public api: ComponentApi,
-    public shards: number = 1
+    public component: UseApi<typeof api>,
+    public options?: { shards?: Shards; defaultShards?: number }
   ) {}
-  async add(ctx: RunMutationCtx, name: string, count: number = 1) {
-    return ctx.runMutation(this.api.public.add, {
+  async add<Name extends string = keyof Shards & string>(
+    ctx: RunMutationCtx,
+    name: Name,
+    count: number = 1
+  ) {
+    const shards = this.options?.shards?.[name] ?? this.options?.defaultShards;
+    return ctx.runMutation(this.component.public.add, {
       name,
       count,
-      shards: this.shards,
+      shards,
     });
   }
-  async get(ctx: RunQueryCtx, name: string) {
-    return ctx.runQuery(this.api.public.get, { name });
+  async get<Name extends string = keyof Shards & string>(
+    ctx: RunQueryCtx,
+    name: Name
+  ) {
+    return ctx.runQuery(this.component.public.get, { name });
   }
 }
 
@@ -35,14 +44,30 @@ type RunMutationCtx = {
 
 // TODO: Copy in a concrete API from example/_generated/server.d.ts once your API is stable.
 import { api } from "../component/_generated/api.js"; // the component's public api
-type InternalizeApi<API> = Expand<{
-  [K in keyof API]: API[K] extends FunctionReference<
-    infer T,
-    "public",
-    infer A,
-    infer R,
-    infer P
+
+export type OpaqueIds<T> =
+  T extends GenericId<infer _T>
+    ? string
+    : T extends (infer U)[]
+      ? OpaqueIds<U>[]
+      : T extends object
+        ? { [K in keyof T]: OpaqueIds<T[K]> }
+        : T;
+
+export type UseApi<API> = Expand<{
+  [mod in keyof API]: API[mod] extends FunctionReference<
+    infer FType,
+    FunctionVisibility,
+    infer FArgs,
+    infer FReturnType,
+    infer FComponentPath
   >
-    ? FunctionReference<T, "internal", A, R, P>
-    : InternalizeApi<API[K]>;
+    ? FunctionReference<
+        FType,
+        "internal",
+        OpaqueIds<FArgs>,
+        OpaqueIds<FReturnType>,
+        FComponentPath
+      >
+    : UseApi<API[mod]>;
 }>;
