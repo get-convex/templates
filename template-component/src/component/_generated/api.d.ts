@@ -36,7 +36,7 @@ declare const fullApiWithMounts: typeof fullApi & {
       { count: number; name: string; shards?: number },
       null
     >;
-    get: FunctionReference<"query", "public", { name: string }, number>;
+    count: FunctionReference<"query", "public", { name: string }, number>;
   };
 };
 

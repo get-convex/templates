@@ -24,12 +24,32 @@ export class Client<Shards extends Record<string, number>> {
       shards,
     });
   }
-  async get<Name extends string = keyof Shards & string>(
+  async count<Name extends string = keyof Shards & string>(
     ctx: RunQueryCtx,
     name: Name
   ) {
-    return ctx.runQuery(this.component.public.get, { name });
+    return ctx.runQuery(this.component.public.count, { name });
   }
+}
+
+// Another way of exporting functionality
+export function defineCounter(
+  component: UseApi<typeof api>,
+  name: string,
+  shards: number
+) {
+  return {
+    add: async (ctx: RunMutationCtx, count: number = 1) =>
+      ctx.runMutation(component.public.add, { name, count, shards }),
+    subtract: async (ctx: RunMutationCtx, count: number = 1) =>
+      ctx.runMutation(component.public.add, { name, count: -count, shards }),
+    inc: async (ctx: RunMutationCtx) =>
+      ctx.runMutation(component.public.add, { name, count: 1, shards }),
+    dec: async (ctx: RunMutationCtx) =>
+      ctx.runMutation(component.public.add, { name, count: -1, shards }),
+    count: async (ctx: RunQueryCtx) =>
+      ctx.runQuery(component.public.count, { name }),
+  };
 }
 
 /* Type utils follow */
