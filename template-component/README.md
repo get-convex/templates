@@ -2,7 +2,8 @@
 
 This is a Convex component, ready to be published on npm.
 
-To create your own component, find and replace "counter" to your component's name.
+To create your own component, find and replace "counter" to your component's name,
+then rename the folder `src/counter` to your component's name.
 
 To develop your component run a dev process in the example project.
 
