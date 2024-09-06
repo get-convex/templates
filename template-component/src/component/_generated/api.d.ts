@@ -10,7 +10,7 @@
  * @module
  */
 
-import type * as index from "../index.js";
+import type * as public from "../public.js";
 
 import type {
   ApiFromModules,
@@ -26,42 +26,17 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  index: typeof index;
+  public: typeof public;
 }>;
 declare const fullApiWithMounts: typeof fullApi & {
-  index: {
-    checkRateLimit: FunctionReference<
-      "query",
-      "public",
-      {
-        count?: number;
-        key?: string;
-        name: string;
-        name2: string;
-        reserve?: boolean;
-        throws?: boolean;
-      },
-      { ok: boolean; retryAt?: number; ts?: number; value?: number }
-    >;
-    rateLimit: FunctionReference<
+  public: {
+    add: FunctionReference<
       "mutation",
       "public",
-      {
-        count?: number;
-        key?: string;
-        name: string;
-        name2: string;
-        reserve?: boolean;
-        throws?: boolean;
-      },
-      { ok: boolean; retryAt?: number }
+      { count: number; name: string; shards?: number },
+      null
     >;
-    resetRateLimit: FunctionReference<
-      "mutation",
-      "public",
-      { key?: string; name: string },
-      any
-    >;
+    get: FunctionReference<"query", "public", { name: string }, number>;
   };
 };
 
