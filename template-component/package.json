@@ -6,6 +6,7 @@
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc --project ./esm.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
     "build:cjs": "tsc --project ./commonjs.json && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/commonjs/package.json",
+    "dev": "cd example; npm run dev",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build",
     "prepack": "node node10stubs.mjs",
@@ -20,37 +21,38 @@
     "./package.json": "./package.json",
     ".": {
       "import": {
+        "@convex-dev/component-source": "./src/client/index.ts",
         "types": "./dist/esm/client/index.d.ts",
         "default": "./dist/esm/client/index.js"
       },
       "require": {
+        "@convex-dev/component-source": "./src/client/index.ts",
         "types": "./dist/commonjs/client/index.d.ts",
         "default": "./dist/commonjs/client/index.js"
       }
     },
     "./frontend": {
       "import": {
+        "@convex-dev/component-source": "./src/frontend/index.ts",
         "types": "./dist/esm/frontend.d.ts",
         "default": "./dist/esm/frontend.js"
       },
       "require": {
+        "@convex-dev/component-source": "./src/frontend/index.ts",
         "types": "./dist/commonjs/frontend.d.ts",
         "default": "./dist/commonjs/frontend.js"
       }
     },
     "./convex.config.js": {
       "import": {
+        "@convex-dev/component-source": "./src/component/convex.config.ts",
         "types": "./dist/esm/component/convex.config.d.ts",
         "default": "./dist/esm/component/convex.config.js"
-      },
-      "require": {
-        "types": "./dist/commonjs/component/convex.config.d.ts",
-        "default": "./dist/commonjs/component/convex.config.js"
       }
     }
   },
   "dependencies": {
-    "convex": "1.15.1-alpha.2"
+    "convex": "^1.16.0-alpha.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

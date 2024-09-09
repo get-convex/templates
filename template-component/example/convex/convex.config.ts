@@ -1,5 +1,5 @@
 import { defineApp } from "convex/server";
-import component from "../../src/component/convex.config";
+import component from "@convex-dev/counter/convex.config.js";
 
 const app = defineApp();
 app.use(component, { name: "counter" });
