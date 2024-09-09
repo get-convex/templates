@@ -62,7 +62,7 @@ type RunMutationCtx = {
 };
 
 // TODO: Copy in a concrete API from example/_generated/server.d.ts once your API is stable.
-import { api } from "../counter/_generated/api.js"; // the component's public api
+import { api } from "../component/_generated/api.js"; // the component's public api
 
 export type OpaqueIds<T> =
   T extends GenericId<infer _T>
