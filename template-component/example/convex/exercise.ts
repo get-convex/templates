@@ -1,5 +1,5 @@
 import { internalMutation, components } from "./_generated/server.js";
-import { Client, defineCounter } from "../../src/client/index.js";
+import { Client, defineCounter } from "@convex-dev/counter";
 
 const counter = new Client(components.counter, { shards: { beans: 100 } });
 
@@ -7,7 +7,7 @@ const usersCounter = defineCounter(components.counter, "users", 100);
 
 export const usingClient = internalMutation({
   args: {},
-  handler: async (ctx, args) => {
+  handler: async (ctx, _args) => {
     await counter.add(ctx, "accomplishments");
     await counter.add(ctx, "beans", 2);
     const count = await counter.count(ctx, "beans");
@@ -17,7 +17,7 @@ export const usingClient = internalMutation({
 
 export const usingFunctions = internalMutation({
   args: {},
-  handler: async (ctx, args) => {
+  handler: async (ctx, _args) => {
     await usersCounter.inc(ctx);
     await usersCounter.inc(ctx);
     await usersCounter.dec(ctx);
@@ -27,7 +27,7 @@ export const usingFunctions = internalMutation({
 
 export const directCall = internalMutation({
   args: {},
-  handler: async (ctx, args) => {
+  handler: async (ctx, _args) => {
     await ctx.runMutation(components.counter.public.add, {
       name: "pennies",
       count: 250,
