@@ -10,7 +10,7 @@ explorations
 node_modules
 .eslintcache
 # components are libraries!
-.package-lock.json
+package-lock.json
 
 # this is a package-json-redirect stub dir, see https://github.com/andrewbranch/example-subpath-exports-ts-compat?tab=readme-ov-file
 frontend/package.json
