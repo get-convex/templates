@@ -10,7 +10,7 @@
  * @module
  */
 
-import type * as exercise from "../exercise.js";
+import type * as example from "../example.js";
 
 import type {
   ApiFromModules,
@@ -26,7 +26,7 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  exercise: typeof exercise;
+  example: typeof example;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
