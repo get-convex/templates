@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@convex-dev/counter": "file:..",
-    "convex": "^1.16.0-alpha.2",
+    "convex": "1.16.0-alpha.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
