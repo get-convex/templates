@@ -8,29 +8,30 @@ import {
 import { GenericId } from "convex/values";
 import { api } from "../component/_generated/api.js";
 
-export class Client<Shards extends Record<string, number>> {
-  constructor(
-    public component: UseApi<typeof api>,
-    public options?: { shards?: Shards; defaultShards?: number }
-  ) {}
-  async add<Name extends string = keyof Shards & string>(
-    ctx: RunMutationCtx,
-    name: Name,
-    count: number = 1
-  ) {
-    const shards = this.options?.shards?.[name] ?? this.options?.defaultShards;
-    return ctx.runMutation(this.component.public.add, {
-      name,
-      count,
-      shards,
-    });
-  }
-  async count<Name extends string = keyof Shards & string>(
-    ctx: RunQueryCtx,
-    name: Name
-  ) {
-    return ctx.runQuery(this.component.public.count, { name });
-  }
+export function counterClient<Shards extends Record<string, number>>(
+  component: UseApi<typeof api>,
+  options?: { shards?: Shards; defaultShards?: number }
+) {
+  return {
+    async add<Name extends string = keyof Shards & string>(
+      ctx: RunMutationCtx,
+      name: Name,
+      count: number = 1
+    ) {
+      const shards = options?.shards?.[name] ?? options?.defaultShards;
+      return ctx.runMutation(component.public.add, {
+        name,
+        count,
+        shards,
+      });
+    },
+    async count<Name extends string = keyof Shards & string>(
+      ctx: RunQueryCtx,
+      name: Name
+    ) {
+      return ctx.runQuery(component.public.count, { name });
+    },
+  };
 }
 
 // Another way of exporting functionality
@@ -52,6 +53,8 @@ export function defineCounter(
       ctx.runQuery(component.public.count, { name }),
   };
 }
+
+export default counterClient;
 
 /* Type utils follow */
 

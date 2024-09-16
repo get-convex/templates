@@ -4,8 +4,10 @@ import {
   query,
   mutation,
 } from "./_generated/server.js";
-import { Client, defineCounter } from "@convex-dev/counter";
+import { counterClient, defineCounter } from "@convex-dev/counter";
 
+const counter = counterClient(components.counter, { shards: { beans: 100 } });
+// alternative way to define a specific counter
 const numUsers = defineCounter(components.counter, "users", 100);
 
 export const addOne = mutation({
@@ -21,8 +23,6 @@ export const getCount = query({
     return await numUsers.count(ctx);
   },
 });
-
-const counter = new Client(components.counter, { shards: { beans: 100 } });
 
 export const usingClient = internalMutation({
   args: {},
