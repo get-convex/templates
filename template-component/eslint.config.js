@@ -33,7 +33,7 @@ export default [
       // allow (_arg: number) => {} and const _foo = 1;
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
-        "error",
+        "warn",
         {
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_",
