@@ -10,7 +10,6 @@
  * @module
  */
 
-import type * as app from "../app.js";
 import type * as example from "../example.js";
 
 import type {
@@ -27,7 +26,6 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  app: typeof app;
   example: typeof example;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
