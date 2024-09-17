@@ -6,19 +6,19 @@ import {
 } from "./_generated/server.js";
 import { Client, defineCounter } from "@convex-dev/counter";
 
-const usersCounter = defineCounter(components.counter, "users", 100);
+const numUsers = defineCounter(components.counter, "users", 100);
 
 export const addOne = mutation({
   args: {},
   handler: async (ctx, _args) => {
-    await usersCounter.inc(ctx);
+    await numUsers.inc(ctx);
   },
 });
 
 export const getCount = query({
   args: {},
   handler: async (ctx, _args) => {
-    return await usersCounter.count(ctx);
+    return await numUsers.count(ctx);
   },
 });
 
@@ -37,10 +37,10 @@ export const usingClient = internalMutation({
 export const usingFunctions = internalMutation({
   args: {},
   handler: async (ctx, _args) => {
-    await usersCounter.inc(ctx);
-    await usersCounter.inc(ctx);
-    await usersCounter.dec(ctx);
-    return usersCounter.count(ctx);
+    await numUsers.inc(ctx);
+    await numUsers.inc(ctx);
+    await numUsers.dec(ctx);
+    return numUsers.count(ctx);
   },
 });
 
