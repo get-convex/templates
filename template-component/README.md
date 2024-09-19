@@ -21,8 +21,8 @@ If you won't be adding frontend code (e.g. React components) to this
 component you can delete the following:
 
 - "prepack" and "postpack" scripts of package.json
-- "./frontend" exports in package.json
-- the "src/frontend/" directory
+- "./react" exports in package.json
+- the "src/react/" directory
 - the "node10stubs.mjs" file
 
 ### Component Directory structure
@@ -39,8 +39,8 @@ component you can delete the following:
 │   │   ├── convex.config.ts  Name your component here and use other components
 │   │   ├── index.ts    Define functions here and in new files in this directory
 │   │   └── schema.ts   schema specific to this component
-│   ├── client.ts       "Fat" client code goes here.
-│   └── frontend/       Code intended to be used on the frontend goes here.
+│   ├── client/index.ts "Thick" client code goes here.
+│   └── react/          Code intended to be used on the frontend goes here.
 │       │               Your are free to delete this if this component
 │       │               does not provide code.
 │       └── index.ts
@@ -86,7 +86,7 @@ import { MyComponentClient } from "my-convex-component";
 When frontend code is included it is typically published at a subpath:
 
 ```
-import { helper } from "my-convex-component/frontend";
+import { helper } from "my-convex-component/react";
 import { FrontendReactComponent } from "my-convex-component/react";
 ```
 
@@ -101,8 +101,8 @@ more than one version of e.g. React.
 The [Metro](https://reactnative.dev/docs/metro) bundler for React Native
 requires setting
 [`resolver.unstable_enablePackageExports`](https://metrobundler.dev/docs/package-exports/)
-in order to import code that lives in `dist/esm/frontend.js` from a path like
-`my-convex-component/frontend`.
+in order to import code that lives in `dist/esm/react.js` from a path like
+`my-convex-component/react`.
 
 Authors of Convex component that provide frontend components are encouraged to
 support these legacy "Node10-style" module resolution algorithms by generating
