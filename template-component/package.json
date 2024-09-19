@@ -15,7 +15,7 @@
   "files": [
     "dist",
     "src",
-    "frontend"
+    "react"
   ],
   "exports": {
     "./package.json": "./package.json",
@@ -31,16 +31,16 @@
         "default": "./dist/commonjs/client/index.js"
       }
     },
-    "./frontend": {
+    "./react": {
       "import": {
-        "@convex-dev/component-source": "./src/frontend/index.ts",
-        "types": "./dist/esm/frontend.d.ts",
-        "default": "./dist/esm/frontend.js"
+        "@convex-dev/component-source": "./src/react/index.ts",
+        "types": "./dist/esm/react.d.ts",
+        "default": "./dist/esm/react.js"
       },
       "require": {
-        "@convex-dev/component-source": "./src/frontend/index.ts",
-        "types": "./dist/commonjs/frontend.d.ts",
-        "default": "./dist/commonjs/frontend.js"
+        "@convex-dev/component-source": "./src/react/index.ts",
+        "types": "./dist/commonjs/react.d.ts",
+        "default": "./dist/commonjs/react.js"
       }
     },
     "./convex.config.js": {
