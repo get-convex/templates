@@ -43,7 +43,7 @@
         "default": "./dist/commonjs/react.js"
       }
     },
-    "./convex.config.js": {
+    "./convex.config": {
       "import": {
         "@convex-dev/component-source": "./src/component/convex.config.ts",
         "types": "./dist/esm/component/convex.config.d.ts",

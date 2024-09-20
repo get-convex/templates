@@ -6,7 +6,7 @@ import {
   GenericQueryCtx,
 } from "convex/server";
 import { GenericId } from "convex/values";
-import { api } from "../component/_generated/api.js";
+import { api } from "../component/_generated/api";
 
 export class Client<Shards extends Record<string, number>> {
   constructor(
