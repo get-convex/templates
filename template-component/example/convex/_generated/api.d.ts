@@ -39,4 +39,18 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
+export declare const components: {
+  counter: {
+    public: {
+      add: FunctionReference<
+        "mutation",
+        "internal",
+        { count: number; name: string; shards?: number },
+        null
+      >;
+      count: FunctionReference<"query", "internal", { name: string }, number>;
+    };
+  };
+};
+
 /* prettier-ignore-end */
