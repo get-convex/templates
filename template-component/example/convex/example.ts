@@ -1,9 +1,5 @@
-import {
-  internalMutation,
-  components,
-  query,
-  mutation,
-} from "./_generated/server";
+import { internalMutation, query, mutation } from "./_generated/server";
+import { components } from "./_generated/api";
 import { Client, defineCounter } from "@convex-dev/counter";
 
 const numUsers = defineCounter(components.counter, "users", 100);
