@@ -1,6 +1,18 @@
 {
   "name": "@convex-dev/counter",
-  "version": "0.0.0",
+  "description": "A counter component for Convex.",
+  "repository": "github:get-convex/counter",
+  "homepage": "https://github.com/get-convex/counter#readme",
+  "bugs": {
+    "email": "support@convex.dev",
+    "url": "https://github.com/get-convex/counter/issues"
+  },
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "keywords": [
+    "convex",
+    "component"
+  ],
   "type": "module",
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
@@ -52,7 +64,7 @@
     }
   },
   "dependencies": {
-    "convex": "1.16.0-alpha.2"
+    "convex": "^1.16.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
