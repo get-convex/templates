@@ -1,8 +1,11 @@
 import { internalMutation, query, mutation } from "./_generated/server";
 import { components } from "./_generated/api";
-import { Client, defineCounter } from "@convex-dev/counter";
+import { Client } from "@convex-dev/counter";
 
-const numUsers = defineCounter(components.counter, "users", 100);
+const counter = new Client(components.counter, {
+  shards: { beans: 10, users: 100 },
+});
+const numUsers = counter.for("users");
 
 export const addOne = mutation({
   args: {},
@@ -17,8 +20,6 @@ export const getCount = query({
     return await numUsers.count(ctx);
   },
 });
-
-const counter = new Client(components.counter, { shards: { beans: 100 } });
 
 export const usingClient = internalMutation({
   args: {},
