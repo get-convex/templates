@@ -31,26 +31,18 @@ export class Client<Shards extends Record<string, number>> {
   ) {
     return ctx.runQuery(this.component.public.count, { name });
   }
-}
-
-// Another way of exporting functionality
-export function defineCounter(
-  component: UseApi<typeof api>,
-  name: string,
-  shards: number
-) {
-  return {
-    add: async (ctx: RunMutationCtx, count: number = 1) =>
-      ctx.runMutation(component.public.add, { name, count, shards }),
-    subtract: async (ctx: RunMutationCtx, count: number = 1) =>
-      ctx.runMutation(component.public.add, { name, count: -count, shards }),
-    inc: async (ctx: RunMutationCtx) =>
-      ctx.runMutation(component.public.add, { name, count: 1, shards }),
-    dec: async (ctx: RunMutationCtx) =>
-      ctx.runMutation(component.public.add, { name, count: -1, shards }),
-    count: async (ctx: RunQueryCtx) =>
-      ctx.runQuery(component.public.count, { name }),
-  };
+  // Another way of exporting functionality
+  for<Name extends string = keyof Shards & string>(name: Name) {
+    return {
+      add: async (ctx: RunMutationCtx, count: number = 1) =>
+        this.add(ctx, name, count),
+      subtract: async (ctx: RunMutationCtx, count: number = 1) =>
+        this.add(ctx, name, -count),
+      inc: async (ctx: RunMutationCtx) => this.add(ctx, name, 1),
+      dec: async (ctx: RunMutationCtx) => this.add(ctx, name, -1),
+      count: async (ctx: RunQueryCtx) => this.count(ctx, name),
+    };
+  }
 }
 
 /* Type utils follow */
