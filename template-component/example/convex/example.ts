@@ -1,8 +1,8 @@
 import { internalMutation, query, mutation } from "./_generated/server";
 import { components } from "./_generated/api";
-import { Client } from "@convex-dev/counter";
+import { Counter } from "@convex-dev/counter";
 
-const counter = new Client(components.counter, {
+const counter = new Counter(components.counter, {
   shards: { beans: 10, users: 100 },
 });
 const numUsers = counter.for("users");

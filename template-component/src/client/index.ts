@@ -8,7 +8,7 @@ import {
 import { GenericId } from "convex/values";
 import { api } from "../component/_generated/api";
 
-export class Client<Shards extends Record<string, number>> {
+export class Counter<Shards extends Record<string, number>> {
   constructor(
     public component: UseApi<typeof api>,
     public options?: { shards?: Shards; defaultShards?: number }
