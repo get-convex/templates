@@ -1,13 +1,16 @@
 import { cn } from "@/lib/utils";
+import { Id } from "../../convex/_generated/dataModel";
 import { ReactNode } from "react";
 
 export function Message({
   author,
+  authorName,
   viewer,
   children,
 }: {
-  author: string;
-  viewer: string;
+  author: Id<"users">;
+  authorName: string;
+  viewer: Id<"users">;
   children: ReactNode;
 }) {
   return (
@@ -17,7 +20,7 @@ export function Message({
         author === viewer ? "items-end self-end" : "items-start self-start",
       )}
     >
-      <div className="mb-1 text-sm font-medium">{author}</div>
+      <div className="mb-1 text-sm font-medium">{authorName}</div>
       <p
         className={cn(
           "rounded-xl bg-muted px-3 py-2",

@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { ReactNode } from "react";
 
@@ -28,8 +30,16 @@ export function UserMenu({ children }: { children: ReactNode }) {
             Theme
             <ThemeToggle />
           </DropdownMenuLabel>
+          <SignOutButton />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
+  );
+}
+
+function SignOutButton() {
+  const { signOut } = useAuthActions();
+  return (
+    <DropdownMenuItem onClick={() => void signOut()}>Sign out</DropdownMenuItem>
   );
 }
