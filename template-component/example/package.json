@@ -4,7 +4,7 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
-    "dev": "convex dev --live-component-sources",
+    "dev": "convex dev --live-component-sources --typecheck-components",
     "dev:frontend": "vite",
     "logs": "convex logs",
     "lint": "tsc -p convex && eslint convex"

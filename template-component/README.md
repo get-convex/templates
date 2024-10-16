@@ -123,9 +123,15 @@ stub directories with special pre- and post-pack scripts.
 
 [![npm version](https://badge.fury.io/js/@convex-dev%2Fcounter.svg)](https://badge.fury.io/js/@convex-dev%2Fcounter)
 
+**Note: Convex Components are currently in beta**
+
+<!-- START: Include on https://convex.dev/components -->
+
 - [ ] What is some compelling syntax as a hook?
 - [ ] Why should you use this component?
 - [ ] Links to Stack / other resources?
+
+Found a bug? Feature request? [File it here](https://github.com/get-convex/counter/issues).
 
 ## Before you get started
 
@@ -167,6 +173,8 @@ const counter = new Counter(components.counter, {
 ```
 
 See more example usage in [example.ts](./example/convex/example.ts).
+
+<!-- END: Include on https://convex.dev/components -->
 
 # 🧑‍🏫 What is Convex?
 
