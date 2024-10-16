@@ -63,8 +63,8 @@
       }
     }
   },
-  "dependencies": {
-    "convex": "^1.16.2"
+  "peerDependencies": {
+    "convex": "~1.16.5 || ~1.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
