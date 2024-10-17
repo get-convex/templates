@@ -284,7 +284,7 @@ async function installDependencies(): Promise<void> {
     /**
      * Spawn the installation process.
      */
-    const child = spawn("npm", ["install", "--no-fund", "--no-audit"], {
+    const child = spawn("npm", ["install", "--no-fund", "--no-audit", "--loglevel=error"], {
       stdio: "inherit",
       env: {
         ...process.env,
