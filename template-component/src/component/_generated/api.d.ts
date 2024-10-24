@@ -10,7 +10,7 @@
  * @module
  */
 
-import type * as public from "../public.js";
+import type * as lib from "../lib.js";
 
 import type {
   ApiFromModules,
@@ -26,10 +26,10 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  public: typeof public;
+  lib: typeof lib;
 }>;
 export type Mounts = {
-  public: {
+  lib: {
     add: FunctionReference<
       "mutation",
       "public",
