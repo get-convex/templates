@@ -146,7 +146,7 @@ Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.d
 Install the component package:
 
 ```ts
-npm install @convex-dev/foo
+npm install @convex-dev/counter
 ```
 
 Create a `convex.config.ts` file in your app's `convex/` folder and install the component by calling `use`:

@@ -19,7 +19,7 @@ export class Counter<Shards extends Record<string, number>> {
     count: number = 1
   ) {
     const shards = this.options?.shards?.[name] ?? this.options?.defaultShards;
-    return ctx.runMutation(this.component.public.add, {
+    return ctx.runMutation(this.component.lib.add, {
       name,
       count,
       shards,
@@ -29,7 +29,7 @@ export class Counter<Shards extends Record<string, number>> {
     ctx: RunQueryCtx,
     name: Name
   ) {
-    return ctx.runQuery(this.component.public.count, { name });
+    return ctx.runQuery(this.component.lib.count, { name });
   }
   // Another way of exporting functionality
   for<Name extends string = keyof Shards & string>(name: Name) {
