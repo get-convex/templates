@@ -44,16 +44,16 @@ export const usingFunctions = internalMutation({
 export const directCall = internalMutation({
   args: {},
   handler: async (ctx, _args) => {
-    await ctx.runMutation(components.counter.public.add, {
+    await ctx.runMutation(components.counter.lib.add, {
       name: "pennies",
       count: 250,
     });
-    await ctx.runMutation(components.counter.public.add, {
+    await ctx.runMutation(components.counter.lib.add, {
       name: "beans",
       count: 3,
       shards: 100,
     });
-    const count = await ctx.runQuery(components.counter.public.count, {
+    const count = await ctx.runQuery(components.counter.lib.count, {
       name: "beans",
     });
     return count;
