@@ -41,7 +41,7 @@ export declare const internal: FilterApi<
 
 export declare const components: {
   counter: {
-    public: {
+    lib: {
       add: FunctionReference<
         "mutation",
         "internal",
