@@ -24,7 +24,7 @@ npx convex dev
 
 Modify the schema and index files in src/component/ to define your component.
 
-Optionally write a client forusing this component in src/client/index.ts.
+Write a client for using this component in src/client/index.ts.
 
 If you won't be adding frontend code (e.g. React components) to this
 component you can delete the following:
