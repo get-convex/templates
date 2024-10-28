@@ -1,0 +1,11 @@
+.DS_Store
+.idea
+*.local
+*.log
+/.vscode/
+/docs/.vitepress/cache
+dist
+dist-ssr
+explorations
+node_modules
+.eslintcache
