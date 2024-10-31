@@ -80,28 +80,28 @@ type RunMutationCtx = {
 };
 
 export type OpaqueIds<T> =
-T extends GenericId<infer _T>
-? string
-: T extends (infer U)[]
-? OpaqueIds<U>[]
-: T extends object
-? { [K in keyof T]: OpaqueIds<T[K]> }
-: T;
+  T extends GenericId<infer _T>
+    ? string
+    : T extends (infer U)[]
+      ? OpaqueIds<U>[]
+      : T extends object
+        ? { [K in keyof T]: OpaqueIds<T[K]> }
+        : T;
 
 export type UseApi<API> = Expand<{
   [mod in keyof API]: API[mod] extends FunctionReference<
-  infer FType,
-  "public",
-  infer FArgs,
-  infer FReturnType,
-  infer FComponentPath
+    infer FType,
+    "public",
+    infer FArgs,
+    infer FReturnType,
+    infer FComponentPath
   >
-  ? FunctionReference<
-  FType,
-  "internal",
-  OpaqueIds<FArgs>,
-  OpaqueIds<FReturnType>,
-  FComponentPath
-  >
-  : UseApi<API[mod]>;
+    ? FunctionReference<
+        FType,
+        "internal",
+        OpaqueIds<FArgs>,
+        OpaqueIds<FReturnType>,
+        FComponentPath
+      >
+    : UseApi<API[mod]>;
 }>;
