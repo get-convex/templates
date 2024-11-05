@@ -59,3 +59,6 @@ export const directCall = internalMutation({
     return count;
   },
 });
+
+// Direct re-export of component's API.
+export const { add, count } = counter.api();

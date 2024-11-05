@@ -4,8 +4,10 @@ import {
   GenericDataModel,
   GenericMutationCtx,
   GenericQueryCtx,
+  mutationGeneric,
+  queryGeneric,
 } from "convex/server";
-import { GenericId } from "convex/values";
+import { GenericId, v } from "convex/values";
 import { api } from "../component/_generated/api";
 
 export class Counter<Shards extends Record<string, number>> {
@@ -41,6 +43,29 @@ export class Counter<Shards extends Record<string, number>> {
       inc: async (ctx: RunMutationCtx) => this.add(ctx, name, 1),
       dec: async (ctx: RunMutationCtx) => this.add(ctx, name, -1),
       count: async (ctx: RunQueryCtx) => this.count(ctx, name),
+    };
+  }
+  /**
+  * For easy re-exporting.
+  * Apps can do
+  * ```ts
+  * export const { add, count } = counter.api();
+  * ```
+  */
+  api() {
+    return {
+      add: mutationGeneric({
+        args: { name: v.string() },
+        handler: async (ctx, args) => {
+          await this.add(ctx, args.name);
+        },
+      }),
+      count: queryGeneric({
+        args: { name: v.string() },
+        handler: async (ctx, args) => {
+          return await this.count(ctx, args.name);
+        },
+      }),
     };
   }
 }
