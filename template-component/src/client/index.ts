@@ -46,12 +46,12 @@ export class Counter<Shards extends Record<string, number>> {
     };
   }
   /**
-  * For easy re-exporting.
-  * Apps can do
-  * ```ts
-  * export const { add, count } = counter.api();
-  * ```
-  */
+   * For easy re-exporting.
+   * Apps can do
+   * ```ts
+   * export const { add, count } = counter.api();
+   * ```
+   */
   api() {
     return {
       add: mutationGeneric({
