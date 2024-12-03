@@ -49,13 +49,13 @@
     "./react": {
       "import": {
         "@convex-dev/component-source": "./src/react/index.ts",
-        "types": "./dist/esm/react.d.ts",
-        "default": "./dist/esm/react.js"
+        "types": "./dist/esm/react/index.d.ts",
+        "default": "./dist/esm/react/index.js"
       },
       "require": {
         "@convex-dev/component-source": "./src/react/index.ts",
-        "types": "./dist/commonjs/react.d.ts",
-        "default": "./dist/commonjs/react.js"
+        "types": "./dist/commonjs/react/index.d.ts",
+        "default": "./dist/commonjs/react/index.js"
       }
     },
     "./convex.config": {
