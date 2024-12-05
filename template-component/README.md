@@ -5,13 +5,11 @@ This is a Convex component, ready to be published on npm.
 To create your own component:
 
 1. Find and replace "Counter" to your component's Name.
-1. Find and replace "counter" to your component's name.
+1. Find and replace "counter" to your component's name everywhere but LICENSE.
 1. Write code in src/component for your component.
 1. Write code in src/client for your thick client.
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
-
-It is safe to find & replace "counter" project-wide.
 
 To develop your component run a dev process in the example project.
 
@@ -122,8 +120,6 @@ stub directories with special pre- and post-pack scripts.
 # Convex Counter Component
 
 [![npm version](https://badge.fury.io/js/@convex-dev%2Fcounter.svg)](https://badge.fury.io/js/@convex-dev%2Fcounter)
-
-**Note: Convex Components are currently in beta**
 
 <!-- START: Include on https://convex.dev/components -->
 
