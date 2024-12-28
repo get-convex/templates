@@ -186,6 +186,12 @@ async function init() {
     fs.mkdirSync(root, { recursive: true });
   }
 
+  // We've removed shadcn from some of these.
+  const maybeShadcn =
+    framework && framework.name === "nextjs" && auth === "clerk"
+      ? ""
+      : "-shadcn";
+
   // determine template
   const givenTemplate: string = component
     ? "component"
@@ -193,7 +199,7 @@ async function init() {
     ? framework.name +
       (framework.name === "bare"
         ? ""
-        : (auth !== "none" ? "-" + auth : "") + "-shadcn")
+        : (auth !== "none" ? "-" + auth : "") + maybeShadcn)
     : argTemplate!;
 
   const SEPARATE_REPOS = [
@@ -284,17 +290,21 @@ async function installDependencies(): Promise<void> {
     /**
      * Spawn the installation process.
      */
-    const child = spawn("npm", ["install", "--no-fund", "--no-audit", "--loglevel=error"], {
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        ADBLOCK: "1",
-        // we set NODE_ENV to development as pnpm skips dev
-        // dependencies when production
-        NODE_ENV: "development",
-        DISABLE_OPENCOLLECTIVE: "1",
-      },
-    });
+    const child = spawn(
+      "npm",
+      ["install", "--no-fund", "--no-audit", "--loglevel=error"],
+      {
+        stdio: "inherit",
+        env: {
+          ...process.env,
+          ADBLOCK: "1",
+          // we set NODE_ENV to development as pnpm skips dev
+          // dependencies when production
+          NODE_ENV: "development",
+          DISABLE_OPENCOLLECTIVE: "1",
+        },
+      }
+    );
     child.on("close", (code) => {
       if (code !== 0) {
         reject(code);
