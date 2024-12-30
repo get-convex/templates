@@ -21,9 +21,10 @@ npm create convex@latest my-app -- -t bare
 Currently supported template presets include:
 
 - `bare`
-- `nextjs-clerk-shadcn`
-- `nextjs-lucia-shadcn`
 - `nextjs-shadcn`
+- `nextjs-clerk`
+- `nextjs-convexauth-shadcn`
+- `nextjs-lucia-shadcn`
 - `react-vite-clerk-shadcn`
 - `react-vite-shadcn`
 
