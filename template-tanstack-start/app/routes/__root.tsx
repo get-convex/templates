@@ -21,6 +21,7 @@ export const Route = createRootRouteWithContext<{
       },
     ],
   }),
+  notFoundComponent: () => <div>Route not found</div>,
   component: RootComponent,
 });
 

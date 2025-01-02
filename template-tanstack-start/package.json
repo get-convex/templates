@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm-run-all --parallel dev:convex dev:start",
+    "dev": "npx convex dev --once; npx convex import --table tasks sampleData.jsonl; npm-run-all --parallel dev:convex dev:start",
     "dev:convex": "convex dev",
     "dev:start": "vinxi dev",
     "build": "vinxi build",
