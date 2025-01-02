@@ -238,6 +238,9 @@ async function init() {
     }
     await degitInstance.clone(root);
   } catch (error) {
+    if (verbose) {
+      console.log(red((error as any).toString()));
+    }
     console.log(red(`✖ Failed to download template from \`${repo}\``));
     return;
   }
@@ -362,9 +365,6 @@ function emptyDir(dir: string) {
     return;
   }
   for (const file of fs.readdirSync(dir)) {
-    if (file === ".git") {
-      continue;
-    }
     fs.rmSync(path.resolve(dir, file), { recursive: true, force: true });
   }
 }
