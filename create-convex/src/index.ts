@@ -32,6 +32,10 @@ const FRAMEWORKS: Framework[] = [
     display: "Next.js App Router",
   },
   {
+    name: "tanstack-start",
+    display: "TanStack Start (Beta)",
+  },
+  {
     name: "bare",
     display: "none",
   },
@@ -50,6 +54,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
     name: "clerk",
     display: "Clerk (requires Clerk account)",
+    frameworks: ["react-vite", "nextjs", "tanstack-start"],
   },
   {
     name: "none",
@@ -188,7 +193,8 @@ async function init() {
 
   // We've removed shadcn from some of these.
   const maybeShadcn =
-    framework && framework.name === "nextjs" && auth === "clerk"
+    (framework && framework.name === "nextjs" && auth === "clerk") ||
+    (framework && framework.name === "tanstack-start")
       ? ""
       : "-shadcn";
 
