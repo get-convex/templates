@@ -285,7 +285,12 @@ async function init() {
       }`
     );
   }
-  if (component) {
+  // The TanStack basic template is confusing
+  // if you haven't imported the data.
+  if (givenTemplate === "tanstack-start") {
+    console.log(`  npm run seed`);
+    console.log(`  npm run dev`);
+  } else if (component) {
     console.log(`  cd example`);
     console.log(`  npm run dev`);
   } else {
