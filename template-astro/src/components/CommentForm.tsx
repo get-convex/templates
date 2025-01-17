@@ -10,7 +10,10 @@ export default withConvexProvider(function CommentForm() {
   const [error, setError] = useState<string>();
 
   const handleSubmit = async () => {
-    if (!author.trim() || !content.trim()) return;
+    if (!author.trim() || !content.trim()) {
+      setError("You must provide an author and content");
+      return;
+    }
 
     setError(undefined);
     try {
