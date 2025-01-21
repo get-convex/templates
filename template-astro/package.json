@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "convex dev --until-success && run-p --race \"dev:*\"",
+    "dev": "run-p -r dev:*",
+    "predev": "convex dev --until-success",
     "dev:astro": "astro dev",
     "dev:convex": "convex dev",
     "build": "astro build",
