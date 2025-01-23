@@ -1,11 +1,11 @@
 {
-  "name": "@convex-dev/counter",
-  "description": "A counter component for Convex.",
-  "repository": "github:get-convex/counter",
-  "homepage": "https://github.com/get-convex/counter#readme",
+  "name": "@convex-dev/sharded-counter",
+  "description": "A sharded counter component for Convex.",
+  "repository": "github:get-convex/sharded-counter",
+  "homepage": "https://github.com/get-convex/sharded-counter#readme",
   "bugs": {
     "email": "support@convex.dev",
-    "url": "https://github.com/get-convex/counter/issues"
+    "url": "https://github.com/get-convex/sharded-counter/issues"
   },
   "version": "0.1.0",
   "license": "Apache-2.0",
