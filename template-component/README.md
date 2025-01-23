@@ -4,8 +4,9 @@ This is a Convex component, ready to be published on npm.
 
 To create your own component:
 
-1. Find and replace "Counter" to your component's Name.
-1. Find and replace "counter" to your component's name everywhere but LICENSE.
+1. Find and replace "@convex-dev/sharded-counter" with your npm package's name.
+1. Find and replace "get-convex/sharded-counter" to your component's repo.
+1. Find and replace "ShardedCounter", "shardedCounter", "sharded-counter", "sharded_counter", "sharded counter", and "Sharded Counter" to your component's name.
 1. Write code in src/component for your component.
 1. Write code in src/client for your thick client.
 1. Write example usage in example/convex/example.ts.
@@ -117,9 +118,9 @@ stub directories with special pre- and post-pack scripts.
 
 ---
 
-# Convex Counter Component
+# Convex Sharded Counter Component
 
-[![npm version](https://badge.fury.io/js/@convex-dev%2Fcounter.svg)](https://badge.fury.io/js/@convex-dev%2Fcounter)
+[![npm version](https://badge.fury.io/js/@convex-dev%2Fsharded-counter.svg)](https://badge.fury.io/js/@convex-dev%2Fsharded-counter)
 
 <!-- START: Include on https://convex.dev/components -->
 
@@ -127,7 +128,7 @@ stub directories with special pre- and post-pack scripts.
 - [ ] Why should you use this component?
 - [ ] Links to Stack / other resources?
 
-Found a bug? Feature request? [File it here](https://github.com/get-convex/counter/issues).
+Found a bug? Feature request? [File it here](https://github.com/get-convex/sharded-counter/issues).
 
 ## Pre-requisite: Convex
 
@@ -142,7 +143,7 @@ Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.d
 Install the component package:
 
 ```ts
-npm install @convex-dev/counter
+npm install @convex-dev/sharded-counter
 ```
 
 Create a `convex.config.ts` file in your app's `convex/` folder and install the component by calling `use`:
@@ -150,10 +151,10 @@ Create a `convex.config.ts` file in your app's `convex/` folder and install the 
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import counter from "@convex-dev/counter/convex.config";
+import shardedCounter from "@convex-dev/sharded-counter/convex.config";
 
 const app = defineApp();
-app.use(counter);
+app.use(shardedCounter);
 
 export default app;
 ```
@@ -162,7 +163,7 @@ export default app;
 
 ```ts
 import { components } from "./_generated/api";
-import { Counter } from "@convex-dev/counter";
+import { ShardedCounter } from "@convex-dev/sharded-counter";
 
 const counter = new Counter(components.counter, {
   ...options,

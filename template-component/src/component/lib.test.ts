@@ -7,7 +7,7 @@ import { api } from "./_generated/api.js";
 
 const modules = import.meta.glob("./**/*.*s");
 
-describe("counter", () => {
+describe("sharded-counter", () => {
   test("add and subtract", async () => {
     const t = convexTest(schema, modules);
     await t.mutation(api.lib.add, { name: "beans", count: 10 });

@@ -10,7 +10,7 @@ import {
 import { GenericId, v } from "convex/values";
 import { api } from "../component/_generated/api";
 
-export class Counter<Shards extends Record<string, number>> {
+export class ShardedCounter<Shards extends Record<string, number>> {
   constructor(
     public component: UseApi<typeof api>,
     public options?: { shards?: Shards; defaultShards?: number }
@@ -49,7 +49,7 @@ export class Counter<Shards extends Record<string, number>> {
    * For easy re-exporting.
    * Apps can do
    * ```ts
-   * export const { add, count } = counter.api();
+   * export const { add, count } = shardedCounter.api();
    * ```
    */
   api() {

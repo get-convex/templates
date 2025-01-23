@@ -1,11 +1,11 @@
 import { internalMutation, query, mutation } from "./_generated/server";
 import { components } from "./_generated/api";
-import { Counter } from "@convex-dev/counter";
+import { ShardedCounter } from "@convex-dev/sharded-counter";
 
-const counter = new Counter(components.counter, {
+const shardedCounter = new ShardedCounter(components.shardedCounter, {
   shards: { beans: 10, users: 100 },
 });
-const numUsers = counter.for("users");
+const numUsers = shardedCounter.for("users");
 
 export const addOne = mutation({
   args: {},
@@ -24,9 +24,9 @@ export const getCount = query({
 export const usingClient = internalMutation({
   args: {},
   handler: async (ctx, _args) => {
-    await counter.add(ctx, "accomplishments");
-    await counter.add(ctx, "beans", 2);
-    const count = await counter.count(ctx, "beans");
+    await shardedCounter.add(ctx, "accomplishments");
+    await shardedCounter.add(ctx, "beans", 2);
+    const count = await shardedCounter.count(ctx, "beans");
     return count;
   },
 });
@@ -44,16 +44,16 @@ export const usingFunctions = internalMutation({
 export const directCall = internalMutation({
   args: {},
   handler: async (ctx, _args) => {
-    await ctx.runMutation(components.counter.lib.add, {
+    await ctx.runMutation(components.shardedCounter.lib.add, {
       name: "pennies",
       count: 250,
     });
-    await ctx.runMutation(components.counter.lib.add, {
+    await ctx.runMutation(components.shardedCounter.lib.add, {
       name: "beans",
       count: 3,
       shards: 100,
     });
-    const count = await ctx.runQuery(components.counter.lib.count, {
+    const count = await ctx.runQuery(components.shardedCounter.lib.count, {
       name: "beans",
     });
     return count;
@@ -61,4 +61,4 @@ export const directCall = internalMutation({
 });
 
 // Direct re-export of component's API.
-export const { add, count } = counter.api();
+export const { add, count } = shardedCounter.api();
