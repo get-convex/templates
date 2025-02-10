@@ -14,3 +14,27 @@
 	path = template-nextjs-convexauth-shadcn
 	url = https://github.com/get-convex/generate-template-nextjs.git
 	branch = template-nextjs-convexauth-shadcn
+[submodule "template-react-vite"]
+	path = template-react-vite
+	url = https://github.com/get-convex/generate-template-react-vite.git
+	branch = template-react-vite
+[submodule "template-react-vite-convexauth"]
+	path = template-react-vite-convexauth
+	url = https://github.com/get-convex/generate-template-react-vite.git
+	branch = template-react-vite-convexauth
+[submodule "template-react-vite-clerk"]
+	path = template-react-vite-clerk
+	url = https://github.com/get-convex/generate-template-react-vite.git
+	branch = template-react-vite-clerk
+[submodule "template-nextjs"]
+	path = template-nextjs
+	url = https://github.com/get-convex/generate-template-nextjs.git
+	branch = template-nextjs
+[submodule "template-nextjs-convexauth"]
+	path = template-nextjs-convexauth
+	url = https://github.com/get-convex/generate-template-nextjs.git
+	branch = template-nextjs-convexauth
+[submodule "template-nextjs-clerk"]
+	path = template-nextjs-clerk
+	url = https://github.com/get-convex/generate-template-nextjs.git
+	branch = template-nextjs-clerk

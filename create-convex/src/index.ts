@@ -92,6 +92,7 @@ async function init() {
   try {
     result = await prompts(
       [
+        // Prompt for the project name
         {
           type: argTargetDir ? null : "text",
           name: "projectName",
@@ -102,6 +103,7 @@ async function init() {
           },
         },
         {
+          // Prompt for overwrite if the target directory is not empty
           type: () =>
             !fs.existsSync(targetDir) || isEmpty(targetDir) ? null : "confirm",
           name: "overwrite",
@@ -112,6 +114,7 @@ async function init() {
             ` is not empty. Remove existing files and continue?`,
         },
         {
+          // Check if overwrite is false
           type: (_, { overwrite }: { overwrite?: boolean }) => {
             if (overwrite === false) {
               throw new Error(red("✖") + " Operation cancelled");
@@ -121,6 +124,7 @@ async function init() {
           name: "overwriteChecker",
         },
         {
+          // Prompt for the package name (if project name is not a valid package name)
           type: () => (isValidPackageName(getProjectName()) ? null : "text"),
           name: "packageName",
           message: reset("Package name:"),
@@ -128,7 +132,9 @@ async function init() {
           validate: (dir) =>
             isValidPackageName(dir) || "Invalid package.json name",
         },
+        // The next two prompts are only shown if not targeting a specific template or using the component template
         {
+          // Prompt for the framework
           type: argTemplate || component ? null : "select",
           name: "framework",
           hint: "Use arrow-keys, <return> to confirm",
@@ -142,6 +148,7 @@ async function init() {
           }),
         },
         {
+          // Prompt for the auth provider
           type: (framework) => {
             if (argTemplate || component) {
               return null;
@@ -191,41 +198,20 @@ async function init() {
     fs.mkdirSync(root, { recursive: true });
   }
 
-  // We've removed shadcn from some of these.
-  const maybeShadcn =
-    (framework && framework.name === "nextjs" && auth === "clerk") ||
-    (framework && framework.name === "tanstack-start")
-      ? ""
-      : "-shadcn";
-
   // determine template
-  const givenTemplate: string = component
-    ? "component"
-    : framework
-    ? framework.name +
-      (framework.name === "bare"
-        ? ""
-        : (auth !== "none" ? "-" + auth : "") + maybeShadcn)
-    : argTemplate!;
+  // e.g. `nextjs-convexauth`
+  const givenTemplate: string = getGivenTemplate({
+    component,
+    framework,
+    auth,
+    argTemplate,
+  });
 
-  const SEPARATE_REPOS = [
-    "react-vite-convexauth-shadcn",
-    "nextjs-convexauth-shadcn",
-    "nextjs-shadcn",
-    "react-vite-shadcn",
-  ];
-
-  const template = givenTemplate.includes("/")
-    ? givenTemplate.includes("#")
-      ? givenTemplate
-      : givenTemplate + "#main"
-    : SEPARATE_REPOS.includes(givenTemplate)
-    ? `get-convex/template-${givenTemplate}#main`
-    : `get-convex/templates/template-${givenTemplate}#main`;
+  const templateRepoPath = getTemplateRepoPath(givenTemplate);
 
   console.log(`\nSetting up...`);
 
-  const repo = `https://github.com/${template}`;
+  const repo = `https://github.com/${templateRepoPath}`;
 
   if (argv["dry-run"]) {
     console.log(`\n${green(`✔`)} Would have fetched template from:`);
@@ -378,4 +364,52 @@ function emptyDir(dir: string) {
   for (const file of fs.readdirSync(dir)) {
     fs.rmSync(path.resolve(dir, file), { recursive: true, force: true });
   }
+}
+
+// e.g. `nextjs-convexauth`
+function getGivenTemplate(args: {
+  component: boolean;
+  framework: Framework;
+  auth: string;
+  argTemplate: string | undefined;
+}) {
+  const { component, framework, auth, argTemplate } = args;
+  if (component) {
+    return "component";
+  }
+  if (argTemplate) {
+    return argTemplate;
+  }
+  if (framework === null || framework === undefined) {
+    throw new Error(red("✖") + " No framework or template provided");
+  }
+  if (framework.name === "bare") {
+    return framework.name;
+  }
+  if (auth === "none") {
+    return framework.name;
+  }
+  return framework.name + "-" + auth;
+}
+
+// E.g. `get-convex/templates/template-nextjs-convexauth#main`
+// or `atrakh/one-million-checkboxes`
+function getTemplateRepoPath(templateName: string) {
+  // Does this look like a repo name already?
+  if (templateName.includes("/")) {
+    if (templateName.includes("#")) {
+      return templateName;
+    } else {
+      return templateName + "#main";
+    }
+  }
+  if (
+    templateName === "tanstack-start" ||
+    templateName === "tanstack-start-clerk"
+  ) {
+    return `get-convex/templates/template-${templateName}#main`;
+  }
+
+  // This is one of our templates specifically for `npm create convex`
+  return `get-convex/template-${templateName}#main`;
 }
