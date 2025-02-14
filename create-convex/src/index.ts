@@ -384,13 +384,20 @@ function getGivenTemplate(args: {
     throw new Error(red("✖") + " No framework or template provided");
   }
   if (framework.name === "bare") {
-    return framework.name;
+    return "bare";
   }
   if (auth === "none") {
     return framework.name;
   }
   return framework.name + "-" + auth;
 }
+
+const TEMPLATES_IN_REPO = [
+  "bare",
+  "tanstack-start",
+  "tanstack-start-clerk",
+  "component",
+];
 
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
@@ -403,10 +410,7 @@ function getTemplateRepoPath(templateName: string) {
       return templateName + "#main";
     }
   }
-  if (
-    templateName === "tanstack-start" ||
-    templateName === "tanstack-start-clerk"
-  ) {
+  if (TEMPLATES_IN_REPO.includes(templateName)) {
     return `get-convex/templates/template-${templateName}#main`;
   }
 
