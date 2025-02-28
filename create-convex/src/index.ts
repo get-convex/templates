@@ -5,6 +5,7 @@ import { bold, green, gray, red, reset } from "kolorist";
 import minimist from "minimist";
 import path from "path";
 import prompts from "prompts";
+import { PackageManager, detectPackageManager } from "./packageManagers";
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -70,6 +71,10 @@ function authOptions(framework: Framework) {
 }
 
 const defaultTargetDir = "my-app";
+
+// Detect package manager early
+const packageManager = detectPackageManager();
+console.log(`Using package manager: ${green(packageManager)}`);
 
 init().catch((e) => {
   console.error(e);
@@ -274,37 +279,41 @@ async function init() {
   // The TanStack basic template is confusing
   // if you haven't imported the data.
   if (givenTemplate === "tanstack-start") {
-    console.log(`  npm run seed`);
-    console.log(`  npm run dev`);
+    console.log(`  ${packageManager} run seed`);
+    console.log(`  ${packageManager} run dev`);
   } else if (component) {
     console.log(`  cd example`);
-    console.log(`  npm run dev`);
+    console.log(`  ${packageManager} run dev`);
   } else {
-    console.log(`  npm run dev`);
+    console.log(`  ${packageManager} run dev`);
   }
   console.log();
 }
 
 async function installDependencies(): Promise<void> {
   return new Promise((resolve, reject) => {
+    // Different package managers use different command arguments
+    const packageManagerArgs: Record<PackageManager, string[]> = {
+      npm: ["install", "--no-fund", "--no-audit", "--loglevel=error"],
+      yarn: ["install", "--no-fund"],
+      pnpm: ["install"],
+      bun: ["install"],
+    };
+
     /**
-     * Spawn the installation process.
+     * Spawn the installation process using the detected package manager
      */
-    const child = spawn(
-      "npm",
-      ["install", "--no-fund", "--no-audit", "--loglevel=error"],
-      {
-        stdio: "inherit",
-        env: {
-          ...process.env,
-          ADBLOCK: "1",
-          // we set NODE_ENV to development as pnpm skips dev
-          // dependencies when production
-          NODE_ENV: "development",
-          DISABLE_OPENCOLLECTIVE: "1",
-        },
-      }
-    );
+    const child = spawn(packageManager, packageManagerArgs[packageManager], {
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        ADBLOCK: "1",
+        // we set NODE_ENV to development as pnpm skips dev
+        // dependencies when production
+        NODE_ENV: "development",
+        DISABLE_OPENCOLLECTIVE: "1",
+      },
+    });
     child.on("close", (code) => {
       if (code !== 0) {
         reject(code);
