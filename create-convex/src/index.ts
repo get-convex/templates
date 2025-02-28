@@ -433,7 +433,7 @@ async function writeCursorRules(root: string, options: { verbose: boolean }) {
     content = await getLatestCursorRules(options);
   } catch (e) {
     console.error(red("✖ Failed to download latest cursor rules:"));
-    console.error(gray(e.toString()));
+    console.error(gray(`${e}`));
   }
   if (content !== null) {
     // Create the .cursor/rules directory if it doesn't exist
