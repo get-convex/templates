@@ -23,7 +23,8 @@
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "lint": "echo ESLint is not configured"
+    "lint": "echo ESLint is not configured",
+    "dev:run": "node ./dist/index.mjs"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
