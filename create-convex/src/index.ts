@@ -74,7 +74,6 @@ const defaultTargetDir = "my-app";
 
 // Detect package manager early
 const packageManager = detectPackageManager();
-console.log(`Using package manager: ${green(packageManager)}`);
 
 init().catch((e) => {
   console.error(e);

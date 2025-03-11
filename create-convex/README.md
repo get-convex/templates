@@ -46,6 +46,6 @@ optionally with a branch name:
 npm create convex@latest my-app -- -t 'thomasballinger/convex-clerk-users-table#branch'
 ```
 
-# Devloping
+# Developing
 
 To work on this repo, make changes then `bun dev` which will output to `./dist` then `bun run dev:run` to run it with bun or `X run dev:run` where X is your package manager of choice.
