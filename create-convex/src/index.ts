@@ -440,7 +440,7 @@ async function writeCursorRules(root: string, options: { verbose: boolean }) {
   try {
     content = await getLatestCursorRules(options);
   } catch (e) {
-    console.error(red("✖ Failed to download latest cursor rules:"));
+    console.error(red("✖ Failed to download latest Cursor rules:"));
     console.error(gray(`${e}`));
   }
   if (content !== null) {
@@ -450,7 +450,7 @@ async function writeCursorRules(root: string, options: { verbose: boolean }) {
       path.join(root, ".cursor", "rules", CURSOR_RULES_FILE_NAME),
       content
     );
-    console.log(`${green("✔")} Latest cursor rules added to project.`);
+    console.log(`${green("✔")} Latest Cursor rules added to project.`);
     console.log();
   }
 }
