@@ -19,12 +19,11 @@
     "dist"
   ],
   "scripts": {
-    "dev": "unbuild --stub",
-    "build": "unbuild",
+    "build": "unbuild --stub",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm i && npm run build",
     "lint": "echo ESLint is not configured",
-    "dev:run": "node ./dist/index.mjs"
+    "dev": "node ./dist/index.mjs"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
