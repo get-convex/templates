@@ -20,10 +20,10 @@
   ],
   "scripts": {
     "build": "unbuild --stub",
+    "start": "node ./dist/index.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm i && npm run build",
-    "lint": "echo ESLint is not configured",
-    "dev": "node ./dist/index.mjs"
+    "lint": "echo ESLint is not configured"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
