@@ -22,7 +22,7 @@
     "dev": "unbuild --stub",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm i && npm run build",
     "lint": "echo ESLint is not configured",
     "dev:run": "node ./dist/index.mjs"
   },
@@ -34,6 +34,7 @@
     "@types/degit": "^2.8.4",
     "@types/minimist": "^1.2.2",
     "@types/prompts": "^2.4.4",
+    "boxen": "^8.0.1",
     "cross-spawn": "^7.0.3",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",

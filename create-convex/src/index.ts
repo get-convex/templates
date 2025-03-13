@@ -2,6 +2,7 @@ import spawn from "cross-spawn";
 import degit from "degit";
 import fs from "fs";
 import { bold, green, gray, red, reset } from "kolorist";
+import boxen from "boxen";
 import minimist from "minimist";
 import path from "path";
 import prompts from "prompts";
@@ -264,28 +265,37 @@ async function init() {
       process.chdir("./example");
       await installDependencies();
     }
-    console.log(`\n${green(`✔`)} Done. Now run:\n`);
+    console.log(`\n${green(`✔`)} Done.`);
   } catch (error) {
     console.log(red("✖ Failed to install dependencies."));
   }
+  let message = "Run the following commands to start the project:\n\n";
   if (root !== cwd) {
-    console.log(
-      `  cd ${
-        cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
-      }`
-    );
+    message += `  cd ${
+      cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
+    }\n`;
   }
   // The TanStack basic template is confusing
   // if you haven't imported the data.
   if (givenTemplate === "tanstack-start") {
-    console.log(`  ${packageManager} run seed`);
-    console.log(`  ${packageManager} run dev`);
+    message += `  ${packageManager} run seed\n`;
+    message += `  ${packageManager} run dev\n`;
   } else if (component) {
-    console.log(`  cd example`);
-    console.log(`  ${packageManager} run dev`);
+    message += `  cd example\n`;
+    message += `  ${packageManager} run dev\n`;
   } else {
-    console.log(`  ${packageManager} run dev`);
+    message += `  ${packageManager} run dev\n`;
   }
+  
+  // Add a link to the Convex docs
+  message += `\nCheck out the Convex docs at: ${bold("https://docs.convex.dev")}\n`;
+  
+  console.log(boxen(message.trimEnd(), {
+    title: "Template Created",
+    padding: 1,
+    margin: 1,
+    borderStyle: "double",
+  }));
   console.log();
 }
 
