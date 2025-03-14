@@ -79,7 +79,7 @@ type RunMutationCtx = {
   runMutation: GenericMutationCtx<GenericDataModel>["runMutation"];
 };
 
-export type OpaqueIds<T> = T extends GenericId<infer _T> | string
+export type OpaqueIds<T> = T extends GenericId<infer _T>
   ? string
   : T extends (infer U)[]
     ? OpaqueIds<U>[]
