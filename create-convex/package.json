@@ -1,6 +1,6 @@
 {
   "name": "create-convex",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Convex, Inc. <team@convex.dev>",
@@ -19,11 +19,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild --stub",
-    "start": "node ./dist/index.mjs",
+    "dev": "unbuild --stub",
+    "build": "unbuild",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm i && npm run typecheck && npm run build",
-    "lint": "echo ESLint is not configured"
+    "prepublishOnly": "npm run build",
+    "lint": "echo ESLint is not configured",
+    "dev:run": "node ./dist/index.mjs"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
