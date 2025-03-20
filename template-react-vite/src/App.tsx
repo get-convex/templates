@@ -6,7 +6,7 @@ import { api } from "../convex/_generated/api";
 export default function App() {
   return (
     <>
-      <header className="sticky top-0 z-10 bg-background p-4 border-b-2 border-slate-200 dark:border-slate-800">
+      <header className="sticky top-0 z-10 bg-light dark:bg-dark p-4 border-b-2 border-slate-200 dark:border-slate-800">
         Convex + React
       </header>
       <main className="p-8 flex flex-col gap-16">
@@ -41,7 +41,7 @@ function Content() {
       </p>
       <p>
         <button
-          className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
+          className="bg-dark dark:bg-light text-light dark:text-dark text-sm px-4 py-2 rounded-md border-2"
           onClick={() => {
             void addNumber({ value: Math.floor(Math.random() * 10) });
           }}
