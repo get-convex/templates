@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@convex-dev/sharded-counter": "file:..",
-    "convex": "file:../node_modules/convex",
+    "convex": "^1.21.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
