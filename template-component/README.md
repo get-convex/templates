@@ -165,7 +165,7 @@ export default app;
 import { components } from "./_generated/api";
 import { ShardedCounter } from "@convex-dev/sharded-counter";
 
-const counter = new Counter(components.counter, {
+const shardedCounter = new ShardedCounter(components.shardedCounter, {
   ...options,
 });
 ```
