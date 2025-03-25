@@ -9,7 +9,7 @@
     "lint": "tsc -p convex && eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "convex": "^1.17.0"
+    "convex": "^1.21.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.0",
