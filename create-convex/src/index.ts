@@ -286,16 +286,20 @@ async function init() {
   } else {
     message += `  ${packageManager} run dev\n`;
   }
-  
+
   // Add a link to the Convex docs
-  message += `\nCheck out the Convex docs at: ${bold("https://docs.convex.dev")}\n`;
-  
-  console.log(boxen(message.trimEnd(), {
-    title: "Template Created",
-    padding: 1,
-    margin: 1,
-    borderStyle: "double",
-  }));
+  message += `\nCheck out the Convex docs at: ${bold(
+    "https://docs.convex.dev"
+  )}\n`;
+
+  console.log(
+    boxen(message.trimEnd(), {
+      title: "Template Created",
+      padding: 1,
+      margin: 1,
+      borderStyle: "double",
+    })
+  );
   console.log();
 }
 
