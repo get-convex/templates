@@ -7,14 +7,14 @@
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "vite --open",
     "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && node setup.mjs --once && convex dashboard",
+    "predev": "convex dev --until-success && convex dev --once --run-sh 'node setup.mjs --once' && convex dashboard",
     "build": "tsc -b && vite build",
     "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@convex-dev/auth": "^0.0.80",
-    "convex": "^1.21.0",
+    "@convex-dev/auth": "^0.0.81",
+    "convex": "^1.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
