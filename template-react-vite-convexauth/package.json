@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.81",
-    "convex": "^1.22.0",
+    "convex": "^1.23.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
