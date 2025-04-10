@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx convex dev --once; npm-run-all --parallel dev:convex dev:start",
+    "dev": "npx convex dev --once && npm-run-all --parallel dev:convex dev:start",
     "dev:convex": "convex dev",
     "dev:start": "vinxi dev",
-    "seed": "npx convex dev --once; npx convex import --table tasks sampleData.jsonl",
+    "seed": "npx convex dev --once && npx convex import --table tasks sampleData.jsonl",
     "build": "vinxi build",
     "start": "vinxi start"
   },
