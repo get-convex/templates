@@ -146,6 +146,9 @@ To make a change, follow these steps:
      really matter which specific template directory you choose. Pick one.
 2. Make the change by amending some commit or adding a new commit (see the
    workflows below)
+   - To keep history clean, only add a new commit for changes that really
+     require the distinction. Otherwise look for a relevant commit in the
+     template's history and amend that.
 3. Rebase any other affected branches (see below)
 4. Force push all changed branches
 5. `cd` into the main directory
@@ -175,7 +178,7 @@ If you need to make other changes, including rerunning the commands used to make
 a particular commit, do:
 
 1. `cd template-foo`
-2. Run `npx rebase -i --root`
+2. Run `git rebase -i --root`
 3. Mark the commits you want to edit as `edit`. This is easier if you install
    GitLens extension in VS Code and configure Git to use VS Code as the editor
    via `git config --global core.editor "code --wait"`
