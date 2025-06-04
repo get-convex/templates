@@ -12,6 +12,7 @@ function Home() {
 
   return (
     <div>
+      <h1>Tasks from Convex</h1>
       {data.map(({ _id, text }) => (
         <div key={_id}>{text}</div>
       ))}
