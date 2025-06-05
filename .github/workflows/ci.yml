@@ -64,9 +64,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets[matrix.deploy_key] }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
           git config --global url."git@github.com:".insteadOf "https://github.com/"
-          git submodule update --init --recursive ${{ matrix.project }}
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" git submodule update --init --recursive ${{ matrix.project }}
           git config --global --unset url."git@github.com:".insteadOf
 
       - name: Setup Node.js
