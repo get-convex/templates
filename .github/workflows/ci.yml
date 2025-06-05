@@ -97,10 +97,19 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm run build
 
+      - name: Run build (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.build' package.json > /dev/null; then
+            npm run build
+          else
+            echo "No build script found, skipping"
+          fi
+
       - name: Run typecheck (if available)
         working-directory: ${{ matrix.project }}
         run: |
-          if npm run | grep -q "typecheck"; then
+          if jq -e '.scripts.typecheck' package.json > /dev/null; then
             npm run typecheck
           else
             echo "No typecheck script found, skipping"
@@ -109,7 +118,7 @@ jobs:
       - name: Run lint (if available)
         working-directory: ${{ matrix.project }}
         run: |
-          if npm run | grep -q "lint"; then
+          if jq -e '.scripts.lint' package.json > /dev/null; then
             npm run lint
           else
             echo "No lint script found, skipping"
