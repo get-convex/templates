@@ -20,28 +20,28 @@ jobs:
           - project: template-component
           - project: template-component/example
           - project: template-nextjs
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
           - project: template-nextjs-clerk
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
           - project: template-nextjs-clerk-shadcn
           - project: template-nextjs-convexauth
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
           - project: template-nextjs-convexauth-shadcn
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
           - project: template-nextjs-lucia-shadcn
           - project: template-nextjs-shadcn
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
           - project: template-react-vite
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
           - project: template-react-vite-clerk
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
           - project: template-react-vite-clerk-shadcn
           - project: template-react-vite-convexauth
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
           - project: template-react-vite-convexauth-shadcn
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
           - project: template-react-vite-shadcn
-            deploy_key: ${{ secrets.GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY }}
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
           - project: template-tanstack-start
           - project: template-tanstack-start-clerk
 
@@ -49,9 +49,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: recursive
-          ssh-key: ${{ matrix.deploy_key || '' }}
-          token: ${{ matrix.deploy_key && '' || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Initialize submodules with deploy key
+        if: matrix.deploy_key != ''
+        run: |
+          git config --global url."https://x-access-token:${{ secrets[matrix.deploy_key] }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive ${{ matrix.project }}
+          git config --global --unset url."https://x-access-token:${{ secrets[matrix.deploy_key] }}@github.com/".insteadOf
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
