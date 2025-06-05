@@ -96,10 +96,6 @@ jobs:
           npm install
           npm run build
 
-      - name: Build project
-        working-directory: ${{ matrix.project }}
-        run: npm run build
-
       - name: Run build (if available)
         working-directory: ${{ matrix.project }}
         run: |
@@ -108,6 +104,8 @@ jobs:
           else
             echo "No build script found, skipping"
           fi
+        env:
+          CONVEX_URL: "https://placeholder.convex.cloud"
 
       - name: Run typecheck (if available)
         working-directory: ${{ matrix.project }}
