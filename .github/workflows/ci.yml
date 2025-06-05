@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   build:
+    name: ${{ matrix.project }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -75,6 +76,13 @@ jobs:
           cache: "npm"
           cache-dependency-path: "${{ matrix.project }}/package.json" # because package-lock.json is sometimes excluded
 
+      - name: Build parent project (for the component template)
+        if: matrix.project == 'template-component/example'
+        working-directory: template-component
+        run: |
+          npm install
+          npm run build
+
       - name: Install NPM dependencies
         if: matrix.use_bun != true
         working-directory: ${{ matrix.project }}
@@ -88,13 +96,6 @@ jobs:
         if: matrix.use_bun == true
         working-directory: ${{ matrix.project }}
         run: bun install
-
-      - name: Build parent component (if example project)
-        if: matrix.project == 'template-component/example'
-        working-directory: template-component
-        run: |
-          npm install
-          npm run build
 
       - name: Run build (if available)
         working-directory: ${{ matrix.project }}
