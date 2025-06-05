@@ -55,6 +55,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: false
 
       - name: Initialize submodule with deploy key
         if: matrix.deploy_key != ''
@@ -63,7 +64,9 @@ jobs:
           echo "${{ secrets[matrix.deploy_key] }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key" git submodule update --init --recursive ${{ matrix.project }}
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          git submodule update --init --recursive ${{ matrix.project }}
+          git config --global --unset url."git@github.com:".insteadOf
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
