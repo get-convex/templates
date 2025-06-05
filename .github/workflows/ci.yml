@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - create-convex
+          - template-astro
+          - template-bare
+          - template-component
+          - template-component/example
+          - template-nextjs
+          - template-nextjs-clerk
+          - template-nextjs-clerk-shadcn
+          - template-nextjs-convexauth
+          - template-nextjs-convexauth-shadcn
+          - template-nextjs-lucia-shadcn
+          - template-nextjs-shadcn
+          - template-react-vite
+          - template-react-vite-clerk
+          - template-react-vite-clerk-shadcn
+          - template-react-vite-convexauth
+          - template-react-vite-convexauth-shadcn
+          - template-react-vite-shadcn
+          - template-tanstack-start
+          - template-tanstack-start-clerk
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "${{ matrix.project }}/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.project }}
+        run: npm ci
+
+      - name: Build project
+        working-directory: ${{ matrix.project }}
+        run: npm run build
+
+      - name: Run typecheck (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if npm run | grep -q "typecheck"; then
+            npm run typecheck
+          else
+            echo "No typecheck script found, skipping"
+          fi
+
+      - name: Run lint (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if npm run | grep -q "lint"; then
+            npm run lint
+          else
+            echo "No lint script found, skipping"
+          fi
