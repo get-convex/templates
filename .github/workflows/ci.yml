@@ -106,6 +106,7 @@ jobs:
           fi
         env:
           CONVEX_URL: "https://placeholder.convex.cloud"
+          NEXT_PUBLIC_CONVEX_URL: "https://placeholder.convex.cloud"
 
       - name: Run typecheck (if available)
         working-directory: ${{ matrix.project }}
