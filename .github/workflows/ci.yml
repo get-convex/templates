@@ -53,6 +53,13 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm ci
 
+      - name: Build parent component (if example project)
+        if: matrix.project == 'template-component/example'
+        working-directory: template-component
+        run: |
+          npm ci
+          npm run build
+
       - name: Build project
         working-directory: ${{ matrix.project }}
         run: npm run build
