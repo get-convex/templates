@@ -77,6 +77,10 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm install # using `install` instead of `ci` since package-lock.json is sometimes excluded
 
+      - name: Setup Bun
+        if: matrix.use_bun == true
+        uses: oven-sh/setup-bun@v1
+
       - name: Install Bun dependencies
         if: matrix.use_bun == true
         working-directory: ${{ matrix.project }}
