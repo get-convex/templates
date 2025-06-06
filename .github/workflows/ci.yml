@@ -58,7 +58,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: false
 
-      - name: Initialize submodule with deploy key
+      - name: Initialize submodule
         if: matrix.deploy_key != ''
         run: |
           mkdir -p ~/.ssh
