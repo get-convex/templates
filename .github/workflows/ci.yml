@@ -132,7 +132,7 @@ jobs:
         if: matrix.project != 'template-component'
         run: |
           if npx convex codegen --init --dry-run | grep -q "Command would write file"; then
-            echo "❌ Convex codegen is out of date. Please run 'npx convex codegen'.
+            echo "❌ Convex codegen is out of date. Please run `npx convex codegen`.
             exit 1
           else
             echo "✅ Convex codegen is up to date"
