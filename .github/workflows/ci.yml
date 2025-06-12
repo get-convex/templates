@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: create-convex
+          - project: template-astro
+            use_bun: true
+          - project: template-bare
+          - project: template-component
+          - project: template-component/example
+          - project: template-nextjs
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
+          - project: template-nextjs-clerk
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
+          - project: template-nextjs-clerk-shadcn
+          - project: template-nextjs-convexauth
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
+          - project: template-nextjs-convexauth-shadcn
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
+          - project: template-nextjs-lucia-shadcn
+          - project: template-nextjs-shadcn
+            deploy_key: GENERATE_TEMPLATE_NEXTJS_DEPLOY_KEY
+          - project: template-react-vite
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
+          - project: template-react-vite-clerk
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
+          - project: template-react-vite-clerk-shadcn
+          - project: template-react-vite-convexauth
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
+          - project: template-react-vite-convexauth-shadcn
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
+          - project: template-react-vite-shadcn
+            deploy_key: GENERATE_TEMPLATE_REACT_VITE_DEPLOY_KEY
+          - project: template-tanstack-start
+          - project: template-tanstack-start-clerk
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: false
+
+      - name: Initialize submodule
+        if: matrix.deploy_key != ''
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets[matrix.deploy_key] }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" git submodule update --init --recursive ${{ matrix.project }}
+          git config --global --unset url."git@github.com:".insteadOf
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "${{ matrix.project }}/package.json" # because package-lock.json is sometimes excluded
+
+      - name: Build parent project (for the component template)
+        if: matrix.project == 'template-component/example'
+        working-directory: template-component
+        run: |
+          npm install
+          npm run build
+
+      - name: Install NPM dependencies
+        if: matrix.use_bun != true
+        working-directory: ${{ matrix.project }}
+        run: npm install # using `install` instead of `ci` since package-lock.json is sometimes excluded
+
+      - name: Setup Bun
+        if: matrix.use_bun == true
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install Bun dependencies
+        if: matrix.use_bun == true
+        working-directory: ${{ matrix.project }}
+        run: bun install
+
+      - name: Run build (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.build' package.json > /dev/null; then
+            npm run build
+          else
+            echo "No build script found, skipping"
+          fi
+        env:
+          CONVEX_URL: "https://placeholder.convex.cloud"
+          NEXT_PUBLIC_CONVEX_URL: "https://placeholder.convex.cloud"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_JA=="
+
+      - name: Run typecheck (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.typecheck' package.json > /dev/null; then
+            npm run typecheck
+          else
+            echo "No typecheck script found, skipping"
+          fi
+
+      - name: Run lint (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.lint' package.json > /dev/null; then
+            npm run lint
+          else
+            echo "No lint script found, skipping"
+          fi
