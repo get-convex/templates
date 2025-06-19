@@ -1,5 +1,7 @@
-// This is where React components go.
+"use client";
 
-export function subtract(a: number, b: number): number {
-  return a - b;
-}
+// This is where React components / hooks go.
+
+export const useMyComponent = () => {
+  return {};
+};

@@ -11,14 +11,14 @@ To create your own component:
 1. Write code in src/client for your thick client.
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
+1. Publish to npm with `npm run alpha` or `npm run release`.
 
 To develop your component run a dev process in the example project.
+For convenience, `npm run dev` will start both a file watcher to re-build
+the component, as well as install, configure, and run the example project.
 
 ```
-npm i
-cd example
-npm i
-npx convex dev
+npm run dev
 ```
 
 Modify the schema and index files in src/component/ to define your component.
@@ -33,6 +33,8 @@ component you can delete the following:
 - the "src/react/" directory
 - the "node10stubs.mjs" file
 
+If you will be adding frontend code, add a peer dependency on React in package.json.
+
 ### Component Directory structure
 
 ```
@@ -43,7 +45,7 @@ component you can delete the following:
 │                       is .gitignored and ignored by consumers.
 ├── src
 │   ├── component/
-│   │   ├── _generated/ Files here are generated.
+│   │   ├── _generated/ Files here are generated for the component.
 │   │   ├── convex.config.ts  Name your component here and use other components
 │   │   ├── index.ts    Define functions here and in new files in this directory
 │   │   └── schema.ts   schema specific to this component
@@ -56,21 +58,11 @@ component you can delete the following:
 │   │                   Run 'npx convex dev' from here during development.
 │   ├── package.json.ts Thick client code goes here.
 │   └── convex/
-│       ├── _generated/
+│       ├── _generated/       Files here are generated for the example app.
 │       ├── convex.config.ts  Imports and uses this component
 │       ├── myFunctions.ts    Functions that use the component
-│       ├── schema.ts         Example app schema
-│       └── tsconfig.json
-│  
-├── dist/               Publishing artifacts will be created here.
-├── commonjs.json       Used during build by TypeScript.
-├── esm.json            Used during build by TypeScript.
-├── node10stubs.mjs     Script used during build for compatibility
-│                       with the Metro bundler used with React Native.
-├── eslint.config.mjs   Recommended lints for writing a component.
-│                       Feel free to customize it.
-└── tsconfig.json       Recommended tsconfig.json for writing a component.
-                        Some settings can be customized, some are required.
+│       └── schema.ts         Example app schema
+└── dist/               Publishing artifacts will be created here.
 ```
 
 ### Structure of a Convex Component
@@ -78,9 +70,6 @@ component you can delete the following:
 A Convex components exposes the entry point convex.config.js. The on-disk
 location of this file must be a directory containing implementation files. These
 files should be compiled to ESM.
-The package.json should contain `"type": "module"` and the tsconfig.json should
-contain `"moduleResolution": "Bundler"` or `"Node16"` in order to import other
-component definitions.
 
 In addition to convex.config.js, a component typically exposes a client that
 wraps communication with the component for use in the Convex
@@ -172,4 +161,5 @@ const shardedCounter = new ShardedCounter(components.shardedCounter, {
 
 See more example usage in [example.ts](./example/convex/example.ts).
 
+Run the example with `npm run example`.
 <!-- END: Include on https://convex.dev/components -->
