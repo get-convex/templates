@@ -4,9 +4,7 @@ This is a Convex component, ready to be published on npm.
 
 To create your own component:
 
-1. Find and replace "@convex-dev/sharded-counter" with your npm package's name.
-1. Find and replace "get-convex/sharded-counter" to your component's repo.
-1. Find and replace "ShardedCounter", "shardedCounter", "sharded-counter", "sharded_counter", "sharded counter", and "Sharded Counter" to your component's name.
+1. Run `node rename.mjs` to rename everything to your component's name.
 1. Write code in src/component for your component.
 1. Write code in src/client for your thick client.
 1. Write example usage in example/convex/example.ts.
