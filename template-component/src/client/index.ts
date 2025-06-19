@@ -1,19 +1,22 @@
-import {
-  Expand,
-  FunctionReference,
-  GenericDataModel,
-  GenericMutationCtx,
-  GenericQueryCtx,
-  mutationGeneric,
-  queryGeneric,
-} from "convex/server";
-import { GenericId, v } from "convex/values";
-import { api } from "../component/_generated/api";
+import { mutationGeneric, queryGeneric } from "convex/server";
+import { v } from "convex/values";
+import type { Mounts } from "../component/_generated/api";
+import type { UseApi, RunMutationCtx, RunQueryCtx } from "./types";
+
+// UseApi<typeof api> is an alternative that has jump-to-definition but is
+// less stable and reliant on types within the component files, which can cause
+// issues where passing `components.foo` doesn't match the argument
+export type ShardedCounterComponent = UseApi<Mounts>;
 
 export class ShardedCounter<Shards extends Record<string, number>> {
   constructor(
-    public component: UseApi<typeof api>,
-    public options?: { shards?: Shards; defaultShards?: number }
+    public component: ShardedCounterComponent,
+    public options?: {
+      shards?: Shards;
+      defaultShards?: number;
+      // Common parameters:
+      // logLevel
+    }
   ) {}
   async add<Name extends string = keyof Shards & string>(
     ctx: RunMutationCtx,
@@ -32,18 +35,6 @@ export class ShardedCounter<Shards extends Record<string, number>> {
     name: Name
   ) {
     return ctx.runQuery(this.component.lib.count, { name });
-  }
-  // Another way of exporting functionality
-  for<Name extends string = keyof Shards & string>(name: Name) {
-    return {
-      add: async (ctx: RunMutationCtx, count: number = 1) =>
-        this.add(ctx, name, count),
-      subtract: async (ctx: RunMutationCtx, count: number = 1) =>
-        this.add(ctx, name, -count),
-      inc: async (ctx: RunMutationCtx) => this.add(ctx, name, 1),
-      dec: async (ctx: RunMutationCtx) => this.add(ctx, name, -1),
-      count: async (ctx: RunQueryCtx) => this.count(ctx, name),
-    };
   }
   /**
    * For easy re-exporting.
@@ -69,40 +60,3 @@ export class ShardedCounter<Shards extends Record<string, number>> {
     };
   }
 }
-
-/* Type utils follow */
-
-type RunQueryCtx = {
-  runQuery: GenericQueryCtx<GenericDataModel>["runQuery"];
-};
-type RunMutationCtx = {
-  runMutation: GenericMutationCtx<GenericDataModel>["runMutation"];
-};
-
-export type OpaqueIds<T> = T extends GenericId<infer _T>
-  ? string
-  : T extends (infer U)[]
-    ? OpaqueIds<U>[]
-    : T extends ArrayBuffer
-      ? ArrayBuffer
-      : T extends object
-        ? { [K in keyof T]: OpaqueIds<T[K]> }
-        : T;
-
-export type UseApi<API> = Expand<{
-  [mod in keyof API]: API[mod] extends FunctionReference<
-    infer FType,
-    "public",
-    infer FArgs,
-    infer FReturnType,
-    infer FComponentPath
-  >
-    ? FunctionReference<
-        FType,
-        "internal",
-        OpaqueIds<FArgs>,
-        OpaqueIds<FReturnType>,
-        FComponentPath
-      >
-    : UseApi<API[mod]>;
-}>;
