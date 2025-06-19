@@ -1,7 +1,8 @@
 import {
   Link,
   Outlet,
-  ScrollRestoration,
+  HeadContent,
+  Scripts,
   createRootRouteWithContext,
   useRouteContext,
 } from '@tanstack/react-router'
@@ -12,12 +13,12 @@ import {
   SignedOut,
   UserButton,
   useAuth,
-} from '@clerk/tanstack-start'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { Meta, Scripts, createServerFn } from '@tanstack/start'
+} from '@clerk/tanstack-react-start'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { createServerFn } from '@tanstack/react-start'
 import { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
-import { getAuth } from '@clerk/tanstack-start/server'
+import { getAuth } from '@clerk/tanstack-react-start/server'
 import { getWebRequest } from 'vinxi/http'
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js'
 import { NotFound } from '~/components/NotFound.js'
@@ -118,7 +119,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html>
       <head>
-        <Meta />
+        <HeadContent />
       </head>
       <body>
         <div className="p-2 flex gap-2 text-lg">
@@ -139,6 +140,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           >
             Posts
           </Link>
+          <Link
+            to="/convexposts"
+            activeProps={{
+              className: 'font-bold',
+            }}
+          >
+            Convex Posts
+          </Link>
           <div className="ml-auto">
             <SignedIn>
               <UserButton />
@@ -150,7 +159,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
         <hr />
         {children}
-        <ScrollRestoration />
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
