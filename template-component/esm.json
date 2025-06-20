@@ -1,8 +1,15 @@
 {
   "extends": "./tsconfig.json",
   "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.*", "../src/package.json"],
+  "exclude": [
+    "src/**/*.test.*",
+    "../src/package.json",
+    "./src/vitest.config.ts"
+  ],
   "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "verbatimModuleSyntax": false,
     "outDir": "./dist/esm"
   }
 }
