@@ -1,6 +1,8 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
+import reactPlugin from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 
 export default [
   { files: ["src/**/*.{js,mjs,cjs,ts,tsx}"] },
@@ -25,6 +27,27 @@ export default [
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: [
+      "src/react/**/*.{jsx,tsx}",
+      "src/react/**/*.js",
+      "src/react/**/*.ts",
+    ],
+    plugins: { react: reactPlugin, "react-hooks": reactHooks },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    rules: {
+      ...reactPlugin.configs["recommended"].rules,
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
   {
     rules: {
       "@typescript-eslint/no-floating-promises": "error",

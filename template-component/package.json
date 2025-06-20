@@ -28,12 +28,14 @@
     "typecheck": "tsc --noEmit",
     "prepack": "node node10stubs.mjs",
     "postpack": "node node10stubs.mjs --cleanup",
-    "alpha": "rm -rf dist && npm run build && npm run test && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
-    "release": "rm -rf dist && npm run build && npm run test && npm version patch && npm publish && git push --tags",
+    "alpha": "rm -rf dist && npm run build && run-p test lint typecheck attw && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
+    "release": "rm -rf dist && npm run build && run-p test lint typecheck attw && npm version patch && npm publish && git push --tags",
     "test": "vitest run --typecheck --config ./src/vitest.config.ts",
     "test:watch": "vitest --typecheck --config ./src/vitest.config.ts",
     "test:debug": "vitest --inspect-brk --no-file-parallelism --config ./src/vitest.config.ts",
     "test:coverage": "vitest run --coverage --coverage.reporter=text",
+    "lint": "eslint src",
+    "attw": "attw $(npm pack -s) --exclude-entrypoints ./convex.config",
     "version": "pbcopy <<<$npm_package_version; vim CHANGELOG.md && git add CHANGELOG.md"
   },
   "files": [
@@ -79,12 +81,15 @@
     "convex": "^1.24.8"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.4",
     "@eslint/js": "9.29.0",
     "@types/node": "18.17.0",
     "chokidar-cli": "3.0.0",
     "convex-test": "0.0.37",
     "cpy-cli": "5.0.0",
     "eslint": "9.29.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^15.9.0",
     "npm-run-all2": "7.0.2",
     "prettier": "3.2.5",
