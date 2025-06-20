@@ -21,7 +21,8 @@ yarn.lock
 /blob-report/
 /playwright/.cache/
 
-# just ignored for the template
 .env
 
 .env.local
+
+app.config.timestamp_*.js
