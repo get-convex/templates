@@ -78,7 +78,8 @@
     }
   },
   "peerDependencies": {
-    "convex": "^1.24.8"
+    "convex": "^1.24.8",
+    "react": "^18.3.1 || ^19.0.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.4",
@@ -94,7 +95,7 @@
     "npm-run-all2": "7.0.2",
     "prettier": "3.2.5",
     "typescript": "5.5.4",
-    "typescript-eslint": "8.4.0",
+    "typescript-eslint": "8.34.1",
     "vitest": "3.2.4"
   },
   "main": "./dist/commonjs/client/index.js",
