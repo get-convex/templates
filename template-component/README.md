@@ -159,5 +159,10 @@ const shardedCounter = new ShardedCounter(components.shardedCounter, {
 
 See more example usage in [example.ts](./example/convex/example.ts).
 
-Run the example with `npm run example`.
+Run the example:
+
+```sh
+npm i
+npm run example
+```
 <!-- END: Include on https://convex.dev/components -->
