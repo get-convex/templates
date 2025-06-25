@@ -11,9 +11,16 @@ To create your own component:
 1. Delete the text in this readme until `---` and flesh out the README.
 1. Publish to npm with `npm run alpha` or `npm run release`.
 
-To develop your component run a dev process in the example project.
-For convenience, `npm run dev` will start both a file watcher to re-build
-the component, as well as install, configure, and run the example project.
+To develop your component run a dev process in the example project:
+```sh
+npm run setup
+npm run dev
+```
+`setup` will do the install and builds and set up your convex backend (run once).
+`dev` will start both a file watcher to re-build the component, as well as run
+the example convex project alongside it.
+
+
 
 ```
 npm run dev
@@ -162,7 +169,7 @@ See more example usage in [example.ts](./example/convex/example.ts).
 Run the example:
 
 ```sh
-npm i
+npm run setup
 npm run example
 ```
 <!-- END: Include on https://convex.dev/components -->
