@@ -8,8 +8,6 @@
   ],
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "verbatimModuleSyntax": false,
-    "outDir": "./dist/esm"
+    "moduleResolution": "Bundler"
   }
 }

@@ -19,15 +19,10 @@
     "dashboard": "cd example && npx convex dashboard",
     "dev": "run-p 'example' 'build:watch'",
     "setup": "npm i && npm run build && cd example && npm i && npx convex dev --once",
-    "build": "npm run build:esm && npm run build:cjs",
     "build:watch": "cd src && npx chokidar '../tsconfig.json' '*.ts' 'react/**/*.ts' 'component/**/*.ts' 'client/**/*.ts' -c 'npm run build' --initial",
-    "build:esm": "tsc --project ./esm.json && npm run copy:dts:esm && echo '{\\n  \"type\": \"module\"\\n}' > dist/esm/package.json",
-    "build:cjs": "tsc --project ./commonjs.json && npm run copy:dts:cjs && echo '{\\n  \"type\": \"commonjs\"\\n}' > dist/commonjs/package.json",
-    "copy:dts:esm": "cpy 'src/**/*.d.ts' 'dist/esm/' --parents",
-    "copy:dts:cjs": "cpy 'src/**/*.d.ts' 'dist/commonjs/' --parents",
+    "build": "tsc --project ./tsconfig.build.json && echo '{\\n  \"type\": \"module\"\\n}' > dist/package.json && npm run copy:dts",
+    "copy:dts": "cpy 'src/**/*.d.ts' 'dist/' --parents",
     "typecheck": "tsc --noEmit",
-    "prepack": "node node10stubs.mjs",
-    "postpack": "node node10stubs.mjs --cleanup",
     "alpha": "rm -rf dist && npm run build && run-p test lint typecheck attw && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
     "release": "rm -rf dist && npm run build && run-p test lint typecheck attw && npm version patch && npm publish && git push --tags",
     "test": "vitest run --typecheck --config ./src/vitest.config.ts",
@@ -46,35 +41,19 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "@convex-dev/component-source": "./src/client/index.ts",
-        "types": "./dist/esm/client/index.d.ts",
-        "default": "./dist/esm/client/index.js"
-      },
-      "require": {
-        "@convex-dev/component-source": "./src/client/index.ts",
-        "types": "./dist/commonjs/client/index.d.ts",
-        "default": "./dist/commonjs/client/index.js"
-      }
+      "@convex-dev/component-source": "./src/client/index.ts",
+      "types": "./dist/src/client/index.d.ts",
+      "default": "./dist/src/client/index.js"
     },
     "./react": {
-      "import": {
-        "@convex-dev/component-source": "./src/react/index.ts",
-        "types": "./dist/esm/react/index.d.ts",
-        "default": "./dist/esm/react/index.js"
-      },
-      "require": {
-        "@convex-dev/component-source": "./src/react/index.ts",
-        "types": "./dist/commonjs/react/index.d.ts",
-        "default": "./dist/commonjs/react/index.js"
-      }
+      "@convex-dev/component-source": "./src/react/index.ts",
+      "types": "./dist/src/react/index.d.ts",
+      "default": "./dist/src/react/index.js"
     },
     "./convex.config": {
-      "import": {
-        "@convex-dev/component-source": "./src/component/convex.config.ts",
-        "types": "./dist/esm/component/convex.config.d.ts",
-        "default": "./dist/esm/component/convex.config.js"
-      }
+      "@convex-dev/component-source": "./src/component/convex.config.ts",
+      "types": "./dist/src/component/convex.config.d.ts",
+      "default": "./dist/src/component/convex.config.js"
     }
   },
   "peerDependencies": {
@@ -98,7 +77,6 @@
     "typescript-eslint": "8.34.1",
     "vitest": "3.2.4"
   },
-  "main": "./dist/commonjs/client/index.js",
-  "types": "./dist/commonjs/client/index.d.ts",
-  "module": "./dist/esm/client/index.js"
+  "types": "./dist/src/client/index.d.ts",
+  "module": "./dist/src/client/index.js"
 }
