@@ -3,8 +3,8 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 function App() {
-  const count = useQuery(api.app.getCount);
-  const addOne = useMutation(api.app.addOne);
+  const count = useQuery(api.example.count, { name: "accomplishments" });
+  const addOne = useMutation(api.example.addOne);
 
   return (
     <>
