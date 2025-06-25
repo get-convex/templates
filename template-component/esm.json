@@ -7,8 +7,8 @@
     "./src/vitest.config.ts"
   ],
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "verbatimModuleSyntax": false,
     "outDir": "./dist/esm"
   }
