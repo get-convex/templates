@@ -1,8 +1,8 @@
 import { action, internalMutation, query } from './_generated/server'
 import { api, internal } from './_generated/api.js'
 import { v } from 'convex/values'
-import { WithoutSystemFields } from 'convex/server'
-import { Doc } from './_generated/dataModel'
+import type { Doc } from './_generated/dataModel'
+import type { WithoutSystemFields } from 'convex/server'
 
 export const get = query({
   args: {
@@ -25,14 +25,6 @@ export const insert = internalMutation(
     ctx.db.insert('posts', post),
 )
 
-export const profile = query((ctx) => ctx.auth.getUserIdentity())
-
-export const name = query(
-  async (ctx) => (await ctx.auth.getUserIdentity())?.name,
-)
-export const email = query(
-  async (ctx) => (await ctx.auth.getUserIdentity())?.email,
-)
 export const count = query(
   async (ctx) => (await ctx.db.query('posts').collect()).length,
 )
@@ -51,7 +43,7 @@ export const populate = action(async (ctx) => {
     body: string
   }[]
   await Promise.all(
-    posts.map((post) =>
+    posts.slice(0, 10).map((post) =>
       ctx.runMutation(internal.posts.insert, {
         post: {
           id: post.id.toString(),
