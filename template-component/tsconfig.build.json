@@ -1,13 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "include": ["src/**/*"],
-  "exclude": [
-    "src/**/*.test.*",
-    "../src/package.json",
-    "./src/vitest.config.ts"
-  ],
+  "exclude": ["src/**/*.test.*", "./src/vitest.config.ts"],
   "compilerOptions": {
     "module": "ESNext",
+    "rootDir": "./src",
     "moduleResolution": "Bundler"
   }
 }

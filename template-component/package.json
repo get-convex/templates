@@ -35,25 +35,24 @@
   },
   "files": [
     "dist",
-    "src",
-    "react"
+    "src"
   ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "@convex-dev/component-source": "./src/client/index.ts",
-      "types": "./dist/src/client/index.d.ts",
-      "default": "./dist/src/client/index.js"
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
     },
     "./react": {
       "@convex-dev/component-source": "./src/react/index.ts",
-      "types": "./dist/src/react/index.d.ts",
-      "default": "./dist/src/react/index.js"
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
     },
     "./convex.config": {
       "@convex-dev/component-source": "./src/component/convex.config.ts",
-      "types": "./dist/src/component/convex.config.d.ts",
-      "default": "./dist/src/component/convex.config.js"
+      "types": "./dist/component/convex.config.d.ts",
+      "default": "./dist/component/convex.config.js"
     }
   },
   "peerDependencies": {
@@ -78,6 +77,6 @@
     "typescript-eslint": "8.34.1",
     "vitest": "3.2.4"
   },
-  "types": "./dist/src/client/index.d.ts",
-  "module": "./dist/src/client/index.js"
+  "types": "./dist/client/index.d.ts",
+  "module": "./dist/client/index.js"
 }
