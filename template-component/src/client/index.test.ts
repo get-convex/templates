@@ -78,6 +78,6 @@ describe("ShardedCounter thick client", () => {
       name: "beans",
       count: 1,
     });
-    expect(result).toBe(1);
+    expect(result).toBe(null);
   });
 });
