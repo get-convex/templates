@@ -33,10 +33,8 @@ Write a client for using this component in src/client/index.ts.
 If you won't be adding frontend code (e.g. React components) to this
 component you can delete the following:
 
-- "prepack" and "postpack" scripts of package.json
 - "./react" exports in package.json
 - the "src/react/" directory
-- the "node10stubs.mjs" file
 
 If you will be adding frontend code, add a peer dependency on React in package.json.
 
@@ -92,23 +90,8 @@ import { helper } from "my-convex-component/react";
 import { FrontendReactComponent } from "my-convex-component/react";
 ```
 
-Frontend code should be compiled as CommonJS code as well as ESM and make use of
-subpackage stubs (see next section).
-
 If you do include frontend components, prefer peer dependencies to avoid using
 more than one version of e.g. React.
-
-### Support for Node10 module resolution
-
-The [Metro](https://reactnative.dev/docs/metro) bundler for React Native
-requires setting
-[`resolver.unstable_enablePackageExports`](https://metrobundler.dev/docs/package-exports/)
-in order to import code that lives in `dist/esm/react.js` from a path like
-`my-convex-component/react`.
-
-Authors of Convex component that provide frontend components are encouraged to
-support these legacy "Node10-style" module resolution algorithms by generating
-stub directories with special pre- and post-pack scripts.
 
 ---
 
