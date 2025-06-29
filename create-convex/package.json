@@ -1,6 +1,6 @@
 {
   "name": "create-convex",
-  "version": "0.0.27",
+  "version": "0.0.29",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Convex, Inc. <team@convex.dev>",
@@ -34,10 +34,10 @@
     "@types/degit": "^2.8.4",
     "@types/minimist": "^1.2.2",
     "@types/prompts": "^2.4.4",
-    "boxen": "7.1.1",
     "cross-spawn": "^7.0.3",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
+    "prettier": "^3.6.2",
     "prompts": "^2.4.2",
     "unbuild": "^2.0.0"
   },
