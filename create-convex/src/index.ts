@@ -2,7 +2,6 @@ import spawn from "cross-spawn";
 import degit from "degit";
 import fs from "fs";
 import { bold, green, gray, red, reset } from "kolorist";
-import boxen from "boxen";
 import minimist from "minimist";
 import path from "path";
 import prompts from "prompts";
@@ -67,7 +66,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
 function authOptions(framework: Framework) {
   return AUTH.filter(
     ({ frameworks }) =>
-      frameworks === undefined || frameworks.includes(framework.name)
+      frameworks === undefined || frameworks.includes(framework.name),
   );
 }
 
@@ -75,6 +74,7 @@ const defaultTargetDir = "my-app";
 
 // Detect package manager early
 const packageManager = detectPackageManager();
+console.log(`Using package manager: ${green(packageManager)}`);
 
 init().catch((e) => {
   console.error(e);
@@ -163,7 +163,7 @@ async function init() {
               throw new Error(
                 red("✖") +
                   " Follow one of the quickstarts at " +
-                  bold("https://docs.convex.dev/quickstarts")
+                  bold("https://docs.convex.dev/quickstarts"),
               );
             }
 
@@ -185,7 +185,7 @@ async function init() {
         onCancel: () => {
           throw new Error(red("✖") + " Operation cancelled");
         },
-      }
+      },
     );
   } catch (cancelled: any) {
     console.log(cancelled.message);
@@ -245,14 +245,14 @@ async function init() {
   await writeCursorRules(root, { verbose });
 
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8")
+    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
   );
 
   pkg.name = packageName || getProjectName();
 
   fs.writeFileSync(
     path.join(root, "package.json"),
-    JSON.stringify(pkg, null, 2) + "\n"
+    JSON.stringify(pkg, null, 2) + "\n",
   );
 
   const cdProjectName = path.relative(cwd, root);
@@ -289,18 +289,8 @@ async function init() {
 
   // Add a link to the Convex docs
   message += `\nCheck out the Convex docs at: ${bold(
-    "https://docs.convex.dev"
+    "https://docs.convex.dev",
   )}\n`;
-
-  console.log(
-    boxen(message.trimEnd(), {
-      title: "Template Created",
-      padding: 1,
-      margin: 1,
-      borderStyle: "double",
-    })
-  );
-  console.log();
 }
 
 async function installDependencies(): Promise<void> {
@@ -309,7 +299,7 @@ async function installDependencies(): Promise<void> {
     const packageManagerArgs: Record<PackageManager, string[]> = {
       npm: ["install", "--no-fund", "--no-audit", "--loglevel=error"],
       yarn: ["install", "--no-fund"],
-      pnpm: ["install"],
+      pnpm: ["install", "--config.ignore-scripts=false"],
       bun: ["install"],
     };
 
@@ -352,7 +342,7 @@ function copy(src: string, dest: string) {
 
 function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName
+    projectName,
   );
 }
 
@@ -462,7 +452,7 @@ async function writeCursorRules(root: string, options: { verbose: boolean }) {
     fs.mkdirSync(path.join(root, ".cursor", "rules"), { recursive: true });
     fs.writeFileSync(
       path.join(root, ".cursor", "rules", CURSOR_RULES_FILE_NAME),
-      content
+      content,
     );
     console.log(`${green("✔")} Latest Cursor rules added to project.`);
     console.log();
@@ -495,7 +485,7 @@ async function getLatestCursorRules(options: { verbose: boolean }) {
         ) {
           if (options.verbose) {
             console.log(
-              `Latest stable version with appropriate binary is ${release.tag_name}`
+              `Latest stable version with appropriate binary is ${release.tag_name}`,
             );
           }
           version = release.tag_name;
@@ -503,7 +493,7 @@ async function getLatestCursorRules(options: { verbose: boolean }) {
 
         if (options.verbose) {
           console.log(
-            `Version ${release.tag_name} does not contain a ${CURSOR_RULES_FILE_NAME}, checking previous version`
+            `Version ${release.tag_name} does not contain a ${CURSOR_RULES_FILE_NAME}, checking previous version`,
           );
         }
       }
@@ -522,14 +512,14 @@ async function getLatestCursorRules(options: { verbose: boolean }) {
   // If we get here, we didn't find any suitable releases
   if (!version) {
     throw new Error(
-      `Found no stable releases with a ${CURSOR_RULES_FILE_NAME}.`
+      `Found no stable releases with a ${CURSOR_RULES_FILE_NAME}.`,
     );
   }
   const downloadUrl = `https://github.com/${repoPath}/releases/download/${version}/${CURSOR_RULES_FILE_NAME}`;
   const response = await fetch(downloadUrl);
   if (!response.ok) {
     throw new Error(
-      `Failed to download ${CURSOR_RULES_FILE_NAME} from ${downloadUrl}`
+      `Failed to download ${CURSOR_RULES_FILE_NAME} from ${downloadUrl}`,
     );
   }
   const content = await response.text();
