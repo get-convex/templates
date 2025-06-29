@@ -1,6 +1,6 @@
 {
   "name": "create-convex",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Convex, Inc. <team@convex.dev>",
@@ -23,6 +23,7 @@
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
+    "prepack": "node dont-publish-alpha-as-latest.cjs",
     "lint": "echo ESLint is not configured",
     "dev:run": "node ./dist/index.mjs"
   },
