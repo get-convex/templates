@@ -291,9 +291,31 @@ async function init() {
   message += `\nCheck out the Convex docs at: ${bold(
     "https://docs.convex.dev",
   )}\n`;
+
+  console.log();
+  console.log();
+  console.log(message);
 }
 
 async function installDependencies(): Promise<void> {
+  if (packageManager === "pnpm") {
+    // Any reasonable-to-trust deps that have build scripts used in any templates
+    const buildScriptDepsAllowList = ["esbuild", "@tailwindcss/oxide"];
+    const packageJsonPath = "package.json";
+    const pkg = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+
+    pkg.pnpm = {
+      ...pkg.pnpm,
+      onlyBuiltDependencies: buildScriptDepsAllowList,
+    };
+
+    fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2));
+
+    console.log(
+      "Pre-approved known dependncy build scripts (check package.json pnpm.onlyBuiltDependencies to change)",
+    );
+  }
+
   return new Promise((resolve, reject) => {
     // Different package managers use different command arguments
     const packageManagerArgs: Record<PackageManager, string[]> = {
