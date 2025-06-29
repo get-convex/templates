@@ -3,26 +3,28 @@ package-lock.json
 yarn.lock
 
 !.env
+.env
+.env.local
 .DS_Store
 .cache
 .vercel
 .output
 .vinxi
+.nitro
+.output
+.tanstack
 
 /build/
 /api/
 /server/build
 /public/build
 .vinxi
+
 # Sentry Config File
 .env.sentry-build-plugin
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
-.env
-
-.env.local
 
 app.config.timestamp_*.js
