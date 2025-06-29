@@ -10,7 +10,7 @@ export default [
     ignores: [
       "dist/**",
       "eslint.config.js",
-      "vitest.config.ts",
+      "vitest.config.js",
       "**/_generated/",
       "node10stubs.mjs",
     ],
