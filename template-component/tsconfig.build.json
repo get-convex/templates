@@ -4,7 +4,6 @@
   "exclude": ["src/**/*.test.*", "./src/vitest.config.ts"],
   "compilerOptions": {
     "module": "ESNext",
-    "rootDir": "./src",
     "moduleResolution": "Bundler"
   }
 }
