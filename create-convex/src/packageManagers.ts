@@ -1,5 +1,6 @@
 // Type definition for package managers (no unknown - defaults to npm)
-export const packageManagers = ["npm", "pnpm", "yarn", "bun"] as const;
+// order is important because we're not fully parsing npm_config_user_agent
+export const packageManagers = ["pnpm", "yarn", "bun", "npm"] as const;
 export type PackageManager = (typeof packageManagers)[number];
 
 /**
