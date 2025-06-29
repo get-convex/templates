@@ -18,9 +18,10 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*", "vitest.config.ts"]
+  "include": ["./src/**/*"]
 }
