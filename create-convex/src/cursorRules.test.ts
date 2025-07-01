@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { writeCursorRules } from "./cursorRules";
 import * as fs from "fs";
-import * as path from "path";
 import * as githubHelpers from "./github";
 
 // Mock fs module
@@ -36,7 +35,6 @@ vi.mock("./github", () => ({
 
 describe("Cursor Rules Functions", () => {
   const mockFsModule = (fs as any).default;
-  const mockPathModule = (path as any).default;
   const mockGithubHelpers = githubHelpers as any;
 
   beforeEach(() => {
