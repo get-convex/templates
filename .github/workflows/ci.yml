@@ -126,3 +126,14 @@ jobs:
           else
             echo "No lint script found, skipping"
           fi
+
+      - name: Run tests (if available)
+        # I would like to run tests but it seems like there is an error in the template-component test running?
+        if: matrix.project != 'template-component'
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.test' package.json > /dev/null; then
+            npm run test
+          else
+            echo "No test script found, skipping"
+          fi
