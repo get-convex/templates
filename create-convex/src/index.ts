@@ -1,11 +1,12 @@
 import spawn from "cross-spawn";
 import degit from "degit";
 import fs from "fs";
-import { bold, green, gray, red, reset } from "kolorist";
+import { bold, green, red, reset } from "kolorist";
 import minimist from "minimist";
 import path from "path";
 import prompts from "prompts";
 import { PackageManager, detectPackageManager } from "./packageManagers";
+import { writeCursorRules } from "./cursorRules";
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -66,7 +67,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
 function authOptions(framework: Framework) {
   return AUTH.filter(
     ({ frameworks }) =>
-      frameworks === undefined || frameworks.includes(framework.name),
+      frameworks === undefined || frameworks.includes(framework.name)
   );
 }
 
@@ -163,7 +164,7 @@ async function init() {
               throw new Error(
                 red("✖") +
                   " Follow one of the quickstarts at " +
-                  bold("https://docs.convex.dev/quickstarts"),
+                  bold("https://docs.convex.dev/quickstarts")
               );
             }
 
@@ -185,7 +186,7 @@ async function init() {
         onCancel: () => {
           throw new Error(red("✖") + " Operation cancelled");
         },
-      },
+      }
     );
   } catch (cancelled: any) {
     console.log(cancelled.message);
@@ -245,14 +246,14 @@ async function init() {
   await writeCursorRules(root, { verbose });
 
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
+    fs.readFileSync(path.join(root, `package.json`), "utf-8")
   );
 
   pkg.name = packageName || getProjectName();
 
   fs.writeFileSync(
     path.join(root, "package.json"),
-    JSON.stringify(pkg, null, 2) + "\n",
+    JSON.stringify(pkg, null, 2) + "\n"
   );
 
   const cdProjectName = path.relative(cwd, root);
@@ -289,7 +290,7 @@ async function init() {
 
   // Add a link to the Convex docs
   message += `\nCheck out the Convex docs at: ${bold(
-    "https://docs.convex.dev",
+    "https://docs.convex.dev"
   )}\n`;
 
   console.log();
@@ -312,7 +313,7 @@ async function installDependencies(): Promise<void> {
     fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2));
 
     console.log(
-      "Pre-approved known dependncy build scripts (check package.json pnpm.onlyBuiltDependencies to change)",
+      "Pre-approved known dependncy build scripts (check package.json pnpm.onlyBuiltDependencies to change)"
     );
   }
 
@@ -364,7 +365,7 @@ function copy(src: string, dest: string) {
 
 function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName,
+    projectName
   );
 }
 
@@ -450,126 +451,4 @@ function getTemplateRepoPath(templateName: string) {
 
   // This is one of our templates specifically for `npm create convex`
   return `get-convex/template-${templateName}#main`;
-}
-
-type GitHubRelease = {
-  tag_name: string;
-  prerelease: boolean;
-  draft: boolean;
-  assets: { name: string }[];
-};
-
-const CURSOR_RULES_FILE_NAME = "convex_rules.mdc";
-
-async function writeCursorRules(root: string, options: { verbose: boolean }) {
-  let content: string | null = null;
-  try {
-    content = await getLatestCursorRules(options);
-  } catch (e) {
-    console.error(red("✖ Failed to download latest Cursor rules:"));
-    console.error(gray(`${e}`));
-  }
-  if (content !== null) {
-    // Create the .cursor/rules directory if it doesn't exist
-    fs.mkdirSync(path.join(root, ".cursor", "rules"), { recursive: true });
-    fs.writeFileSync(
-      path.join(root, ".cursor", "rules", CURSOR_RULES_FILE_NAME),
-      content,
-    );
-    console.log(`${green("✔")} Latest Cursor rules added to project.`);
-    console.log();
-  }
-}
-async function getLatestCursorRules(options: { verbose: boolean }) {
-  const repoPath = "get-convex/convex-evals";
-  let version: string | undefined;
-  let nextUrl = `https://api.github.com/repos/${repoPath}/releases?per_page=30`;
-
-  while (nextUrl && version === undefined) {
-    const response = await fetch(nextUrl);
-
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`GitHub API returned ${response.status}: ${text}`);
-    }
-
-    const releases = (await response.json()) as GitHubRelease[];
-    if (releases.length === 0) {
-      break;
-    }
-
-    for (const release of releases) {
-      // Only consider stable releases
-      if (!release.prerelease && !release.draft) {
-        // Check if this release has our binary
-        if (
-          release.assets.find((asset) => asset.name === CURSOR_RULES_FILE_NAME)
-        ) {
-          if (options.verbose) {
-            console.log(
-              `Latest stable version with appropriate binary is ${release.tag_name}`,
-            );
-          }
-          version = release.tag_name;
-        }
-
-        if (options.verbose) {
-          console.log(
-            `Version ${release.tag_name} does not contain a ${CURSOR_RULES_FILE_NAME}, checking previous version`,
-          );
-        }
-      }
-    }
-
-    // Get the next page URL from the Link header
-    const linkHeader = response.headers.get("Link");
-    if (!linkHeader) {
-      break;
-    }
-
-    const links = parseLinkHeader(linkHeader);
-    nextUrl = links["next"] || "";
-  }
-
-  // If we get here, we didn't find any suitable releases
-  if (!version) {
-    throw new Error(
-      `Found no stable releases with a ${CURSOR_RULES_FILE_NAME}.`,
-    );
-  }
-  const downloadUrl = `https://github.com/${repoPath}/releases/download/${version}/${CURSOR_RULES_FILE_NAME}`;
-  const response = await fetch(downloadUrl);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to download ${CURSOR_RULES_FILE_NAME} from ${downloadUrl}`,
-    );
-  }
-  const content = await response.text();
-  return content;
-}
-
-/**
- * Parse the HTTP header like
- * link: <https://api.github.com/repositories/1300192/issues?page=2>; rel="prev", <https://api.github.com/repositories/1300192/issues?page=4>; rel="next", <https://api.github.com/repositories/1300192/issues?page=515>; rel="last", <https://api.github.com/repositories/1300192/issues?page=1>; rel="first"
- * into an object.
- * https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28#using-link-headers
- */
-function parseLinkHeader(header: string): {
-  prev?: string;
-  next?: string;
-  first?: string;
-  last?: string;
-} {
-  const links: { [key: string]: string } = {};
-  const parts = header.split(",");
-  for (const part of parts) {
-    const section = part.split(";");
-    if (section.length !== 2) {
-      continue;
-    }
-    const url = section[0].trim().slice(1, -1);
-    const rel = section[1].trim().slice(5, -1);
-    links[rel] = url;
-  }
-  return links;
 }
