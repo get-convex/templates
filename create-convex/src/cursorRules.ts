@@ -28,7 +28,7 @@ export async function writeCursorRules(
       rules.content
     );
     console.log(
-      `${green("✔")} Cursor rules ${rules.version} added to project.`
+      `${green("✔")} Latest Cursor Rules (${rules.version}) was added to project.`
     );
     console.log();
   }
