@@ -126,3 +126,12 @@ jobs:
           else
             echo "No lint script found, skipping"
           fi
+
+      - name: Run tests (if available)
+        working-directory: ${{ matrix.project }}
+        run: |
+          if jq -e '.scripts.test' package.json > /dev/null; then
+            npm run test
+          else
+            echo "No test script found, skipping"
+          fi
