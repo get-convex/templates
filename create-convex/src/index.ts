@@ -67,7 +67,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
 function authOptions(framework: Framework) {
   return AUTH.filter(
     ({ frameworks }) =>
-      frameworks === undefined || frameworks.includes(framework.name)
+      frameworks === undefined || frameworks.includes(framework.name),
   );
 }
 
@@ -164,7 +164,7 @@ async function init() {
               throw new Error(
                 red("✖") +
                   " Follow one of the quickstarts at " +
-                  bold("https://docs.convex.dev/quickstarts")
+                  bold("https://docs.convex.dev/quickstarts"),
               );
             }
 
@@ -186,7 +186,7 @@ async function init() {
         onCancel: () => {
           throw new Error(red("✖") + " Operation cancelled");
         },
-      }
+      },
     );
   } catch (cancelled: any) {
     console.log(cancelled.message);
@@ -246,14 +246,14 @@ async function init() {
   await writeCursorRules(root, { verbose });
 
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8")
+    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
   );
 
   pkg.name = packageName || getProjectName();
 
   fs.writeFileSync(
     path.join(root, "package.json"),
-    JSON.stringify(pkg, null, 2) + "\n"
+    JSON.stringify(pkg, null, 2) + "\n",
   );
 
   const cdProjectName = path.relative(cwd, root);
@@ -290,7 +290,7 @@ async function init() {
 
   // Add a link to the Convex docs
   message += `\nCheck out the Convex docs at: ${bold(
-    "https://docs.convex.dev"
+    "https://docs.convex.dev",
   )}\n`;
 
   console.log();
@@ -313,7 +313,7 @@ async function installDependencies(): Promise<void> {
     fs.writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2));
 
     console.log(
-      "Pre-approved known dependncy build scripts (check package.json pnpm.onlyBuiltDependencies to change)"
+      "Pre-approved known dependncy build scripts (check package.json pnpm.onlyBuiltDependencies to change)",
     );
   }
 
@@ -365,7 +365,7 @@ function copy(src: string, dest: string) {
 
 function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName
+    projectName,
   );
 }
 
