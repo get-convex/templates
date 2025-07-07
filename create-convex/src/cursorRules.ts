@@ -11,7 +11,7 @@ const CURSOR_RULES_FILE_NAME = "convex_rules.mdc";
 
 export async function writeCursorRules(
   root: string,
-  options: { verbose: boolean }
+  options: { verbose: boolean },
 ) {
   let rules: { content: string; version: string } | null = null;
   try {
@@ -25,10 +25,10 @@ export async function writeCursorRules(
     fs.mkdirSync(path.join(root, ".cursor", "rules"), { recursive: true });
     fs.writeFileSync(
       path.join(root, ".cursor", "rules", CURSOR_RULES_FILE_NAME),
-      rules.content
+      rules.content,
     );
     console.log(
-      `${green("✔")} Latest Cursor Rules (${rules.version}) was added to project.`
+      `${green("✔")} Latest Cursor Rules (${rules.version}) was added to project.`,
     );
     console.log();
   }
@@ -47,7 +47,7 @@ async function getLatestCursorRules(options: { verbose: boolean }) {
 
   if (!targetRelease) {
     throw new Error(
-      `Found no stable releases with a ${CURSOR_RULES_FILE_NAME}.`
+      `Found no stable releases with a ${CURSOR_RULES_FILE_NAME}.`,
     );
   }
 
@@ -55,7 +55,7 @@ async function getLatestCursorRules(options: { verbose: boolean }) {
   const content = await downloadAssetFromRelease(
     repoPath,
     targetRelease.tag_name,
-    CURSOR_RULES_FILE_NAME
+    CURSOR_RULES_FILE_NAME,
   );
 
   return { content, version: targetRelease.tag_name };

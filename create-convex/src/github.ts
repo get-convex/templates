@@ -36,7 +36,7 @@ export function parseLinkHeader(header: string): LinkHeader {
  */
 export async function fetchAllGitHubReleases(
   repoPath: string,
-  perPage: number = 30
+  perPage: number = 30,
 ): Promise<GitHubRelease[]> {
   const allReleases: GitHubRelease[] = [];
   let nextUrl = `https://api.github.com/repos/${repoPath}/releases?per_page=${perPage}`;
@@ -75,7 +75,7 @@ export async function fetchAllGitHubReleases(
 export function findReleaseWithAsset(
   releases: GitHubRelease[],
   assetName: string,
-  options: { verbose?: boolean } = {}
+  options: { verbose?: boolean } = {},
 ): GitHubRelease | null {
   for (const release of releases) {
     // Only consider stable releases
@@ -84,16 +84,18 @@ export function findReleaseWithAsset(
       if (release.assets.find((asset) => asset.name === assetName)) {
         if (options.verbose) {
           console.log(
-            `Latest stable version with ${assetName} is ${release.tag_name}`
+            `Latest stable version with ${assetName} is ${release.tag_name}`,
           );
         }
         return release;
       } else {
         if (options.verbose) {
           console.log(
-            `Version ${release.tag_name} does not contain a ${assetName}, checking previous version`
+            `Version ${release.tag_name} does not contain a ${assetName}, checking previous version`,
           );
-          console.log(`ASSETS: ${release.assets.map((asset) => asset.name).join(", ")}`);
+          console.log(
+            `ASSETS: ${release.assets.map((asset) => asset.name).join(", ")}`,
+          );
         }
       }
     }
@@ -108,16 +110,14 @@ export function findReleaseWithAsset(
 export async function downloadAssetFromRelease(
   repoPath: string,
   version: string,
-  assetName: string
+  assetName: string,
 ): Promise<string> {
   const downloadUrl = `https://github.com/${repoPath}/releases/download/${version}/${assetName}`;
   const response = await fetch(downloadUrl);
-  
+
   if (!response.ok) {
-    throw new Error(
-      `Failed to download ${assetName} from ${downloadUrl}`
-    );
+    throw new Error(`Failed to download ${assetName} from ${downloadUrl}`);
   }
-  
+
   return await response.text();
-} 
+}

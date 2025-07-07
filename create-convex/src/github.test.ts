@@ -100,11 +100,11 @@ describe("GitHub Helper Functions", () => {
       expect(mockFetch).toHaveBeenCalledTimes(2);
       expect(mockFetch).toHaveBeenNthCalledWith(
         1,
-        "https://api.github.com/repos/test/repo/releases?per_page=30"
+        "https://api.github.com/repos/test/repo/releases?per_page=30",
       );
       expect(mockFetch).toHaveBeenNthCalledWith(
         2,
-        "https://api.github.com/repos/test/repo/releases?page=2"
+        "https://api.github.com/repos/test/repo/releases?page=2",
       );
     });
 
@@ -146,7 +146,7 @@ describe("GitHub Helper Functions", () => {
       });
 
       await expect(fetchAllGitHubReleases("test/repo")).rejects.toThrow(
-        "GitHub API returned 404: Not Found"
+        "GitHub API returned 404: Not Found",
       );
     });
 
@@ -162,7 +162,7 @@ describe("GitHub Helper Functions", () => {
       await fetchAllGitHubReleases("test/repo", 50);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.github.com/repos/test/repo/releases?per_page=50"
+        "https://api.github.com/repos/test/repo/releases?per_page=50",
       );
     });
   });
@@ -240,7 +240,7 @@ describe("GitHub Helper Functions", () => {
       findReleaseWithAsset(mockReleases, "convex_rules.mdc", { verbose: true });
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        "Latest stable version with convex_rules.mdc is v0.8.0"
+        "Latest stable version with convex_rules.mdc is v0.8.0",
       );
 
       consoleSpy.mockRestore();
@@ -252,7 +252,7 @@ describe("GitHub Helper Functions", () => {
       findReleaseWithAsset(mockReleases, "nonexistent.file", { verbose: true });
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        "Version v1.0.0 does not contain a nonexistent.file, checking previous version"
+        "Version v1.0.0 does not contain a nonexistent.file, checking previous version",
       );
       expect(consoleSpy).toHaveBeenCalledWith("ASSETS: app.zip, docs.pdf");
 
@@ -272,12 +272,12 @@ describe("GitHub Helper Functions", () => {
       const result = await downloadAssetFromRelease(
         "test/repo",
         "v1.0.0",
-        "convex_rules.mdc"
+        "convex_rules.mdc",
       );
 
       expect(result).toBe(mockContent);
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://github.com/test/repo/releases/download/v1.0.0/convex_rules.mdc"
+        "https://github.com/test/repo/releases/download/v1.0.0/convex_rules.mdc",
       );
     });
 
@@ -288,9 +288,9 @@ describe("GitHub Helper Functions", () => {
       });
 
       await expect(
-        downloadAssetFromRelease("test/repo", "v1.0.0", "convex_rules.mdc")
+        downloadAssetFromRelease("test/repo", "v1.0.0", "convex_rules.mdc"),
       ).rejects.toThrow(
-        "Failed to download convex_rules.mdc from https://github.com/test/repo/releases/download/v1.0.0/convex_rules.mdc"
+        "Failed to download convex_rules.mdc from https://github.com/test/repo/releases/download/v1.0.0/convex_rules.mdc",
       );
     });
 
@@ -298,7 +298,7 @@ describe("GitHub Helper Functions", () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
       await expect(
-        downloadAssetFromRelease("test/repo", "v1.0.0", "convex_rules.mdc")
+        downloadAssetFromRelease("test/repo", "v1.0.0", "convex_rules.mdc"),
       ).rejects.toThrow("Network error");
     });
   });

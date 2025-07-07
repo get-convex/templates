@@ -72,7 +72,7 @@ describe("Cursor Rules Functions", () => {
         assets: [{ name: "convex_rules.mdc" }],
       });
       mockGithubHelpers.downloadAssetFromRelease.mockResolvedValue(
-        mockRules.content
+        mockRules.content,
       );
     });
 
@@ -82,21 +82,21 @@ describe("Cursor Rules Functions", () => {
       // Verify directory creation
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules",
-        { recursive: true }
+        { recursive: true },
       );
 
       // Verify file writing
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
-        mockRules.content
+        mockRules.content,
       );
 
       // Verify success message
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining("✔") &&
           expect.stringContaining(
-            "Latest Cursor Rules (v1.2.3) was added to project."
-          )
+            "Latest Cursor Rules (v1.2.3) was added to project.",
+          ),
       );
       expect(console.log).toHaveBeenCalledWith(); // Empty line
     });
@@ -105,17 +105,17 @@ describe("Cursor Rules Functions", () => {
       await writeCursorRules(mockRoot, { verbose: true });
 
       expect(mockGithubHelpers.fetchAllGitHubReleases).toHaveBeenCalledWith(
-        "get-convex/convex-evals"
+        "get-convex/convex-evals",
       );
       expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
         expect.any(Array),
         "convex_rules.mdc",
-        { verbose: true }
+        { verbose: true },
       );
       expect(mockGithubHelpers.downloadAssetFromRelease).toHaveBeenCalledWith(
         "get-convex/convex-evals",
         "v1.2.3",
-        "convex_rules.mdc"
+        "convex_rules.mdc",
       );
     });
 
@@ -131,10 +131,10 @@ describe("Cursor Rules Functions", () => {
 
       // Should log error
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:")
+        expect.stringContaining("✖ Failed to download latest cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("GitHub API error")
+        expect.stringContaining("GitHub API error"),
       );
     });
 
@@ -149,12 +149,12 @@ describe("Cursor Rules Functions", () => {
 
       // Should log error
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:")
+        expect.stringContaining("✖ Failed to download latest cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining(
-          "Found no stable releases with a convex_rules.mdc."
-        )
+          "Found no stable releases with a convex_rules.mdc.",
+        ),
       );
     });
 
@@ -170,10 +170,10 @@ describe("Cursor Rules Functions", () => {
 
       // Should log error
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:")
+        expect.stringContaining("✖ Failed to download latest cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("Download failed")
+        expect.stringContaining("Download failed"),
       );
     });
 
@@ -184,12 +184,12 @@ describe("Cursor Rules Functions", () => {
 
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/different/path/project/.cursor/rules",
-        { recursive: true }
+        { recursive: true },
       );
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/different/path/project/.cursor/rules/convex_rules.mdc",
-        mockRules.content
+        mockRules.content,
       );
     });
 
@@ -200,7 +200,7 @@ describe("Cursor Rules Functions", () => {
       expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
         expect.any(Array),
         "convex_rules.mdc",
-        { verbose: true }
+        { verbose: true },
       );
     });
 
@@ -211,7 +211,7 @@ describe("Cursor Rules Functions", () => {
       expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
         expect.any(Array),
         "convex_rules.mdc",
-        { verbose: false }
+        { verbose: false },
       );
     });
 
@@ -223,13 +223,13 @@ describe("Cursor Rules Functions", () => {
 
       // The function should throw the fs error since it's not caught
       await expect(
-        writeCursorRules(mockRoot, { verbose: false })
+        writeCursorRules(mockRoot, { verbose: false }),
       ).rejects.toThrow("Permission denied");
 
       // Should still try to create directory
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules",
-        { recursive: true }
+        { recursive: true },
       );
 
       // Should not try to write file since mkdir failed
@@ -239,14 +239,14 @@ describe("Cursor Rules Functions", () => {
     it("should write correct file content and path", async () => {
       const customContent = "# Custom rules content\nSome specific rules here.";
       mockGithubHelpers.downloadAssetFromRelease.mockResolvedValue(
-        customContent
+        customContent,
       );
 
       await writeCursorRules(mockRoot, { verbose: false });
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
-        customContent
+        customContent,
       );
     });
 
@@ -257,14 +257,14 @@ describe("Cursor Rules Functions", () => {
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
-        ""
+        "",
       );
 
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining("✔") &&
           expect.stringContaining(
-            "Latest Cursor Rules (v1.2.3) was added to project."
-          )
+            "Latest Cursor Rules (v1.2.3) was added to project.",
+          ),
       );
     });
 
@@ -280,8 +280,8 @@ describe("Cursor Rules Functions", () => {
 
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining(
-          "Latest Cursor Rules (v2.0.0-beta.1) was added to project."
-        )
+          "Latest Cursor Rules (v2.0.0-beta.1) was added to project.",
+        ),
       );
     });
   });
