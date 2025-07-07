@@ -22,6 +22,8 @@
     "dev": "unbuild --stub",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run --typecheck",
+    "dev:test": "vitest --typecheck",
     "prepublishOnly": "npm run build",
     "prepack": "node dont-publish-alpha-as-latest.cjs",
     "lint": "echo ESLint is not configured",
@@ -40,7 +42,8 @@
     "minimist": "^1.2.8",
     "prettier": "^3.6.2",
     "prompts": "^2.4.2",
-    "unbuild": "^2.0.0"
+    "unbuild": "^2.0.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "degit": "^2.8.4"
