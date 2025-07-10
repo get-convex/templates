@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { ShardedCounter } from "./index.js";
 import type { DataModelFromSchemaDefinition } from "convex/server";
 import {
@@ -64,6 +64,12 @@ const testApi: ApiFromModules<{
 }>["fns"] = anyApi["index.test"] as any;
 
 describe("ShardedCounter thick client", () => {
+  beforeEach(async () => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   test("should make thick client", async () => {
     const c = new ShardedCounter(components.shardedCounter);
     const t = initConvexTest(schema);
