@@ -428,6 +428,7 @@ function getGivenTemplate(args: {
 }
 
 const TEMPLATES_IN_REPO = [
+  "astro",
   "bare",
   "tanstack-start",
   "tanstack-start-clerk",
