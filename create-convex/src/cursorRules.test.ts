@@ -26,7 +26,7 @@ vi.mock("path", async () => {
   };
 });
 
-vi.mock("./version", async () => ({
+vi.mock("./versionApi", async () => ({
   getLatestCursorRules: vi.fn().mockResolvedValue("Sample Cursor Rules"),
 }));
 
@@ -36,13 +36,16 @@ vi.mock("./packageVersion", async () => ({
 
 describe("Cursor Rules Functions", () => {
   const mockFsModule = (fs as any).default;
-  const mockVersion = version as any;
 
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset console spies
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
+    // Reset the version mock to default value
+    vi.mocked(version.getLatestCursorRules).mockResolvedValue(
+      "Sample Cursor Rules",
+    );
   });
 
   afterEach(() => {
@@ -79,7 +82,7 @@ describe("Cursor Rules Functions", () => {
 
     it("should handle fetchAllGitHubReleases failure gracefully", async () => {
       const error = new Error("API error");
-      mockVersion.getLatestCursorRules.mockRejectedValue(error);
+      vi.mocked(version.getLatestCursorRules).mockRejectedValue(error);
 
       await writeCursorRules(mockRoot);
 
@@ -89,7 +92,7 @@ describe("Cursor Rules Functions", () => {
 
       // Should log error
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest Cursor rules:"),
+        expect.stringContaining("✖ Failed to download latest cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("API error"),
@@ -135,7 +138,7 @@ describe("Cursor Rules Functions", () => {
 
     it("should write correct file content and path", async () => {
       const customContent = "# Custom rules content\nSome specific rules here.";
-      mockVersion.getLatestCursorRules.mockResolvedValue(customContent);
+      vi.mocked(version.getLatestCursorRules).mockResolvedValue(customContent);
 
       await writeCursorRules(mockRoot);
 
@@ -146,7 +149,7 @@ describe("Cursor Rules Functions", () => {
     });
 
     it("should handle empty content gracefully", async () => {
-      mockVersion.getLatestCursorRules.mockResolvedValue("");
+      vi.mocked(version.getLatestCursorRules).mockResolvedValue("");
 
       await writeCursorRules(mockRoot);
 
