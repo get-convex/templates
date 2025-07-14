@@ -30,6 +30,10 @@ vi.mock("./version", async () => ({
   getLatestCursorRules: vi.fn().mockResolvedValue("Sample Cursor Rules"),
 }));
 
+vi.mock("./packageVersion", async () => ({
+  getPackageVersion: vi.fn().mockReturnValue("1.2.3"),
+}));
+
 describe("Cursor Rules Functions", () => {
   const mockFsModule = (fs as any).default;
   const mockVersion = version as any;
