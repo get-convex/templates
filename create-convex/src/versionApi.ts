@@ -1,6 +1,6 @@
-import { getPackageVersion } from "./packageVersion";
+import { PACKAGE_VERSION } from "./packageVersion";
 
-const CONVEX_CLIENT = `create-convex-${getPackageVersion()}`;
+const CONVEX_CLIENT = `create-convex-${PACKAGE_VERSION}`;
 
 export async function getLatestCursorRules(): Promise<string> {
   let response: Response | null = null;
