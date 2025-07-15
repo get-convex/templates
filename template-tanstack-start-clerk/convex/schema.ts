@@ -7,4 +7,9 @@ export default defineSchema({
     title: v.string(),
     body: v.string(),
   }).index('id', ['id']),
+
+  tasks: defineTable({
+    text: v.string(),
+    isCompleted: v.boolean(),
+  }),
 })
