@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { writeCursorRules } from "./cursorRules";
 import * as fs from "fs";
-import * as githubHelpers from "./github";
+import * as version from "./versionApi";
 
 // Mock fs module
-vi.mock("fs", async (importOriginal) => {
+vi.mock("fs", async () => {
   const mockFs = {
     mkdirSync: vi.fn(),
     writeFileSync: vi.fn(),
@@ -16,7 +16,7 @@ vi.mock("fs", async (importOriginal) => {
 });
 
 // Mock path module
-vi.mock("path", async (importOriginal) => {
+vi.mock("path", async () => {
   const mockPath = {
     join: vi.fn((...args) => args.join("/")),
   };
@@ -26,22 +26,26 @@ vi.mock("path", async (importOriginal) => {
   };
 });
 
-// Mock GitHub helper functions
-vi.mock("./github", () => ({
-  fetchAllGitHubReleases: vi.fn(),
-  findReleaseWithAsset: vi.fn(),
-  downloadAssetFromRelease: vi.fn(),
+vi.mock("./versionApi", async () => ({
+  getLatestCursorRules: vi.fn().mockResolvedValue("Sample Cursor Rules"),
+}));
+
+vi.mock("./packageVersion", async () => ({
+  getPackageVersion: vi.fn().mockReturnValue("1.2.3"),
 }));
 
 describe("Cursor Rules Functions", () => {
   const mockFsModule = (fs as any).default;
-  const mockGithubHelpers = githubHelpers as any;
 
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset console spies
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
+    // Reset the version mock to default value
+    vi.mocked(version.getLatestCursorRules).mockResolvedValue(
+      "Sample Cursor Rules",
+    );
   });
 
   afterEach(() => {
@@ -50,34 +54,9 @@ describe("Cursor Rules Functions", () => {
 
   describe("writeCursorRules", () => {
     const mockRoot = "/test/project";
-    const mockRules = {
-      content: "# Mock cursor rules content\nThis is a test file.",
-      version: "v1.2.3",
-    };
-
-    beforeEach(() => {
-      // Setup default successful mocks
-      mockGithubHelpers.fetchAllGitHubReleases.mockResolvedValue([
-        {
-          tag_name: "v1.2.3",
-          prerelease: false,
-          draft: false,
-          assets: [{ name: "convex_rules.mdc" }],
-        },
-      ]);
-      mockGithubHelpers.findReleaseWithAsset.mockReturnValue({
-        tag_name: "v1.2.3",
-        prerelease: false,
-        draft: false,
-        assets: [{ name: "convex_rules.mdc" }],
-      });
-      mockGithubHelpers.downloadAssetFromRelease.mockResolvedValue(
-        mockRules.content,
-      );
-    });
 
     it("should successfully write cursor rules to project", async () => {
-      await writeCursorRules(mockRoot, { verbose: false });
+      await writeCursorRules(mockRoot);
 
       // Verify directory creation
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
@@ -88,60 +67,24 @@ describe("Cursor Rules Functions", () => {
       // Verify file writing
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
-        mockRules.content,
+        "Sample Cursor Rules",
       );
 
       // Verify success message
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining("✔") &&
           expect.stringContaining(
-            "Latest Cursor Rules (v1.2.3) was added to project.",
+            "Added the latest Cursor rules to the project.",
           ),
       );
       expect(console.log).toHaveBeenCalledWith(); // Empty line
     });
 
-    it("should call GitHub helpers with correct parameters", async () => {
-      await writeCursorRules(mockRoot, { verbose: true });
-
-      expect(mockGithubHelpers.fetchAllGitHubReleases).toHaveBeenCalledWith(
-        "get-convex/convex-evals",
-      );
-      expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
-        expect.any(Array),
-        "convex_rules.mdc",
-        { verbose: true },
-      );
-      expect(mockGithubHelpers.downloadAssetFromRelease).toHaveBeenCalledWith(
-        "get-convex/convex-evals",
-        "v1.2.3",
-        "convex_rules.mdc",
-      );
-    });
-
     it("should handle fetchAllGitHubReleases failure gracefully", async () => {
-      const error = new Error("GitHub API error");
-      mockGithubHelpers.fetchAllGitHubReleases.mockRejectedValue(error);
+      const error = new Error("API error");
+      vi.mocked(version.getLatestCursorRules).mockRejectedValue(error);
 
-      await writeCursorRules(mockRoot, { verbose: false });
-
-      // Should not create directory or write file
-      expect(mockFsModule.mkdirSync).not.toHaveBeenCalled();
-      expect(mockFsModule.writeFileSync).not.toHaveBeenCalled();
-
-      // Should log error
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:"),
-      );
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("GitHub API error"),
-      );
-    });
-
-    it("should handle findReleaseWithAsset returning null", async () => {
-      mockGithubHelpers.findReleaseWithAsset.mockReturnValue(null);
-
-      await writeCursorRules(mockRoot, { verbose: false });
+      await writeCursorRules(mockRoot);
 
       // Should not create directory or write file
       expect(mockFsModule.mkdirSync).not.toHaveBeenCalled();
@@ -152,35 +95,14 @@ describe("Cursor Rules Functions", () => {
         expect.stringContaining("✖ Failed to download latest cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining(
-          "Found no stable releases with a convex_rules.mdc.",
-        ),
-      );
-    });
-
-    it("should handle downloadAssetFromRelease failure gracefully", async () => {
-      const error = new Error("Download failed");
-      mockGithubHelpers.downloadAssetFromRelease.mockRejectedValue(error);
-
-      await writeCursorRules(mockRoot, { verbose: false });
-
-      // Should not create directory or write file
-      expect(mockFsModule.mkdirSync).not.toHaveBeenCalled();
-      expect(mockFsModule.writeFileSync).not.toHaveBeenCalled();
-
-      // Should log error
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:"),
-      );
-      expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("Download failed"),
+        expect.stringContaining("API error"),
       );
     });
 
     it("should work with different project root paths", async () => {
       const differentRoot = "/different/path/project";
 
-      await writeCursorRules(differentRoot, { verbose: false });
+      await writeCursorRules(differentRoot);
 
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/different/path/project/.cursor/rules",
@@ -189,29 +111,7 @@ describe("Cursor Rules Functions", () => {
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/different/path/project/.cursor/rules/convex_rules.mdc",
-        mockRules.content,
-      );
-    });
-
-    it("should handle verbose mode correctly", async () => {
-      await writeCursorRules(mockRoot, { verbose: true });
-
-      // Verify that verbose flag is passed to findReleaseWithAsset
-      expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
-        expect.any(Array),
-        "convex_rules.mdc",
-        { verbose: true },
-      );
-    });
-
-    it("should handle non-verbose mode correctly", async () => {
-      await writeCursorRules(mockRoot, { verbose: false });
-
-      // Verify that verbose: false is passed to findReleaseWithAsset
-      expect(mockGithubHelpers.findReleaseWithAsset).toHaveBeenCalledWith(
-        expect.any(Array),
-        "convex_rules.mdc",
-        { verbose: false },
+        "Sample Cursor Rules",
       );
     });
 
@@ -222,9 +122,9 @@ describe("Cursor Rules Functions", () => {
       });
 
       // The function should throw the fs error since it's not caught
-      await expect(
-        writeCursorRules(mockRoot, { verbose: false }),
-      ).rejects.toThrow("Permission denied");
+      await expect(writeCursorRules(mockRoot)).rejects.toThrow(
+        "Permission denied",
+      );
 
       // Should still try to create directory
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
@@ -238,11 +138,9 @@ describe("Cursor Rules Functions", () => {
 
     it("should write correct file content and path", async () => {
       const customContent = "# Custom rules content\nSome specific rules here.";
-      mockGithubHelpers.downloadAssetFromRelease.mockResolvedValue(
-        customContent,
-      );
+      vi.mocked(version.getLatestCursorRules).mockResolvedValue(customContent);
 
-      await writeCursorRules(mockRoot, { verbose: false });
+      await writeCursorRules(mockRoot);
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
@@ -251,9 +149,9 @@ describe("Cursor Rules Functions", () => {
     });
 
     it("should handle empty content gracefully", async () => {
-      mockGithubHelpers.downloadAssetFromRelease.mockResolvedValue("");
+      vi.mocked(version.getLatestCursorRules).mockResolvedValue("");
 
-      await writeCursorRules(mockRoot, { verbose: false });
+      await writeCursorRules(mockRoot);
 
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
@@ -263,25 +161,8 @@ describe("Cursor Rules Functions", () => {
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining("✔") &&
           expect.stringContaining(
-            "Latest Cursor Rules (v1.2.3) was added to project.",
+            "Added the latest Cursor rules to the project.",
           ),
-      );
-    });
-
-    it("should handle version formatting correctly", async () => {
-      mockGithubHelpers.findReleaseWithAsset.mockReturnValue({
-        tag_name: "v2.0.0-beta.1",
-        prerelease: false,
-        draft: false,
-        assets: [{ name: "convex_rules.mdc" }],
-      });
-
-      await writeCursorRules(mockRoot, { verbose: false });
-
-      expect(console.log).toHaveBeenCalledWith(
-        expect.stringContaining(
-          "Latest Cursor Rules (v2.0.0-beta.1) was added to project.",
-        ),
       );
     });
   });

@@ -243,7 +243,7 @@ async function init() {
     return;
   }
 
-  await writeCursorRules(root, { verbose });
+  await writeCursorRules(root);
 
   const pkg = JSON.parse(
     fs.readFileSync(path.join(root, `package.json`), "utf-8"),
