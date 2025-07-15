@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "npx convex dev --once && concurrently -r npm:dev:web npm:dev:convex",
     "dev:web": "vite dev",
+    "dev:ts": "tsc -b -w",
     "dev:convex": "npx convex dev",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs",
-    "format": "prettier --write .",
-    "seed": "npx convex import --table tasks sampleData.jsonl"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@convex-dev/react-query": "^0.0.0-alpha.11",
