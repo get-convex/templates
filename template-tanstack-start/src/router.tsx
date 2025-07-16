@@ -17,7 +17,7 @@ export function createRouter() {
       queries: {
         queryKeyHashFn: convexQueryClient.hashFn(),
         queryFn: convexQueryClient.queryFn(),
-        gcTime: 5000
+        gcTime: 5000,
       },
     },
   })
@@ -29,6 +29,7 @@ export function createRouter() {
       defaultPreload: 'intent',
       context: { queryClient },
       scrollRestoration: true,
+      defaultPreloadStaleTime: 0, // Let React Query handle all caching
       defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
       defaultNotFoundComponent: () => <p>not found</p>,
       Wrap: ({ children }) => (
