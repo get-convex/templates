@@ -52,10 +52,18 @@ export default [
   {
     rules: {
       "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "separate-type-imports",
+          disallowTypeAnnotations: false,
+        },
+      ],
       "eslint-comments/no-unused-disable": "off",
 
-      // allow (_arg: number) => {} and const _foo = 1;
       "no-unused-vars": "off",
+      // allow (_arg: number) => {} and const _foo = 1;
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

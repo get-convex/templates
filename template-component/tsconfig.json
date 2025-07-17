@@ -20,7 +20,6 @@
     "sourceMap": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
   "include": ["./src/**/*"]
