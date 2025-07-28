@@ -10,7 +10,7 @@ export async function writeCursorRules(root: string) {
   try {
     rules = await getLatestCursorRules();
   } catch (e) {
-    console.error(red("✖ Failed to download latest cursor rules:"));
+    console.error(red("✖ Failed to download latest Cursor rules:"));
     console.error(gray(`${e}`));
     return;
   }
