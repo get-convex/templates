@@ -55,7 +55,7 @@ describe("Cursor Rules Functions", () => {
   describe("writeCursorRules", () => {
     const mockRoot = "/test/project";
 
-    it("should successfully write cursor rules to project", async () => {
+    it("should successfully write Cursor rules to project", async () => {
       await writeCursorRules(mockRoot);
 
       // Verify directory creation
@@ -92,7 +92,7 @@ describe("Cursor Rules Functions", () => {
 
       // Should log error
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining("✖ Failed to download latest cursor rules:"),
+        expect.stringContaining("✖ Failed to download latest Cursor rules:"),
       );
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("API error"),
