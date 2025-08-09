@@ -6,7 +6,7 @@ import minimist from "minimist";
 import path from "path";
 import prompts from "prompts";
 import { PackageManager, detectPackageManager } from "./packageManagers";
-import { writeCursorRules } from "./cursorRules";
+import { writeCursorRules, writeGithubCopilotInstructions } from "./agentRules";
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -244,6 +244,7 @@ async function init() {
   }
 
   await writeCursorRules(root);
+  await writeGithubCopilotInstructions(root);
 
   const pkg = JSON.parse(
     fs.readFileSync(path.join(root, `package.json`), "utf-8"),

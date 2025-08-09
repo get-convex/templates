@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { writeCursorRules } from "./cursorRules";
+import { writeCursorRules, writeGithubCopilotInstructions } from "./agentRules";
 import * as fs from "fs";
 import * as version from "./versionApi";
 
@@ -28,23 +28,27 @@ vi.mock("path", async () => {
 
 vi.mock("./versionApi", async () => ({
   getLatestCursorRules: vi.fn().mockResolvedValue("Sample Cursor Rules"),
+  getGithubCopilotInstructions: vi
+    .fn()
+    .mockResolvedValue("Sample Copilot Instructions"),
 }));
 
 vi.mock("./packageVersion", async () => ({
   getPackageVersion: vi.fn().mockReturnValue("1.2.3"),
 }));
 
-describe("Cursor Rules Functions", () => {
+describe("Agent Rules Functions", () => {
   const mockFsModule = (fs as any).default;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset console spies
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
-    // Reset the version mock to default value
     vi.mocked(version.getLatestCursorRules).mockResolvedValue(
       "Sample Cursor Rules",
+    );
+    vi.mocked((version as any).getGithubCopilotInstructions).mockResolvedValue(
+      "Sample Copilot Instructions",
     );
   });
 
@@ -58,39 +62,34 @@ describe("Cursor Rules Functions", () => {
     it("should successfully write Cursor rules to project", async () => {
       await writeCursorRules(mockRoot);
 
-      // Verify directory creation
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules",
         { recursive: true },
       );
 
-      // Verify file writing
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
         "Sample Cursor Rules",
       );
 
-      // Verify success message
       expect(console.log).toHaveBeenCalledWith(
         expect.stringContaining("✔") &&
           expect.stringContaining(
             "Added the latest Cursor rules to the project.",
           ),
       );
-      expect(console.log).toHaveBeenCalledWith(); // Empty line
+      expect(console.log).toHaveBeenCalledWith();
     });
 
-    it("should handle fetchAllGitHubReleases failure gracefully", async () => {
+    it("should handle fetch failure gracefully", async () => {
       const error = new Error("API error");
       vi.mocked(version.getLatestCursorRules).mockRejectedValue(error);
 
       await writeCursorRules(mockRoot);
 
-      // Should not create directory or write file
       expect(mockFsModule.mkdirSync).not.toHaveBeenCalled();
       expect(mockFsModule.writeFileSync).not.toHaveBeenCalled();
 
-      // Should log error
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("✖ Failed to download latest Cursor rules:"),
       );
@@ -121,18 +120,15 @@ describe("Cursor Rules Functions", () => {
         throw fsError;
       });
 
-      // The function should throw the fs error since it's not caught
       await expect(writeCursorRules(mockRoot)).rejects.toThrow(
         "Permission denied",
       );
 
-      // Should still try to create directory
       expect(mockFsModule.mkdirSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules",
         { recursive: true },
       );
 
-      // Should not try to write file since mkdir failed
       expect(mockFsModule.writeFileSync).not.toHaveBeenCalled();
     });
 
@@ -166,4 +162,53 @@ describe("Cursor Rules Functions", () => {
       );
     });
   });
+
+  describe("writeGithubCopilotInstructions", () => {
+    const mockRoot = "/test/project";
+
+    it("should successfully write Copilot instructions to project", async () => {
+      await writeGithubCopilotInstructions(mockRoot);
+
+      expect((fs as any).default.mkdirSync).toHaveBeenCalledWith(
+        "/test/project/.github/instructions",
+        { recursive: true },
+      );
+
+      expect((fs as any).default.writeFileSync).toHaveBeenCalledWith(
+        "/test/project/.github/instructions/convex.instructions.md",
+        "Sample Copilot Instructions",
+      );
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining("✔") &&
+          expect.stringContaining(
+            "Added the latest GitHub Copilot instructions to the project.",
+          ),
+      );
+      expect(console.log).toHaveBeenCalledWith();
+    });
+
+    it("should handle network failure gracefully", async () => {
+      const error = new Error("API error");
+      vi.mocked((version as any).getGithubCopilotInstructions).mockRejectedValue(
+        error,
+      );
+
+      await writeGithubCopilotInstructions(mockRoot);
+
+      expect((fs as any).default.mkdirSync).not.toHaveBeenCalled();
+      expect((fs as any).default.writeFileSync).not.toHaveBeenCalled();
+
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "✖ Failed to download latest Copilot instructions:",
+        ),
+      );
+      expect(console.error).toHaveBeenCalledWith(
+        expect.stringContaining("API error"),
+      );
+    });
+  });
 });
+
+

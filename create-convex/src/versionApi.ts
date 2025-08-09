@@ -27,3 +27,34 @@ export async function getLatestCursorRules(): Promise<string> {
 
   return data;
 }
+
+export async function getGithubCopilotInstructions(): Promise<string> {
+  let response: Response | null = null;
+
+  try {
+    response = await fetch(
+      `https://convex.link/convex_github_copilot_instructions`,
+      {
+        headers: {
+          "Convex-Client": CONVEX_CLIENT,
+        },
+      },
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(
+        `Network error fetching Copilot instructions: ${error.message}`,
+      );
+    }
+    throw new Error(`Unknown error fetching Copilot instructions: ${error}`);
+  }
+
+  const data = await response.text();
+  if (response.status !== 200) {
+    throw new Error(
+      `Failed to fetch Copilot instructions: ${response.status} ${response.statusText} / ${data}`,
+    );
+  }
+
+  return data;
+}
