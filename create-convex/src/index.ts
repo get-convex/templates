@@ -430,9 +430,20 @@ function getGivenTemplate(args: {
 const TEMPLATES_IN_REPO = [
   "astro",
   "bare",
+  "component",
+  "nextjs",
+  "nextjs-clerk",
+  "nextjs-clerk-shadcn", // not suggested anymore
+  "nextjs-convexauth",
+  "nextjs-shadcn", // not suggested anymore
+  "react-vite",
+  "react-vite-clerk",
+  "react-vite-clerk-shadcn", // not suggested anymore
+  "react-vite-convexauth",
+  "react-vite-convexauth-shadcn", // not suggested anymore
+  "react-vite-shadcn", //  not suggested anymore
   "tanstack-start",
   "tanstack-start-clerk",
-  "component",
 ];
 
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
@@ -451,5 +462,10 @@ function getTemplateRepoPath(templateName: string) {
   }
 
   // This is one of our templates specifically for `npm create convex`
-  return `get-convex/template-${templateName}#main`;
+  // These will be deprecated eventually.
+  const external = `get-convex/template-${templateName}#main`;
+  console.log(
+    `Can't find that template in create-convex repo, using external repo: ${external}`,
+  );
+  return external;
 }
