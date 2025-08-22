@@ -56,7 +56,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          submodules: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
