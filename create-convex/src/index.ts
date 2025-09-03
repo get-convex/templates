@@ -49,14 +49,19 @@ const FRAMEWORKS: Framework[] = [
 
 const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
-    name: "convexauth",
-    display: "Convex Auth",
+    name: "authkit",
+    display: "AuthKit (requires WorkOS account)",
     frameworks: ["react-vite", "nextjs"],
   },
   {
     name: "clerk",
     display: "Clerk (requires Clerk account)",
     frameworks: ["react-vite", "nextjs", "tanstack-start"],
+  },
+  {
+    name: "convexauth",
+    display: "Convex Auth",
+    frameworks: ["react-vite", "nextjs"],
   },
   {
     name: "none",
@@ -446,6 +451,12 @@ const TEMPLATES_IN_REPO = [
   "tanstack-start-clerk",
 ];
 
+// Templates in other repos that it's useful to have a short name for
+const EXTERNAL_TEMPLATES_WITH_NICKNAMES: Record<string, string> = {
+  "react-vite-authkit": "workos/template-convex-react-vite-authkit#main",
+  "nextjs-authkit": "workos/template-convex-nextjs-authkit#main",
+};
+
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
 function getTemplateRepoPath(templateName: string) {
@@ -460,12 +471,15 @@ function getTemplateRepoPath(templateName: string) {
   if (TEMPLATES_IN_REPO.includes(templateName)) {
     return `get-convex/templates/template-${templateName}#main`;
   }
+  if (Object.hasOwn(EXTERNAL_TEMPLATES_WITH_NICKNAMES, templateName)) {
+    return EXTERNAL_TEMPLATES_WITH_NICKNAMES[templateName];
+  }
 
   // This is one of our templates specifically for `npm create convex`
-  // These will be deprecated eventually.
+  // These are annoying to maintain, let's move the ones we care about to this repo.
   const external = `get-convex/template-${templateName}#main`;
   console.log(
-    `Can't find that template in create-convex repo, using external repo: ${external}`,
+    `Can't find template ${templateName} in create-convex repo, using external repo: ${external}`,
   );
   return external;
 }
