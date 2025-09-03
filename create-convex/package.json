@@ -1,6 +1,6 @@
 {
   "name": "create-convex",
-  "version": "0.0.35",
+  "version": "0.0.34",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Convex, Inc. <team@convex.dev>",
@@ -27,7 +27,8 @@
     "prepublishOnly": "npm run build",
     "prepack": "node dont-publish-alpha-as-latest.cjs",
     "lint": "echo ESLint is not configured",
-    "dev:run": "node ./dist/index.mjs"
+    "dev:run": "node ./dist/index.mjs",
+    "prepare": "patch-package"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
@@ -40,6 +41,7 @@
     "cross-spawn": "^7.0.3",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
+    "patch-package": "^8.0.0",
     "prettier": "^3.6.2",
     "prompts": "^2.4.2",
     "unbuild": "^2.0.0",
