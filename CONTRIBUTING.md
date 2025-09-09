@@ -22,14 +22,6 @@ npm install -g bun
 
 Run `just` anywhere from this project to see the list of available commands.
 
-Then you can run them from this or child directory, for example to absorb
-changes to a template into its history do:
-
-```sh
-cd template-foo
-just absorb-prepare
-```
-
 ## All templates to update
 
 Last updated: 2025-03-24
