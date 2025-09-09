@@ -248,6 +248,9 @@ async function init() {
     return;
   }
 
+  // Remove package-lock.json if it exists
+  fs.rmSync(path.join(root, "package-lock.json"), { force: true });
+
   await writeCursorRules(root);
 
   const pkg = JSON.parse(
