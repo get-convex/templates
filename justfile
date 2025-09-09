@@ -18,14 +18,14 @@ install-all:
             total=$((total+1))
         fi
     done
-    counter=0
 
+    counter=0
     install_deps() {
         dir="$1"
 
         counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$(basename "$dir")"
-        if [ "$(basename "$dir")" = "template-astro" ]; then
+        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
+        if [ "$dir" = "template-astro" ]; then
             (cd "$dir" && bun install)
         else
             (cd "$dir" && npm install)
@@ -34,7 +34,7 @@ install-all:
 
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$dir"
+            install_deps "$(basename $dir)"
         fi
     done
 
