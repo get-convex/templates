@@ -8,6 +8,20 @@ set positional-arguments
 _default:
   @just --list
 
+rm-lockfiles:
+    #!/usr/bin/env sh
+    for dir in template-*; do
+        if [ -d "$dir" ] && [ -f "$dir/package-lock.json" ]; then
+            rm -f "$dir/package-lock.json"
+            rm -f "$dir/bun.lockb"
+        fi
+    done
+    rm -ftemplate-component/example/package-lock.json
+
+regenerate-lockfiles:
+    just rm-lockfiles
+    just install-all
+
 # Install npm dependencies in all template folders
 install-all:
     #!/usr/bin/env sh
