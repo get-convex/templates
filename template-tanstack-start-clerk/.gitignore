@@ -7,16 +7,13 @@ node_modules
 .cache
 .vercel
 .output
-.vinxi
 .nitro
-.output
 .tanstack
 
 /build/
 /api/
 /server/build
 /public/build
-.vinxi
 
 # Sentry Config File
 .env.sentry-build-plugin
