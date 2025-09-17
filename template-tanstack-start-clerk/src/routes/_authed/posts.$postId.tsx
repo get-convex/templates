@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_authed/posts/$postId')({
   component: PostComponent,
 })
 
-export function PostErrorComponent({ error }: ErrorComponentProps) {
+function PostErrorComponent({ error }: ErrorComponentProps) {
   return <ErrorComponent error={error} />
 }
 
