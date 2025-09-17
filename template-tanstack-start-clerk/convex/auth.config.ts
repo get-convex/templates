@@ -6,7 +6,7 @@ export default {
       // and configure CLERK_JWT_ISSUER_DOMAIN on the Convex Dashboard
       // See https://docs.convex.dev/auth/clerk#configuring-dev-and-prod-instances
       // Should look similar to 'https://main-swine-30.clerk.accounts.dev'.
-      domain: process.env.VITE_CLERK_FRONTEND_API_URL,
+      domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
       applicationID: 'convex',
     },
   ],
