@@ -18,6 +18,10 @@ rm-lockfiles:
     done
     rm -ftemplate-component/example/package-lock.json
 
+# Since the lockfiles are deleted by the CLI tool when the project is downloaded
+# (in order to allow dependencies to be installed through any package manager),
+# it’s a good idea to regenerate them from time to time to ensure that
+# templates still work.
 regenerate-lockfiles:
     just rm-lockfiles
     just install-all
