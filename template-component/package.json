@@ -1,6 +1,12 @@
 {
-  "name": "template-component",
-  "description": "A template for a Convex component",
+  "name": "@convex-dev/sharded-counter",
+  "description": "A sharded counter component for Convex.",
+  "repository": "github:get-convex/sharded-counter",
+  "homepage": "https://github.com/get-convex/sharded-counter#readme",
+  "bugs": {
+    "email": "support@convex.dev",
+    "url": "https://github.com/get-convex/sharded-counter/issues"
+  },
   "version": "0.1.0",
   "license": "Apache-2.0",
   "keywords": [
@@ -57,7 +63,7 @@
     "@arethetypeswrong/cli": "^0.17.4",
     "@edge-runtime/vm": "^5.0.0",
     "@eslint/js": "9.29.0",
-    "@types/node": "^20.14.8",
+    "@types/node": "18.17.0",
     "chokidar-cli": "3.0.0",
     "convex-test": "0.0.37",
     "eslint": "9.29.0",
@@ -69,8 +75,7 @@
     "tsc-alias": "^1.8.16",
     "typescript": "5.5.4",
     "typescript-eslint": "8.34.1",
-    "vite": "^7.1.5",
-    "vitest": "^3.2.4"
+    "vitest": "3.2.4"
   },
   "types": "./dist/client/index.d.ts",
   "module": "./dist/client/index.js"
