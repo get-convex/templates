@@ -86,7 +86,7 @@ jobs:
         env:
           CONVEX_URL: "https://placeholder.convex.cloud"
           NEXT_PUBLIC_CONVEX_URL: "https://placeholder.convex.cloud"
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_JA=="
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsuYWJjZWYuMTIzNDUuZGV2LmxjbGNsZXJrLmNvbSQ" # not a real key
 
       - name: Run typecheck (if available)
         working-directory: ${{ matrix.project }}
