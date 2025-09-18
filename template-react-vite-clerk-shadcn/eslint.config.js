@@ -1,7 +1,6 @@
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -37,14 +36,9 @@ export default tseslint.config(
     },
     plugins: {
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
       // All of these overrides ease getting into
       // TypeScript, and can be removed for stricter
       // linting down the line.
@@ -60,6 +54,9 @@ export default tseslint.config(
 
       // Allow explicit `any`s
       "@typescript-eslint/no-explicit-any": "off",
+
+      // Allow empty object types
+      "@typescript-eslint/no-empty-object-type": "off",
 
       // START: Allow implicit `any`s
       "@typescript-eslint/no-unsafe-argument": "off",
