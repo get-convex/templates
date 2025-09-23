@@ -50,7 +50,7 @@ const FRAMEWORKS: Framework[] = [
 const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
     name: "authkit",
-    display: "AuthKit (may create a WorkOS account)",
+    display: "AuthKit (auto-creates a WorkOS account if needed)",
     frameworks: ["react-vite", "nextjs"],
   },
   {
