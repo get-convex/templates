@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from '../../convex/_generated/api'
 import { useAction } from 'convex/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -35,9 +35,9 @@ function AnotherPage() {
             Call action to add a random number
           </button>
         </p>
-        <a href="/" className="text-blue-600 underline hover:no-underline">
+        <Link to="/" className="text-blue-600 underline hover:no-underline">
           Back
-        </a>
+        </Link>
       </div>
     </main>
   )
