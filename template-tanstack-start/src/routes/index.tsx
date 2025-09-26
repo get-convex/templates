@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from '../../convex/_generated/api'
 import { useMutation } from 'convex/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -58,12 +58,12 @@ function Home() {
         </p>
         <p>
           Open{' '}
-          <a
-            href="/anotherPage"
+          <Link
+            to="/anotherPage"
             className="text-blue-600 underline hover:no-underline"
           >
             another page
-          </a>{' '}
+          </Link>{' '}
           to send an action.
         </p>
         <div className="flex flex-col">
