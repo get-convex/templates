@@ -126,14 +126,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             activeOptions={{ exact: true }}
           >
             Home
-          </Link>{' '}
-          <Link
-            to="/tasks"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Tasks
           </Link>
           <Link
             to="/posts"
@@ -142,14 +134,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             }}
           >
             Posts
-          </Link>
-          <Link
-            to="/convexposts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Convex Posts
           </Link>
           <Link
             to="/user"

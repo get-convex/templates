@@ -9,8 +9,7 @@
     "dev:convex": "npx convex dev",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs",
-    "format": "prettier --write .",
-    "seed": "npx convex import --table tasks sampleData.jsonl"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@clerk/tanstack-react-start": "0.24.0",
