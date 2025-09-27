@@ -1,10 +1,10 @@
 import { api } from 'convex/_generated/api'
 import { convexQuery } from '@convex-dev/react-query'
-import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useAction } from 'convex/react'
 import { useQuery } from '@tanstack/react-query'
 
-export const Route = createFileRoute('/convexposts')({
+export const Route = createFileRoute('/posts')({
   loader: async ({ context }) => {
     await context.queryClient.ensureQueryData({
       ...convexQuery(api.posts.list, {}),
@@ -49,16 +49,7 @@ function PostsComponent() {
           (post) => {
             return (
               <li key={post.id} className="whitespace-nowrap">
-                <Link
-                  to="/posts/$postId"
-                  params={{
-                    postId: post.id,
-                  }}
-                  className="block py-1 text-blue-800 hover:text-blue-600"
-                  activeProps={{ className: 'text-black font-bold' }}
-                >
-                  <div>{post.title.substring(0, 20)}</div>
-                </Link>
+                {post.title.substring(0, 20)}
               </li>
             )
           },

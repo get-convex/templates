@@ -141,14 +141,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               className: 'font-bold',
             }}
           >
-            Posts
-          </Link>
-          <Link
-            to="/convexposts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
             Convex Posts
           </Link>
           <Link
