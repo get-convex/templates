@@ -4,18 +4,6 @@ import { v } from 'convex/values'
 import type { Doc } from './_generated/dataModel'
 import type { WithoutSystemFields } from 'convex/server'
 
-export const get = query({
-  args: {
-    postId: v.string(),
-  },
-  handler: async (ctx, { postId }) => {
-    return await ctx.db
-      .query('posts')
-      .withIndex('id', (q) => q.eq('id', postId))
-      .unique()
-  },
-})
-
 export const list = query(async (ctx) => {
   return await ctx.db.query('posts').collect()
 })
@@ -23,10 +11,6 @@ export const list = query(async (ctx) => {
 export const insert = internalMutation(
   (ctx, { post }: { post: WithoutSystemFields<Doc<'posts'>> }) =>
     ctx.db.insert('posts', post),
-)
-
-export const count = query(
-  async (ctx) => (await ctx.db.query('posts').collect()).length,
 )
 
 export const populate = action(async (ctx) => {

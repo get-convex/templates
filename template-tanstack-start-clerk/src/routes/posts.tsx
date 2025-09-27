@@ -2,7 +2,7 @@ import { api } from 'convex/_generated/api'
 import { convexQuery } from '@convex-dev/react-query'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useAction } from 'convex/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/posts')({
   loader: async ({ context }) => {
@@ -15,27 +15,13 @@ export const Route = createFileRoute('/posts')({
 })
 
 function PostsComponent() {
-  const {
-    data: posts,
-    isPending,
-    error,
-  } = useQuery({
-    ...convexQuery(api.posts.list, {}),
-  })
-
-  // Not server-rendered
-  const { data: count } = useQuery(convexQuery(api.posts.count, {}))
-
-  if (isPending) return <>loading..</>
-  if (error) return <>error..</>
+  const { data: posts } = useSuspenseQuery(convexQuery(api.posts.list, {}))
 
   const populatePosts = useAction(api.posts.populate)
 
   return (
     <div className="p-2 flex gap-2 flex-col">
-      <div>client-rendered but no auth required (pops in): {count}</div>
-
-      {(!count || count === 0) && (
+      {posts.length === 0 && (
         <button
           onClick={() => populatePosts()}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -45,15 +31,13 @@ function PostsComponent() {
       )}
 
       <ul className="list-disc pl-4">
-        {[...posts, { id: 'i-do-not-exist', title: 'Non-existent Post' }].map(
-          (post) => {
-            return (
-              <li key={post.id} className="whitespace-nowrap">
-                {post.title.substring(0, 20)}
-              </li>
-            )
-          },
-        )}
+        {posts.map((post) => {
+          return (
+            <li key={post.id} className="whitespace-nowrap">
+              {post.title.substring(0, 20)}
+            </li>
+          )
+        })}
       </ul>
       <hr />
       <Outlet />
