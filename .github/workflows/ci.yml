@@ -46,6 +46,7 @@ jobs:
 
   build:
     name: ${{ matrix.project }}
+    needs: identify-changes
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
