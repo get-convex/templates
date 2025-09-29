@@ -15,6 +15,8 @@ jobs:
   identify-changes:
     name: Identify changed projects
     runs-on: ubuntu-latest
+    outputs:
+      changed_projects: ${{ steps.changes.outputs.changes }}
     steps:
       - uses: actions/checkout@v4
 
