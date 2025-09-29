@@ -84,7 +84,7 @@ jobs:
             # Check if this project changed or if workflow changed
             project_changed=$(echo "$CHANGES" | jq -r --arg proj "$project" '.[$proj]')
             
-            if [[ "$workflow_changed" == "true" || "$project_changed" == "true" ]]; then
+            if [[ "$project_changed" == "true" ]]; then
               if [[ "$use_bun" == "true" ]]; then
                 projects+=("{\"project\":\"$project\",\"use_bun\":true}")
               else
