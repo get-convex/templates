@@ -22,27 +22,27 @@ jobs:
         id: changes
         with:
           filters: |
-            - create-convex                        : create-convex/**
-            - template-astro                       : template-astro/**
-            - template-bare                        : template-bare/**
-            - template-component                   : template-component/**
-            - template-component/example           : template-component/example/**
-            - template-nextjs                      : template-nextjs/**
-            - template-nextjs-clerk                : template-nextjs-clerk/**
-            - template-nextjs-clerk-shadcn         : template-nextjs-clerk-shadcn/**
-            - template-nextjs-convexauth           : template-nextjs-convexauth/**
-            - template-nextjs-convexauth-shadcn    : template-nextjs-convexauth-shadcn/**
-            - template-nextjs-lucia-shadcn         : template-nextjs-lucia-shadcn/**
-            - template-nextjs-shadcn               : template-nextjs-shadcn/**
-            - template-react-vite                  : template-react-vite/**
-            - template-react-vite-clerk            : template-react-vite-clerk/**
-            - template-react-vite-clerk-shadcn     : template-react-vite-clerk-shadcn/**
-            - template-react-vite-convexauth       : template-react-vite-convexauth/**
-            - template-react-vite-convexauth-shadcn: template-react-vite-convexauth-shadcn/**
-            - template-react-vite-shadcn           : template-react-vite-shadcn/**
-            - template-tanstack-start              : template-tanstack-start/**
-            - template-tanstack-start-clerk        : template-tanstack-start-clerk/**
-            - workflow: .github/workflows/ci.yml
+            create-convex                        : create-convex/**
+            template-astro                       : template-astro/**
+            template-bare                        : template-bare/**
+            template-component                   : template-component/**
+            template-component/example           : template-component/example/**
+            template-nextjs                      : template-nextjs/**
+            template-nextjs-clerk                : template-nextjs-clerk/**
+            template-nextjs-clerk-shadcn         : template-nextjs-clerk-shadcn/**
+            template-nextjs-convexauth           : template-nextjs-convexauth/**
+            template-nextjs-convexauth-shadcn    : template-nextjs-convexauth-shadcn/**
+            template-nextjs-lucia-shadcn         : template-nextjs-lucia-shadcn/**
+            template-nextjs-shadcn               : template-nextjs-shadcn/**
+            template-react-vite                  : template-react-vite/**
+            template-react-vite-clerk            : template-react-vite-clerk/**
+            template-react-vite-clerk-shadcn     : template-react-vite-clerk-shadcn/**
+            template-react-vite-convexauth       : template-react-vite-convexauth/**
+            template-react-vite-convexauth-shadcn: template-react-vite-convexauth-shadcn/**
+            template-react-vite-shadcn           : template-react-vite-shadcn/**
+            template-tanstack-start              : template-tanstack-start/**
+            template-tanstack-start-clerk        : template-tanstack-start-clerk/**
+            workflow: .github/workflows/ci.yml
 
   build:
     name: ${{ matrix.project }}
