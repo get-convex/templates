@@ -1,5 +1,3 @@
-TEMP
-
 # 🧑‍🚀 Convex w/ Astro & React
 
 An [Astro](https://docs.astro.build) + [Convex](https://convex.dev) starter project
