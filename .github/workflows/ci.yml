@@ -80,6 +80,14 @@ jobs:
             # Check if this project changed
             project_changed=$(echo "$CHANGES" | jq -r --arg proj "$project" '.[$proj]')
             
+            # Special case: if template-component changed, also build template-component/example
+            if [[ "$project" == "template-component/example" ]]; then
+              template_component_changed=$(echo "$CHANGES" | jq -r '."template-component"')
+              if [[ "$template_component_changed" == "true" ]]; then
+                project_changed="true"
+              fi
+            fi
+            
             if [[ "$project_changed" == "true" ]]; then
               if [[ "$project" == "template-astro" ]]; then
                 projects+=("{\"project\":\"$project\",\"use_bun\":true}")
