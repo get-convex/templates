@@ -16,7 +16,7 @@ jobs:
     name: Identify changed projects
     runs-on: ubuntu-latest
     outputs:
-      changed_projects: ${{ steps.changes.outputs.changes }}
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,36 +46,68 @@ jobs:
             template-tanstack-start-clerk        : template-tanstack-start-clerk/**
             workflow: .github/workflows/ci.yml
 
+      - name: Generate matrix
+        id: generate-matrix
+        env:
+          CHANGES: ${{ toJSON(steps.changes.outputs) }}
+        run: |
+          # Define all projects with their configurations (format: "name|use_bun")
+          ALL_PROJECTS=(
+            "create-convex|false"
+            "template-astro|true"
+            "template-bare|false"
+            "template-component|false"
+            "template-component/example|false"
+            "template-nextjs|false"
+            "template-nextjs-clerk|false"
+            "template-nextjs-clerk-shadcn|false"
+            "template-nextjs-convexauth|false"
+            "template-nextjs-convexauth-shadcn|false"
+            "template-nextjs-lucia-shadcn|false"
+            "template-nextjs-shadcn|false"
+            "template-react-vite|false"
+            "template-react-vite-clerk|false"
+            "template-react-vite-clerk-shadcn|false"
+            "template-react-vite-convexauth|false"
+            "template-react-vite-convexauth-shadcn|false"
+            "template-react-vite-shadcn|false"
+            "template-tanstack-start|false"
+            "template-tanstack-start-clerk|false"
+          )
+
+          projects=()
+          workflow_changed=$(echo "$CHANGES" | jq -r '.workflow')
+
+          for entry in "${ALL_PROJECTS[@]}"; do
+            IFS='|' read -r project use_bun <<< "$entry"
+            
+            # Check if this project changed or if workflow changed
+            project_changed=$(echo "$CHANGES" | jq -r --arg proj "$project" '.[$proj]')
+            
+            if [[ "$workflow_changed" == "true" || "$project_changed" == "true" ]]; then
+              if [[ "$use_bun" == "true" ]]; then
+                projects+=("{\"project\":\"$project\",\"use_bun\":true}")
+              else
+                projects+=("{\"project\":\"$project\"}")
+              fi
+            fi
+          done
+
+          # Generate matrix JSON
+          if [ ${#projects[@]} -eq 0 ]; then
+            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
+          else
+            matrix_json=$(printf '%s\n' "${projects[@]}" | jq -s -c '{include: .}')
+            echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+          fi
+
   build:
     name: ${{ matrix.project }}
     needs: identify-changes
-    if: false # TODO
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - project: create-convex
-          - project: template-astro
-            use_bun: true
-          - project: template-bare
-          - project: template-component
-          - project: template-component/example
-          - project: template-nextjs
-          - project: template-nextjs-clerk
-          - project: template-nextjs-clerk-shadcn
-          - project: template-nextjs-convexauth
-          - project: template-nextjs-convexauth-shadcn
-          - project: template-nextjs-lucia-shadcn
-          - project: template-nextjs-shadcn
-          - project: template-react-vite
-          - project: template-react-vite-clerk
-          - project: template-react-vite-clerk-shadcn
-          - project: template-react-vite-convexauth
-          - project: template-react-vite-convexauth-shadcn
-          - project: template-react-vite-shadcn
-          - project: template-tanstack-start
-          - project: template-tanstack-start-clerk
+      matrix: ${{ fromJSON(needs.identify-changes.outputs.matrix) }}
 
     steps:
       - name: Checkout code
