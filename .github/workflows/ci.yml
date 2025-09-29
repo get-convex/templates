@@ -12,34 +12,116 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  identify-changes:
+    name: Identify changed projects
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            create-convex                        : create-convex/**
+            template-astro                       : template-astro/**
+            template-bare                        : template-bare/**
+            template-component                   : template-component/**
+            template-component/example           : template-component/example/**
+            template-nextjs                      : template-nextjs/**
+            template-nextjs-clerk                : template-nextjs-clerk/**
+            template-nextjs-clerk-shadcn         : template-nextjs-clerk-shadcn/**
+            template-nextjs-convexauth           : template-nextjs-convexauth/**
+            template-nextjs-convexauth-shadcn    : template-nextjs-convexauth-shadcn/**
+            template-nextjs-lucia-shadcn         : template-nextjs-lucia-shadcn/**
+            template-nextjs-shadcn               : template-nextjs-shadcn/**
+            template-react-vite                  : template-react-vite/**
+            template-react-vite-clerk            : template-react-vite-clerk/**
+            template-react-vite-clerk-shadcn     : template-react-vite-clerk-shadcn/**
+            template-react-vite-convexauth       : template-react-vite-convexauth/**
+            template-react-vite-convexauth-shadcn: template-react-vite-convexauth-shadcn/**
+            template-react-vite-shadcn           : template-react-vite-shadcn/**
+            template-tanstack-start              : template-tanstack-start/**
+            template-tanstack-start-clerk        : template-tanstack-start-clerk/**
+            workflow: .github/workflows/ci.yml
+
+      - name: Generate matrix
+        id: generate-matrix
+        env:
+          CHANGES: ${{ toJSON(steps.changes.outputs) }}
+        run: |
+          ALL_PROJECTS=(
+            "create-convex"
+            "template-astro"
+            "template-bare"
+            "template-component"
+            "template-component/example"
+            "template-nextjs"
+            "template-nextjs-clerk"
+            "template-nextjs-clerk-shadcn"
+            "template-nextjs-convexauth"
+            "template-nextjs-convexauth-shadcn"
+            "template-nextjs-lucia-shadcn"
+            "template-nextjs-shadcn"
+            "template-react-vite"
+            "template-react-vite-clerk"
+            "template-react-vite-clerk-shadcn"
+            "template-react-vite-convexauth"
+            "template-react-vite-convexauth-shadcn"
+            "template-react-vite-shadcn"
+            "template-tanstack-start"
+            "template-tanstack-start-clerk"
+          )
+
+          projects=()
+
+          for project in "${ALL_PROJECTS[@]}"; do
+            # Check if this project changed
+            project_changed=$(echo "$CHANGES" | jq -r --arg proj "$project" '.[$proj]')
+            
+            # Special case: if template-component changed, also build template-component/example
+            if [[ "$project" == "template-component/example" ]]; then
+              template_component_changed=$(echo "$CHANGES" | jq -r '."template-component"')
+              if [[ "$template_component_changed" == "true" ]]; then
+                project_changed="true"
+              fi
+            fi
+
+            # Special case: if workflow changed, also build all projects
+            workflow_changed=$(echo "$CHANGES" | jq -r '.workflow')
+            if [[ "$workflow_changed" == "true" ]]; then
+              project_changed="true"
+            fi
+            
+            if [[ "$project_changed" == "true" ]]; then
+              if [[ "$project" == "template-astro" ]]; then
+                projects+=("{\"project\":\"$project\",\"use_bun\":true}")
+              else
+                projects+=("{\"project\":\"$project\"}")
+              fi
+            fi
+          done
+
+          # Generate matrix JSON
+          if [ ${#projects[@]} -eq 0 ]; then
+            matrix_json="{\"include\":[]}"
+          else
+            matrix_json=$(printf '%s\n' "${projects[@]}" | jq -s -c '{include: .}')
+          fi
+
+          echo "Generated matrix:"
+          echo "$matrix_json" | jq .
+
+          echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+
   build:
     name: ${{ matrix.project }}
+    needs: identify-changes
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - project: create-convex
-          - project: template-astro
-            use_bun: true
-          - project: template-bare
-          - project: template-component
-          - project: template-component/example
-          - project: template-nextjs
-          - project: template-nextjs-clerk
-          - project: template-nextjs-clerk-shadcn
-          - project: template-nextjs-convexauth
-          - project: template-nextjs-convexauth-shadcn
-          - project: template-nextjs-lucia-shadcn
-          - project: template-nextjs-shadcn
-          - project: template-react-vite
-          - project: template-react-vite-clerk
-          - project: template-react-vite-clerk-shadcn
-          - project: template-react-vite-convexauth
-          - project: template-react-vite-convexauth-shadcn
-          - project: template-react-vite-shadcn
-          - project: template-tanstack-start
-          - project: template-tanstack-start-clerk
+      matrix: ${{ fromJSON(needs.identify-changes.outputs.matrix) }}
 
     steps:
       - name: Checkout code
