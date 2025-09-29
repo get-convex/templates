@@ -51,41 +51,37 @@ jobs:
         env:
           CHANGES: ${{ toJSON(steps.changes.outputs) }}
         run: |
-          # Define all projects with their configurations (format: "name|use_bun")
           ALL_PROJECTS=(
-            "create-convex|false"
-            "template-astro|true"
-            "template-bare|false"
-            "template-component|false"
-            "template-component/example|false"
-            "template-nextjs|false"
-            "template-nextjs-clerk|false"
-            "template-nextjs-clerk-shadcn|false"
-            "template-nextjs-convexauth|false"
-            "template-nextjs-convexauth-shadcn|false"
-            "template-nextjs-lucia-shadcn|false"
-            "template-nextjs-shadcn|false"
-            "template-react-vite|false"
-            "template-react-vite-clerk|false"
-            "template-react-vite-clerk-shadcn|false"
-            "template-react-vite-convexauth|false"
-            "template-react-vite-convexauth-shadcn|false"
-            "template-react-vite-shadcn|false"
-            "template-tanstack-start|false"
-            "template-tanstack-start-clerk|false"
+            "create-convex"
+            "template-astro"
+            "template-bare"
+            "template-component"
+            "template-component/example"
+            "template-nextjs"
+            "template-nextjs-clerk"
+            "template-nextjs-clerk-shadcn"
+            "template-nextjs-convexauth"
+            "template-nextjs-convexauth-shadcn"
+            "template-nextjs-lucia-shadcn"
+            "template-nextjs-shadcn"
+            "template-react-vite"
+            "template-react-vite-clerk"
+            "template-react-vite-clerk-shadcn"
+            "template-react-vite-convexauth"
+            "template-react-vite-convexauth-shadcn"
+            "template-react-vite-shadcn"
+            "template-tanstack-start"
+            "template-tanstack-start-clerk"
           )
 
           projects=()
-          workflow_changed=$(echo "$CHANGES" | jq -r '.workflow')
 
-          for entry in "${ALL_PROJECTS[@]}"; do
-            IFS='|' read -r project use_bun <<< "$entry"
-            
-            # Check if this project changed or if workflow changed
+          for project in "${ALL_PROJECTS[@]}"; do
+            # Check if this project changed
             project_changed=$(echo "$CHANGES" | jq -r --arg proj "$project" '.[$proj]')
             
             if [[ "$project_changed" == "true" ]]; then
-              if [[ "$use_bun" == "true" ]]; then
+              if [[ "$project" == "template-astro" ]]; then
                 projects+=("{\"project\":\"$project\",\"use_bun\":true}")
               else
                 projects+=("{\"project\":\"$project\"}")
@@ -95,11 +91,15 @@ jobs:
 
           # Generate matrix JSON
           if [ ${#projects[@]} -eq 0 ]; then
-            echo "matrix={\"include\":[]}" >> $GITHUB_OUTPUT
+            matrix_json="{\"include\":[]}"
           else
             matrix_json=$(printf '%s\n' "${projects[@]}" | jq -s -c '{include: .}')
-            echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
           fi
+
+          echo "Generated matrix:"
+          echo "$matrix_json" | jq .
+
+          echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
 
   build:
     name: ${{ matrix.project }}
