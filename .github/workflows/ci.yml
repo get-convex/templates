@@ -87,6 +87,12 @@ jobs:
                 project_changed="true"
               fi
             fi
+
+            # Special case: if workflow changed, also build all projects
+            workflow_changed=$(echo "$CHANGES" | jq -r '.workflow')
+            if [[ "$workflow_changed" == "true" ]]; then
+              project_changed="true"
+            fi
             
             if [[ "$project_changed" == "true" ]]; then
               if [[ "$project" == "template-astro" ]]; then
