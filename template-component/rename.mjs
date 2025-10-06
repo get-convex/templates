@@ -150,20 +150,6 @@ async function setup() {
     process.exit(1);
   }
 
-  // Prompt for repository name
-  const repoName = await new Promise((resolve) => {
-    rl.question(
-      `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
-      (answer) => {
-        resolve(answer.trim());
-      }
-    );
-  });
-  if (!repoName) {
-    console.error("❌ Repository name is required!");
-    process.exit(1);
-  }
-
   // Prompt for npm package name
   const npmPackageName = await new Promise((resolve) => {
     rl.question(
@@ -175,6 +161,20 @@ async function setup() {
   });
   if (!npmPackageName) {
     console.error("❌ NPM package name is required!");
+    process.exit(1);
+  }
+
+  // Prompt for repository name
+  const repoName = await new Promise((resolve) => {
+    rl.question(
+      `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
+      (answer) => {
+        resolve(answer.trim());
+      }
+    );
+  });
+  if (!repoName) {
+    console.error("❌ Repository name is required!");
     process.exit(1);
   }
 
