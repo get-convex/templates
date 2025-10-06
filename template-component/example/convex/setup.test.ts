@@ -2,18 +2,14 @@
 import { test } from "vitest";
 import { convexTest } from "convex-test";
 import schema from "./schema.js";
-export const modules = import.meta.glob("./**/*.*s");
+import component from "@convex-dev/sharded-counter/test";
 
-// This is how users write tests that use your component.
-import componentSchema from "../node_modules/@convex-dev/sharded-counter/src/component/schema.js";
-export { componentSchema };
-export const componentModules = import.meta.glob(
-  "../node_modules/@convex-dev/sharded-counter/src/component/**/*.ts"
-);
-
+const modules = import.meta.glob("./**/*.*s");
+// When users want to write tests that use your component, they need to
+// explicitly register it with its schema and modules.
 export function initConvexTest() {
   const t = convexTest(schema, modules);
-  t.registerComponent("agent", componentSchema, componentModules);
+  t.registerComponent("shardedCounter", component.schema, component.modules);
   return t;
 }
 
