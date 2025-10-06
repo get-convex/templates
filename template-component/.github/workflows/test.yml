@@ -25,11 +25,9 @@ jobs:
 
       - run: |
           npm i
-          npm run setup
+          npm run build
+          npx pkg-pr-new publish
           npm run test
           npm run typecheck
           npm run lint
           npm run attw
-          cd example
-          npm i
-          npm run lint
