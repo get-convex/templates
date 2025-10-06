@@ -5,6 +5,7 @@
     "skipLibCheck": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "verbatimModuleSyntax": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",

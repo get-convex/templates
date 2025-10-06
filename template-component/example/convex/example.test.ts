@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, test, vi } from "vitest";
 import { initConvexTest } from "./setup.test";
 import { api } from "./_generated/api";
-import { TestConvex } from "convex-test";
+import type { TestConvex } from "convex-test";
 import type schema from "./schema";
 
 describe("example", () => {
