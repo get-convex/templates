@@ -16,7 +16,6 @@ rm-lockfiles:
             rm -f "$dir/bun.lockb"
         fi
     done
-    rm -ftemplate-component/example/package-lock.json
 
 # Since the lockfiles are deleted by the CLI tool when the project is downloaded
 # (in order to allow dependencies to be installed through any package manager),
@@ -55,8 +54,6 @@ install-all:
             install_deps "$(basename $dir)"
         fi
     done
-
-    install_deps "template-component/example"
 
 # Commit a template change in the `templates` repo
 commit message:
