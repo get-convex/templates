@@ -14,17 +14,13 @@ To create your own component:
 To develop your component run a dev process in the example project:
 
 ```sh
-npm run setup
+npm i
 npm run dev
 ```
 
 `setup` will do the install and set up your convex backend (run once).
 `dev` will start both a file watcher to re-build the component, as well as run
 the example convex project alongside it.
-
-```
-npm run dev
-```
 
 Modify the schema and index files in src/component/ to define your component.
 
@@ -50,7 +46,7 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 │   ├── component/
 │   │   ├── _generated/ Files here are generated for the component.
 │   │   ├── convex.config.ts  Name your component here and use other components
-│   │   ├── index.ts    Define functions here and in new files in this directory
+│   │   ├── lib.ts    Define functions here and in new files in this directory
 │   │   └── schema.ts   schema specific to this component
 │   ├── client/index.ts "Thick" client code goes here.
 │   └── react/          Code intended to be used on the frontend goes here.
@@ -58,8 +54,6 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 │       │               does not provide code.
 │       └── index.ts
 ├── example/            example Convex app that uses this component
-│   │                   Run 'npx convex dev' from here during development.
-│   ├── package.json.ts Thick client code goes here.
 │   └── convex/
 │       ├── _generated/       Files here are generated for the example app.
 │       ├── convex.config.ts  Imports and uses this component
@@ -67,31 +61,6 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 │       └── schema.ts         Example app schema
 └── dist/               Publishing artifacts will be created here.
 ```
-
-### Structure of a Convex Component
-
-A Convex components exposes the entry point convex.config.js. The on-disk
-location of this file must be a directory containing implementation files. These
-files should be compiled to ESM.
-
-In addition to convex.config.js, a component typically exposes a client that
-wraps communication with the component for use in the Convex
-environment is typically exposed as a named export `MyComponentClient` or
-`MyComponent` imported from the root package.
-
-```
-import { MyComponentClient } from "my-convex-component";
-```
-
-When frontend code is included it is typically published at a subpath:
-
-```
-import { helper } from "my-convex-component/react";
-import { FrontendReactComponent } from "my-convex-component/react";
-```
-
-If you do include frontend components, prefer peer dependencies to avoid using
-more than one version of e.g. React.
 
 ---
 
@@ -119,7 +88,7 @@ Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.d
 
 Install the component package:
 
-```ts
+```sh
 npm install @example/sharded-counter
 ```
 
@@ -149,11 +118,11 @@ const shardedCounter = new ShardedCounter(components.shardedCounter, {
 
 See more example usage in [example.ts](./example/convex/example.ts).
 
+<!-- END: Include on https://convex.dev/components -->
+
 Run the example:
 
 ```sh
-npm run setup
-npm run example
+npm i
+npm run dev
 ```
-
-<!-- END: Include on https://convex.dev/components -->

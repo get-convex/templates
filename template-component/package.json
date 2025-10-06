@@ -14,12 +14,11 @@
   ],
   "type": "module",
   "scripts": {
-    "setup": "npm i && npm run build && npm run dev:backend -- --once",
     "all": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch' 'test:watch'",
     "dev": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch'",
     "dev:backend": "convex dev --live-component-sources --typecheck-components",
     "dev:frontend": "cd example && vite --clearScreen false",
-    "predev": "npm run build && npx convex dev --until-success",
+    "predev": "npm run build && npm run dev:backend -- --until-success",
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "tsc --project ./tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:watch": "npx chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'npm run build' --initial",
