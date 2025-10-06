@@ -13,6 +13,7 @@ export default [
       "vitest.config.js",
       "**/_generated/",
       "node10stubs.mjs",
+      "rename.mjs",
     ],
   },
   {

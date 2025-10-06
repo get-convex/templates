@@ -1,6 +1,11 @@
 {
-  "name": "template-component",
-  "description": "A template for a Convex component",
+  "name": "@example/sharded-counter",
+  "description": "A sharded counter component for Convex.",
+  "repository": "github:example-org/sharded-counter",
+  "homepage": "https://github.com/example-org/sharded-counter#readme",
+  "bugs": {
+    "url": "https://github.com/example-org/sharded-counter/issues"
+  },
   "version": "0.1.0",
   "license": "Apache-2.0",
   "keywords": [
