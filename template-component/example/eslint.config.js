@@ -38,5 +38,5 @@ export default tseslint.config(
       ],
     },
   },
-  ...convexPlugin.rules.recommended
+  ...convexPlugin.configs.recommended
 );

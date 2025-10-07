@@ -58,5 +58,5 @@ export default defineConfig([
     },
   },
   globalIgnores(["convex/_generated"]),
-  ...convexPlugin.rules.recommended,
+  ...convexPlugin.configs.recommended,
 ]);

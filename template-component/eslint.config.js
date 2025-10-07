@@ -74,5 +74,5 @@ export default [
       ],
     },
   },
-  ...convexPlugin.rules.recommended,
+  ...convexPlugin.configs.recommended,
 ];

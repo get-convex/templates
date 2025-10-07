@@ -75,5 +75,5 @@ export default tseslint.config(
       "@typescript-eslint/require-await": "off",
     },
   },
-  ...convexPlugin.rules.recommended,
+  ...convexPlugin.configs.recommended,
 );
