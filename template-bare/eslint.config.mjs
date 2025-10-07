@@ -1,10 +1,9 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 
 import globals from "globals";
-import tsParser, {
-  withoutProjectParserOptions,
-} from "@typescript-eslint/parser";
+import tsParser from "@typescript-eslint/parser";
 import js from "@eslint/js";
+import convexPlugin from "@convex-dev/eslint-plugin";
 
 import { FlatCompat } from "@eslint/eslintrc";
 import { join, dirname } from "node:path";
@@ -36,7 +35,7 @@ export default defineConfig([
 
     extends: compat.extends(
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended-type-checked"
+      "plugin:@typescript-eslint/recommended-type-checked",
     ),
 
     rules: {
@@ -59,4 +58,5 @@ export default defineConfig([
     },
   },
   globalIgnores(["convex/_generated"]),
+  ...convexPlugin.rules.recommended,
 ]);

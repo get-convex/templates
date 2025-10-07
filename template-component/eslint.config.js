@@ -3,6 +3,7 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import convexPlugin from "@convex-dev/eslint-plugin";
 
 export default [
   { files: ["src/**/*.{js,mjs,cjs,ts,tsx}"] },
@@ -73,4 +74,5 @@ export default [
       ],
     },
   },
+  ...convexPlugin.rules.recommended,
 ];

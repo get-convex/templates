@@ -19,6 +19,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^0.0.1-alpha.4",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
