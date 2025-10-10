@@ -18,9 +18,10 @@ npm i
 npm run dev
 ```
 
-`setup` will do the install and set up your convex backend (run once).
-`dev` will start both a file watcher to re-build the component, as well as run
-the example convex project alongside it.
+`npm i` will do the install and an initial build.
+`npm run dev` will start a file watcher to re-build the component, as well as
+the example project frontend and backend, which does codegen and installs the
+component.
 
 Modify the schema and index files in src/component/ to define your component.
 
