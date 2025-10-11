@@ -270,10 +270,6 @@ async function init() {
   }
   try {
     await installDependencies();
-    if (component && fs.existsSync("./example")) {
-      process.chdir("./example");
-      await installDependencies();
-    }
     console.log(`\n${green(`✔`)} Done.`);
   } catch (error) {
     console.log(red("✖ Failed to install dependencies."));
