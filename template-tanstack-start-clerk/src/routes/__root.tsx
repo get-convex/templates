@@ -18,22 +18,18 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { createServerFn } from '@tanstack/react-start'
 import { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
-import { getAuth } from '@clerk/tanstack-react-start/server'
-import { getRequest } from '@tanstack/react-start/server'
+import { auth } from '@clerk/tanstack-react-start/server'
 import appCss from '~/styles/app.css?url'
 import { ConvexQueryClient } from '@convex-dev/react-query'
 import { ConvexReactClient } from 'convex/react'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 
 const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
-  const request = getRequest()
-  if (!request) throw new Error('No request found')
-
-  const auth = await getAuth(getRequest())
-  const token = await auth.getToken({ template: 'convex' })
+  const { getToken, userId } = await auth()
+  const token = await getToken({ template: 'convex' })
 
   return {
-    userId: auth.userId,
+    userId,
     token,
   }
 })
