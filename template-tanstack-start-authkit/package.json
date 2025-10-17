@@ -1,0 +1,47 @@
+{
+  "name": "template-convex-tanstack-start-authkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/workos/template-convex-tanstack-start-authkit/#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/workos/template-convex-tanstack-start-authkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/workos/template-convex-tanstack-start-authkit/issues"
+  },
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:frontend dev:backend",
+    "dev:frontend": "vite dev",
+    "dev:backend": "convex dev",
+    "predev": "convex dev --until-success && convex dashboard",
+    "build": "vite build",
+    "start": "vite start",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.132.41",
+    "@tanstack/react-start": "^1.132.43",
+    "@workos/authkit-tanstack-react-start": "0.1.0",
+    "convex": "^1.27.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@tanstack/react-router-devtools": "^1.132.41",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.0.4",
+    "dotenv": "^17.2.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^7.1.8",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
