@@ -67,6 +67,7 @@
     "@edge-runtime/vm": "^5.0.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "9.37.0",
+    "@example/sharded-counter": ".",
     "@types/node": "^20.14.8",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
