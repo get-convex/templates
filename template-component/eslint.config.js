@@ -14,6 +14,7 @@ export default [
       "vitest.config.js",
       "**/_generated/",
       "node10stubs.mjs",
+      "rename.mjs",
     ],
   },
   {
@@ -23,7 +24,7 @@ export default [
 
       parserOptions: {
         project: true,
-        tsconfigRootDir: ".",
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },

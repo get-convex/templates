@@ -153,22 +153,30 @@ async function setup() {
   // Prompt for npm package name
   const npmPackageName = await new Promise((resolve) => {
     rl.question(
-      `Enter your npm package name [@convex-dev/${toKebabCase(componentName)}]: `,
+      `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
       (answer) => {
-        resolve(answer.trim() || `@convex-dev/${toKebabCase(componentName)}`);
+        resolve(answer.trim());
       }
     );
   });
+  if (!npmPackageName) {
+    console.error("❌ NPM package name is required!");
+    process.exit(1);
+  }
 
   // Prompt for repository name
   const repoName = await new Promise((resolve) => {
     rl.question(
-      `Enter your repository name [get-convex/${toKebabCase(componentName)}]: `,
+      `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
       (answer) => {
-        resolve(answer.trim() || `get-convex/${toKebabCase(componentName)}`);
+        resolve(answer.trim());
       }
     );
   });
+  if (!repoName) {
+    console.error("❌ Repository name is required!");
+    process.exit(1);
+  }
 
   rl.close();
 
@@ -195,10 +203,10 @@ async function setup() {
   // Define all replacements
   const replacements = [
     // NPM package name
-    ["@convex-dev/sharded-counter", npmPackageName],
+    ["@example/sharded-counter", npmPackageName],
 
     // Repository name
-    ["get-convex/sharded-counter", repoName],
+    ["example-org/sharded-counter", repoName],
 
     // Component name variations
     ["ShardedCounter", cases.pascal],
@@ -208,6 +216,14 @@ async function setup() {
     ["sharded counter", cases.space],
     ["Sharded Counter", cases.title],
   ];
+  if (npmPackageName.includes("/")) {
+    replacements.push([
+      "@example%2Fsharded-counter",
+      npmPackageName.replace("/", "%2F"),
+    ]);
+  } else {
+    replacements.push(["@example%2Fsharded-counter", npmPackageName]);
+  }
 
   console.log("🔍 Finding files to update...");
   const files = getAllFiles(".");
