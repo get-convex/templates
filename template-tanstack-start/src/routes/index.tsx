@@ -38,9 +38,7 @@ function Home() {
         </p>
         <p>
           Numbers:{' '}
-          {numbers?.length === 0
-            ? 'Click the button!'
-            : (numbers?.join(', ') ?? '...')}
+          {numbers.length === 0 ? 'Click the button!' : numbers.join(', ')}
         </p>
         <p>
           Edit{' '}
