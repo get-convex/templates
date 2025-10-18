@@ -1,12 +1,12 @@
 import { mutationGeneric, queryGeneric } from "convex/server";
 import { v } from "convex/values";
-import type { Mounts } from "../component/_generated/api.js";
+import type { api } from "../component/_generated/api.js";
 import type { UseApi, RunMutationCtx, RunQueryCtx } from "./types.js";
 
 // UseApi<typeof api> is an alternative that has jump-to-definition but is
 // less stable and reliant on types within the component files, which can cause
 // issues where passing `components.foo` doesn't match the argument
-export type ShardedCounterComponent = UseApi<Mounts>;
+export type ShardedCounterComponent = UseApi<typeof api>;
 
 export class ShardedCounter<Shards extends Record<string, number>> {
   constructor(
