@@ -31,6 +31,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^1.0.0",
     "@tailwindcss/postcss": "^4",
     "@tanstack/eslint-config": "^0.3.0",
     "@tanstack/react-router-devtools": "^1.132.41",
