@@ -1,10 +1,5 @@
 import { ReactNode, useCallback, useMemo } from 'react';
-import { ConvexProviderWithAuth } from 'convex/react';
-
-type IConvexReactClient = {
-  setAuth(fetchToken: () => Promise<string | null>): void;
-  clearAuth(): void;
-};
+import { ConvexProviderWithAuth, ConvexReactClient } from 'convex/react';
 
 // Modified to match WorkOS's auth hook structure
 type UseAuth = () => {
@@ -28,7 +23,7 @@ export function ConvexProviderWithAuthKit({
   useAuth,
 }: {
   children: ReactNode;
-  client: IConvexReactClient;
+  client: ConvexReactClient;
   useAuth: UseAuth;
 }) {
   const useAuthFromWorkOS = useUseAuthFromAuthKit(useAuth);
