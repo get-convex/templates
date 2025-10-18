@@ -9,7 +9,8 @@
     "dev:convex": "npx convex dev",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@clerk/tanstack-react-start": "0.24.0",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@tanstack/eslint-config": "^0.3.0",
     "@types/node": "^24.5.1",
     "@types/react-dom": "^19.1.9",
     "@types/react": "^19.1.13",

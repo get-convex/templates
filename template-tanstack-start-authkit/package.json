@@ -19,7 +19,8 @@
     "predev": "convex dev --until-success && convex dashboard",
     "build": "vite build",
     "start": "vite start",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.132.41",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tanstack/eslint-config": "^0.3.0",
     "@tanstack/react-router-devtools": "^1.132.41",
     "@types/node": "^20",
     "@types/react": "^19",
