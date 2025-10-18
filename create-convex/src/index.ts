@@ -51,7 +51,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
     name: "authkit",
     display: "AuthKit (auto-creates a WorkOS account if needed)",
-    frameworks: ["react-vite", "nextjs"],
+    frameworks: ["react-vite", "nextjs", "tanstack-start"],
   },
   {
     name: "clerk",
@@ -450,12 +450,6 @@ const TEMPLATES_IN_REPO = [
   "tanstack-start-clerk",
 ];
 
-// Templates in other repos that it's useful to have a short name for
-const EXTERNAL_TEMPLATES_WITH_NICKNAMES: Record<string, string> = {
-  "react-vite-authkit": "workos/template-convex-react-vite-authkit#main",
-  "nextjs-authkit": "workos/template-convex-nextjs-authkit#main",
-};
-
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
 function getTemplateRepoPath(templateName: string) {
@@ -467,11 +461,9 @@ function getTemplateRepoPath(templateName: string) {
       return templateName + "#main";
     }
   }
+
   if (TEMPLATES_IN_REPO.includes(templateName)) {
     return `get-convex/templates/template-${templateName}#main`;
-  }
-  if (Object.hasOwn(EXTERNAL_TEMPLATES_WITH_NICKNAMES, templateName)) {
-    return EXTERNAL_TEMPLATES_WITH_NICKNAMES[templateName];
   }
 
   // This is one of our templates specifically for `npm create convex`

@@ -29,6 +29,7 @@ jobs:
             template-bare                        : template-bare/**
             template-component                   : template-component/**
             template-nextjs                      : template-nextjs/**
+            template-nextjs-authkit              : template-nextjs-authkit/**
             template-nextjs-clerk                : template-nextjs-clerk/**
             template-nextjs-clerk-shadcn         : template-nextjs-clerk-shadcn/**
             template-nextjs-convexauth           : template-nextjs-convexauth/**
@@ -36,12 +37,14 @@ jobs:
             template-nextjs-lucia-shadcn         : template-nextjs-lucia-shadcn/**
             template-nextjs-shadcn               : template-nextjs-shadcn/**
             template-react-vite                  : template-react-vite/**
+            template-react-vite-authkit          : template-react-vite-authkit/**
             template-react-vite-clerk            : template-react-vite-clerk/**
             template-react-vite-clerk-shadcn     : template-react-vite-clerk-shadcn/**
             template-react-vite-convexauth       : template-react-vite-convexauth/**
             template-react-vite-convexauth-shadcn: template-react-vite-convexauth-shadcn/**
             template-react-vite-shadcn           : template-react-vite-shadcn/**
             template-tanstack-start              : template-tanstack-start/**
+            template-tanstack-start-authkit      : template-tanstack-start-authkit/**
             template-tanstack-start-clerk        : template-tanstack-start-clerk/**
             workflow: .github/workflows/ci.yml
 
@@ -56,6 +59,7 @@ jobs:
             "template-bare"
             "template-component"
             "template-nextjs"
+            "template-nextjs-authkit"
             "template-nextjs-clerk"
             "template-nextjs-clerk-shadcn"
             "template-nextjs-convexauth"
@@ -63,12 +67,14 @@ jobs:
             "template-nextjs-lucia-shadcn"
             "template-nextjs-shadcn"
             "template-react-vite"
+            "template-react-vite-authkit"
             "template-react-vite-clerk"
             "template-react-vite-clerk-shadcn"
             "template-react-vite-convexauth"
             "template-react-vite-convexauth-shadcn"
             "template-react-vite-shadcn"
             "template-tanstack-start"
+            "template-tanstack-start-authkit"
             "template-tanstack-start-clerk"
           )
 
