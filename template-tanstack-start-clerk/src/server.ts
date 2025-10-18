@@ -3,8 +3,8 @@ import {
   defaultStreamHandler,
   defineHandlerCallback,
 } from '@tanstack/react-start/server'
-import { createRouter } from './router'
 import { createClerkHandler } from '@clerk/tanstack-react-start/server'
+import { createRouter } from './router'
 
 const handlerFactory = createClerkHandler(
   createStartHandler({
