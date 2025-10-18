@@ -1,7 +1,7 @@
 import {
-  HeadContent,
   Link,
   Outlet,
+  HeadContent,
   Scripts,
   createRootRouteWithContext,
   useRouteContext,
@@ -16,14 +16,14 @@ import {
 } from '@clerk/tanstack-react-start'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { createServerFn } from '@tanstack/react-start'
+import { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 import { getAuth } from '@clerk/tanstack-react-start/server'
 import { getWebRequest } from '@tanstack/react-start/server'
-import { ConvexProviderWithClerk } from 'convex/react-clerk'
-import type { ConvexQueryClient } from '@convex-dev/react-query'
-import type { ConvexReactClient } from 'convex/react'
-import type { QueryClient } from '@tanstack/react-query'
 import appCss from '~/styles/app.css?url'
+import { ConvexQueryClient } from '@convex-dev/react-query'
+import { ConvexReactClient } from 'convex/react'
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
 
 const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
   const request = getWebRequest()
