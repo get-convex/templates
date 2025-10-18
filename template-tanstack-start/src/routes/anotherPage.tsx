@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { api } from '../../convex/_generated/api'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useAction } from 'convex/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
+import { api } from '../../convex/_generated/api'
 
 export const Route = createFileRoute('/anotherPage')({
   component: AnotherPage,
