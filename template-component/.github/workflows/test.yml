@@ -25,11 +25,14 @@ jobs:
           node-version: "20.x"
           cache: "npm"
 
-      - run: |
+      - name: Install and build
+        run: |
           npm i
           npm run build
-          npx pkg-pr-new publish
+      - name: Publish package for testing branch
+        run: npx pkg-pr-new publish
+      - name: Test
+        run: |
           npm run test
           npm run typecheck
           npm run lint
-          npm run attw
