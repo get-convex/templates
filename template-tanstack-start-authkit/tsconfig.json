@@ -20,6 +20,6 @@
     },
     "types": ["vite/client"]
   },
-  "include": ["src/**/*", "convex/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", ".tanstack"]
 }
