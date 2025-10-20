@@ -95,7 +95,7 @@ function Content() {
           Add a random number
         </button>
       </p>
-      <p>Numbers: {numbers?.length === 0 ? 'Click the button!' : (numbers?.join(', ') ?? '...')}</p>
+      <p>Numbers: {numbers.length === 0 ? 'Click the button!' : numbers.join(', ')}</p>
       <p>
         Edit{' '}
         <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
