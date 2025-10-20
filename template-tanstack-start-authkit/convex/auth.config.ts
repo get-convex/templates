@@ -1,6 +1,8 @@
+import type { AuthConfig } from 'convex/server';
+
 const clientId = process.env.WORKOS_CLIENT_ID;
 
-const authConfig = {
+export default {
   providers: [
     {
       type: 'customJwt',
@@ -17,6 +19,4 @@ const authConfig = {
       applicationID: clientId,
     },
   ],
-};
-
-export default authConfig;
+} satisfies AuthConfig;
