@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { query, mutation, action } from './_generated/server';
+import { action, mutation, query } from './_generated/server';
 import { api } from './_generated/api';
 
 // Write your Convex functions in any file inside this directory (`convex`).
@@ -14,8 +14,8 @@ export const listNumbers = query({
 
   // Query implementation.
   handler: async (ctx, args) => {
-    //// Read the database as many times as you need here.
-    //// See https://docs.convex.dev/database/reading-data.
+    // // Read the database as many times as you need here.
+    // // See https://docs.convex.dev/database/reading-data.
     const numbers = await ctx.db
       .query('numbers')
       // Ordered by _creationTime, return most recent
@@ -37,9 +37,9 @@ export const addNumber = mutation({
 
   // Mutation implementation.
   handler: async (ctx, args) => {
-    //// Insert or modify documents in the database here.
-    //// Mutations can also read from the database like queries.
-    //// See https://docs.convex.dev/database/writing-data.
+    // // Insert or modify documents in the database here.
+    // // Mutations can also read from the database like queries.
+    // // See https://docs.convex.dev/database/writing-data.
 
     const id = await ctx.db.insert('numbers', { value: args.value });
 
@@ -59,18 +59,18 @@ export const myAction = action({
 
   // Action implementation.
   handler: async (ctx, args) => {
-    //// Use the browser-like `fetch` API to send HTTP requests.
-    //// See https://docs.convex.dev/functions/actions#calling-third-party-apis-and-using-npm-packages.
+    // // Use the browser-like `fetch` API to send HTTP requests.
+    // // See https://docs.convex.dev/functions/actions#calling-third-party-apis-and-using-npm-packages.
     // const response = await ctx.fetch("https://api.thirdpartyservice.com");
     // const data = await response.json();
 
-    //// Query data by running Convex queries.
+    // // Query data by running Convex queries.
     const data = await ctx.runQuery(api.myFunctions.listNumbers, {
       count: 10,
     });
     console.log(data);
 
-    //// Write data by running Convex mutations.
+    // // Write data by running Convex mutations.
     await ctx.runMutation(api.myFunctions.addNumber, {
       value: args.first,
     });

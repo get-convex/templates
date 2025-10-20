@@ -1,8 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { api } from '../../convex/_generated/api'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMutation } from 'convex/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
+import { api } from '../../convex/_generated/api'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -38,9 +38,7 @@ function Home() {
         </p>
         <p>
           Numbers:{' '}
-          {numbers?.length === 0
-            ? 'Click the button!'
-            : (numbers?.join(', ') ?? '...')}
+          {numbers.length === 0 ? 'Click the button!' : numbers.join(', ')}
         </p>
         <p>
           Edit{' '}

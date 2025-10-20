@@ -1,16 +1,17 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
 import { useAuth } from '@workos/authkit-tanstack-react-start/client';
-import { getAuth, getSignInUrl, type User } from '@workos/authkit-tanstack-react-start';
-import { useState, useEffect } from 'react';
+import { getAuth, getSignInUrl, getSignUpUrl } from '@workos/authkit-tanstack-react-start';
+import { useEffect, useState } from 'react';
+import { api } from '../../convex/_generated/api';
+import type { User } from '@workos/authkit-tanstack-react-start';
 
 export const Route = createFileRoute('/')({
   component: Home,
   loader: async () => {
     const { user } = await getAuth();
     const signInUrl = await getSignInUrl();
-    const signUpUrl = await getSignInUrl({ screenHint: 'sign-up' });
+    const signUpUrl = await getSignUpUrl();
     return { user, signInUrl, signUpUrl };
   },
 });
@@ -94,7 +95,7 @@ function Content() {
           Add a random number
         </button>
       </p>
-      <p>Numbers: {numbers?.length === 0 ? 'Click the button!' : (numbers?.join(', ') ?? '...')}</p>
+      <p>Numbers: {numbers.length === 0 ? 'Click the button!' : numbers.join(', ')}</p>
       <p>
         Edit{' '}
         <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
