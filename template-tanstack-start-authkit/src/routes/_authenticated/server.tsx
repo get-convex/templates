@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { api } from '../../../convex/_generated/api';
 import { getAuth } from '@workos/authkit-tanstack-react-start';
 import { useMutation, useQuery } from 'convex/react';
 import { fetchQuery } from 'convex/nextjs';
+import { api } from '../../../convex/_generated/api';
 
 export const Route = createFileRoute('/_authenticated/server')({
   component: ServerPage,
