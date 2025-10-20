@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
 import { useAuth } from '@workos/authkit-tanstack-react-start/client';
-import { getAuth, getSignInUrl, type User } from '@workos/authkit-tanstack-react-start';
-import { useState, useEffect } from 'react';
+import { getAuth, getSignInUrl } from '@workos/authkit-tanstack-react-start';
+import { useEffect, useState } from 'react';
+import { api } from '../../convex/_generated/api';
+import type { User } from '@workos/authkit-tanstack-react-start';
 
 export const Route = createFileRoute('/')({
   component: Home,
