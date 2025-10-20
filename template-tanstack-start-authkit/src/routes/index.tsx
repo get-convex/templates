@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react';
 import { useAuth } from '@workos/authkit-tanstack-react-start/client';
-import { getAuth, getSignInUrl } from '@workos/authkit-tanstack-react-start';
+import { getAuth, getSignInUrl, getSignUpUrl } from '@workos/authkit-tanstack-react-start';
 import { useEffect, useState } from 'react';
 import { api } from '../../convex/_generated/api';
 import type { User } from '@workos/authkit-tanstack-react-start';
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/')({
   loader: async () => {
     const { user } = await getAuth();
     const signInUrl = await getSignInUrl();
-    const signUpUrl = await getSignInUrl({ screenHint: 'sign-up' });
+    const signUpUrl = await getSignUpUrl();
     return { user, signInUrl, signUpUrl };
   },
 });
