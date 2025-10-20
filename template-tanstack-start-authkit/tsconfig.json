@@ -20,6 +20,6 @@
     },
     "types": ["vite/client"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "vite.config.ts"],
   "exclude": ["node_modules", "dist", ".tanstack"]
 }
