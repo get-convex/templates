@@ -1,3 +1,4 @@
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
@@ -5,7 +6,7 @@ import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import convexPlugin from "@convex-dev/eslint-plugin";
 
-export default [
+export default defineConfig([
   { files: ["src/**/*.{js,mjs,cjs,ts,tsx}"] },
   {
     ignores: [
@@ -76,4 +77,4 @@ export default [
     },
   },
   ...convexPlugin.configs.recommended,
-];
+]);
