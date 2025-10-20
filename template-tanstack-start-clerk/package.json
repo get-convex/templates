@@ -19,7 +19,7 @@
     "@tanstack/react-router-with-query": "^1.130.17",
     "@tanstack/react-router": "^1.131.44",
     "@tanstack/react-start": "^1.131.44",
-    "convex": "^1.27.0",
+    "convex": "^1.28.0",
     "react-dom": "^19.1.1",
     "react": "^19.1.1",
     "redaxios": "^0.5.1"
