@@ -432,11 +432,13 @@ const TEMPLATES_IN_REPO = [
   "bare",
   "component",
   "nextjs",
+  "nextjs-authkit",
   "nextjs-clerk",
   "nextjs-clerk-shadcn", // not suggested anymore
   "nextjs-convexauth",
   "nextjs-shadcn", // not suggested anymore
   "react-vite",
+  "react-vite-authkit",
   "react-vite-clerk",
   "react-vite-clerk-shadcn", // not suggested anymore
   "react-vite-convexauth",
