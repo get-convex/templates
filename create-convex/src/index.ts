@@ -290,9 +290,6 @@ async function init() {
   if (givenTemplate === "tanstack-start") {
     message += `  ${packageManager} run seed\n`;
     message += `  ${packageManager} run dev\n`;
-  } else if (component) {
-    message += `  cd example\n`;
-    message += `  ${packageManager} run dev\n`;
   } else {
     message += `  ${packageManager} run dev\n`;
   }
