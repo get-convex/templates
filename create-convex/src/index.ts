@@ -136,12 +136,15 @@ async function init() {
         },
         {
           // Prompt for the package name (if project name is not a valid package name)
-          type: () => (isValidPackageName(getProjectName()) ? null : "text"),
+          type: () =>
+            component || isValidPackageName(getProjectName()) ? null : "text",
           name: "packageName",
           message: reset("Package name:"),
           initial: () => toValidPackageName(getProjectName()),
           validate: (dir) =>
-            isValidPackageName(dir) || "Invalid package.json name",
+            !!component ||
+            isValidPackageName(dir) ||
+            "Invalid package.json name",
         },
         // The next two prompts are only shown if not targeting a specific template or using the component template
         {
@@ -253,16 +256,18 @@ async function init() {
 
   await writeCursorRules(root);
 
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
-  );
+  if (!component) {
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(root, `package.json`), "utf-8"),
+    );
 
-  pkg.name = packageName || getProjectName();
+    pkg.name = packageName || getProjectName();
 
-  fs.writeFileSync(
-    path.join(root, "package.json"),
-    JSON.stringify(pkg, null, 2) + "\n",
-  );
+    fs.writeFileSync(
+      path.join(root, "package.json"),
+      JSON.stringify(pkg, null, 2) + "\n",
+    );
+  }
 
   const cdProjectName = path.relative(cwd, root);
   if (root !== cwd) {
