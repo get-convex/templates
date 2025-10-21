@@ -285,14 +285,8 @@ async function init() {
       cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
     }\n`;
   }
-  // The TanStack basic template is confusing
-  // if you haven't imported the data.
-  if (givenTemplate === "tanstack-start") {
-    message += `  ${packageManager} run seed\n`;
-    message += `  ${packageManager} run dev\n`;
-  } else {
-    message += `  ${packageManager} run dev\n`;
-  }
+
+  message += `  ${packageManager} run dev\n`;
 
   // Add a link to the Convex docs
   message += `\nCheck out the Convex docs at: ${bold(
