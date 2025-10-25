@@ -1,5 +1,5 @@
-import { mutation } from "./_generated/server";
-import { components } from "./_generated/api";
+import { mutation } from "./_generated/server.js";
+import { components } from "./_generated/api.js";
 import { ShardedCounter } from "@example/sharded-counter";
 
 const shardedCounter = new ShardedCounter(components.shardedCounter, {});
