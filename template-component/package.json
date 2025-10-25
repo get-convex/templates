@@ -15,7 +15,7 @@
   "type": "module",
   "scripts": {
     "dev": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch'",
-    "dev:backend": "convex dev --live-component-sources --typecheck-components",
+    "dev:backend": "convex dev --typecheck-components",
     "dev:frontend": "cd example && vite --clearScreen false",
     "predev": "npm run dev:backend -- --until-success",
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
@@ -42,18 +42,15 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@convex-dev/component-source": "./src/client/index.ts",
       "types": "./dist/client/index.d.ts",
       "default": "./dist/client/index.js"
     },
     "./react": {
-      "@convex-dev/component-source": "./src/react/index.ts",
       "types": "./dist/react/index.d.ts",
       "default": "./dist/react/index.js"
     },
     "./test": "./src/test.ts",
     "./convex.config": {
-      "@convex-dev/component-source": "./src/component/convex.config.ts",
       "types": "./dist/component/convex.config.d.ts",
       "default": "./dist/component/convex.config.js"
     }
