@@ -18,16 +18,13 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "isolatedModules": true,
-    "noEmit": true
-
-    /* This should only be used in this example. Real apps should not attempt
-     * to compile TypeScript because differences between tsconfig.json files can
-     * cause the code to be compiled differently.
+    /* This should only be used when developing components to be published.
+     * Apps that merely use the component do not need this.
+     * Note: To most reliably see the component's library's types, remove this,
+     * which requires you to re-build your component on changes.
      */
-    // Un-comment this to get instant types between your component and example.
-    // However, if you're willing to wait for a build before the types update,
-    // it's better to leave this commented out to catch build errors faster.
-    // "customConditions": ["@convex-dev/component-source"]
+    "customConditions": ["@convex-dev/workpool"],
+    "noEmit": true
   },
   "include": ["./**/*"],
   "exclude": ["./_generated"]
