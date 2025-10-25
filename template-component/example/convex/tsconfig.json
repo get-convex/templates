@@ -23,7 +23,7 @@
      * Note: To most reliably see the component's library's types, remove this,
      * which requires you to re-build your component on changes.
      */
-    "customConditions": ["@convex-dev/workpool"],
+    "customConditions": ["@convex-dev/component-source"],
     "noEmit": true
   },
   "include": ["./**/*"],
