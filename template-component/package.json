@@ -16,7 +16,6 @@
   "scripts": {
     "dev": "run-p -r 'dev:backend' 'dev:frontend'",
     "dev:backend": "convex dev --live-component-sources --typecheck-components",
-    "dev:package": "convex dev --typecheck-components --once",
     "dev:frontend": "cd example && vite --clearScreen false",
     "predev": "npm run dev:backend -- --until-success",
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
@@ -24,6 +23,7 @@
     "copy:dts": "rsync -a --include='*/' --include='*.d.ts' --exclude='*' src/ dist/ || cpy 'src/**/*.d.ts' 'dist/' --parents",
     "typecheck": "tsc --noEmit && tsc -p example/ && tsc -p example/convex",
     "typecheck:package": "tsc -p example/ --customConditions [] && tsc -p example/convex --customConditions []",
+    "dev:package": "convex dev --typecheck-components --once",
     "lint": "eslint src && eslint example/convex",
     "all": "run-p -r 'dev:backend' 'dev:frontend' 'test:watch'",
     "test": "vitest run --typecheck",
@@ -31,8 +31,8 @@
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:coverage": "vitest run --coverage --coverage.reporter=text",
     "prepare": "npm run build",
-    "alpha": "npm run clean && npm ci && run-p test lint typecheck && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
-    "release": "npm run clean && npm ci && run-p test lint typecheck && npm version patch && npm publish && git push --tags",
+    "alpha": "npm run clean && npm ci && run-p test lint typecheck:package && npm run dev:package && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
+    "release": "npm run clean && npm ci && run-p test lint typecheck:package && npm run dev:package && npm version patch && npm publish && git push --tags",
     "version": "pbcopy <<<$npm_package_version; vim CHANGELOG.md && prettier -w CHANGELOG.md && git add CHANGELOG.md"
   },
   "files": [
