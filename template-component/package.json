@@ -21,7 +21,7 @@
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "tsc --project ./tsconfig.build.json && npm run copy:dts",
     "copy:dts": "rsync -a --include='*/' --include='*.d.ts' --exclude='*' src/ dist/ || cpy 'src/**/*.d.ts' 'dist/' --parents",
-    "build:watch": "npx chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'npm run build' --initial",
+    "build:watch": "npx chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'npx convex codegen && npm run build' --initial",
     "typecheck": "tsc --noEmit && tsc -p example/convex",
     "lint": "eslint src && eslint example/convex",
     "all": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch' 'test:watch'",
