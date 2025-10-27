@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com:workos/template-convex-react-vite-authkit/#readme",
+  "homepage": "https://github.com/workos/template-convex-react-vite-authkit/#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com:workos/template-convex-react-vite-authkit.git"
+    "url": "git+https://github.com/workos/template-convex-react-vite-authkit.git"
   },
   "bugs": {
-    "url": "https://github.com:workos/template-convex-react-vite-authkit/issues"
+    "url": "https://github.com/workos/template-convex-react-vite-authkit/issues"
   },
   "scripts": {
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
