@@ -9,5 +9,11 @@
     "template-react-vite-clerk-shadcn/**",
     "template-react-vite-convexauth-shadcn/**",
     "template-react-vite-shadcn/**"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["npm", "bun"],
+      "rangeStrategy": "bump"
+    }
   ]
 }
