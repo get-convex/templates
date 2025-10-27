@@ -428,6 +428,8 @@ function getGivenTemplate(args: {
 }
 
 const TEMPLATES_IN_REPO = [
+  // When adding a template, please also update `.github/workflows/ci.yml`.
+
   "astro",
   "bare",
   "component",
@@ -446,6 +448,7 @@ const TEMPLATES_IN_REPO = [
   "react-vite-shadcn", //  not suggested anymore
   "tanstack-start",
   "tanstack-start-clerk",
+  "tanstack-start-authkit",
 ];
 
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
