@@ -42,6 +42,23 @@ export declare const components: {
       add: FunctionReference<
         "mutation",
         "internal",
+        {
+          count: number;
+          foo: number;
+          foo2: number;
+          name: string;
+          shards?: number;
+        },
+        null
+      >;
+      count: FunctionReference<"query", "internal", { name: string }, number>;
+    };
+  };
+  sibling: {
+    lib: {
+      add: FunctionReference<
+        "mutation",
+        "internal",
         { count: number; name: string; shards?: number },
         null
       >;
