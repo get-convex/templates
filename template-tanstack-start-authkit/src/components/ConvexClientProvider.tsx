@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ConvexProvider, ConvexProviderWithAuth, ConvexReactClient  } from 'convex/react';
+import { ConvexProvider, ConvexProviderWithAuth, ConvexReactClient } from 'convex/react';
 import { AuthKitProvider, useAccessToken, useAuth } from '@workos/authkit-tanstack-react-start/client';
-import type { ReactNode} from 'react';
+import type { ReactNode } from 'react';
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [convex] = useState(() => {
