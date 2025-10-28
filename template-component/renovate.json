@@ -3,11 +3,11 @@
   "extends": ["config:best-practices"],
   "schedule": ["* 0-4 * * 1"],
   "timezone": "America/Los_Angeles",
-  "prConcurrentLimit": 1,
   "packageRules": [
     {
       "groupName": "Routine updates",
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "prConcurrentLimit": 1,
       "automerge": true
     },
     {
