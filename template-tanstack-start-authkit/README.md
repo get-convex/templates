@@ -27,7 +27,7 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
 3. Configure WorkOS AuthKit:
    - Create a [WorkOS account](https://workos.com/)
    - Get your Client ID and API Key from the WorkOS dashboard
-   - In the WorkOS dashboard, add `http://localhost:5173/api/auth/callback` as a redirect URI
+   - In the WorkOS dashboard, add `http://localhost:3000/api/auth/callback` as a redirect URI
    - Generate a secure password for cookie encryption (minimum 32 characters)
    - Update your `.env.local` file with these values
 
@@ -58,7 +58,7 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
 
    This starts both the Vite dev server (TanStack Start frontend) and Convex backend in parallel
 
-6. Open [http://localhost:5173](http://localhost:5173) to see your app
+6. Open [http://localhost:3000](http://localhost:3000) to see your app
 
 ## WorkOS AuthKit Setup
 
