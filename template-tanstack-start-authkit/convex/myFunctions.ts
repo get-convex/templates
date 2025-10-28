@@ -1,4 +1,4 @@
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
 import { action, mutation, query } from './_generated/server';
 import { api } from './_generated/api';
 
@@ -14,6 +14,11 @@ export const listNumbers = query({
 
   // Query implementation.
   handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) {
+      throw new ConvexError('You need to be authenticated to view numbers.');
+    }
+
     // // Read the database as many times as you need here.
     // // See https://docs.convex.dev/database/reading-data.
     const numbers = await ctx.db
@@ -22,7 +27,7 @@ export const listNumbers = query({
       .order('desc')
       .take(args.count);
     return {
-      viewer: (await ctx.auth.getUserIdentity())?.subject ?? null,
+      viewer: user.subject,
       numbers: numbers.reverse().map((number) => number.value),
     };
   },
