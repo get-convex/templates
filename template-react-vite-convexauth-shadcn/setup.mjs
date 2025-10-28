@@ -15,7 +15,7 @@ if (!fs.existsSync(".env.local")) {
 }
 
 const config = {};
-loadEnvFile({ path: ".env.local", processEnv: config });
+loadEnvFile({ path: ".env.local", processEnv: config, quiet: true });
 
 const runOnceWorkflow = process.argv.includes("--once");
 
