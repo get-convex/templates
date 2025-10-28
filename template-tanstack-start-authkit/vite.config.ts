@@ -10,9 +10,6 @@ dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 export default defineConfig({
-  server: {
-    port: 3000,
-  },
   plugins: [
     tsConfigPaths({
       projects: ['./tsconfig.json'],
