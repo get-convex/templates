@@ -1,8 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react';
+import { Authenticated, Unauthenticated, useMutation } from 'convex/react';
 import { useAuth } from '@workos/authkit-tanstack-react-start/client';
 import { getAuth, getSignInUrl, getSignUpUrl } from '@workos/authkit-tanstack-react-start';
-import { useEffect, useState } from 'react';
 import { convexQuery } from '@convex-dev/react-query';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '../../convex/_generated/api';
@@ -21,16 +20,6 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const { user, signInUrl, signUpUrl } = Route.useLoaderData();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
-
   return <HomeContent user={user} signInUrl={signInUrl} signUpUrl={signUpUrl} />;
 }
 
