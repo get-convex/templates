@@ -3,11 +3,9 @@ import { ConvexProvider, ConvexProviderWithAuth, ConvexReactClient } from 'conve
 import { AuthKitProvider, useAccessToken, useAuth } from '@workos/authkit-tanstack-react-start/client';
 import type { ReactNode } from 'react';
 
-export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const [convex] = useState(() => {
-    return new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
-  });
+const client = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
+export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -15,12 +13,12 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   }, []);
 
   if (!isClient) {
-    return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+    return <ConvexProvider client={client}>{children}</ConvexProvider>;
   }
 
   return (
     <AuthKitProvider>
-      <ConvexProviderWithAuth client={convex} useAuth={useAuthFromAuthKit}>
+      <ConvexProviderWithAuth client={client} useAuth={useAuthFromAuthKit}>
         {children}
       </ConvexProviderWithAuth>
     </AuthKitProvider>
