@@ -46,6 +46,8 @@ export const Route = createRootRouteWithContext<{
   beforeLoad: async (ctx) => {
     const { userId, token } = await fetchWorkosAuth();
 
+    // During SSR only (the only time serverHttpClient exists),
+    // set the Clerk auth token to make HTTP queries with.
     if (token) {
       ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
     }
@@ -56,11 +58,9 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <ConvexClientProvider>
-      <RootDocument>
-        <Outlet />
-      </RootDocument>
-    </ConvexClientProvider>
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
   );
 }
 
