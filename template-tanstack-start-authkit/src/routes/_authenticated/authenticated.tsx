@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/authenticated')({
-  component: ServerPage,
+  component: AuthenticatedPage,
 });
 
-function ServerPage() {
+function AuthenticatedPage() {
   return <p>Welcome!</p>;
 }
