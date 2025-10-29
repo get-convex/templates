@@ -1,8 +1,9 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
-import { Authenticated, Unauthenticated, useMutation, useQuery } from 'convex/react';
+import { Authenticated, Unauthenticated, useMutation } from 'convex/react';
 import { useAuth } from '@workos/authkit-tanstack-react-start/client';
 import { getAuth, getSignInUrl, getSignUpUrl } from '@workos/authkit-tanstack-react-start';
-import { useEffect, useState } from 'react';
+import { convexQuery } from '@convex-dev/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { api } from '../../convex/_generated/api';
 import type { User } from '@workos/authkit-tanstack-react-start';
 
@@ -12,28 +13,17 @@ export const Route = createFileRoute('/')({
     const { user } = await getAuth();
     const signInUrl = await getSignInUrl();
     const signUpUrl = await getSignUpUrl();
+
     return { user, signInUrl, signUpUrl };
   },
 });
 
 function Home() {
-  const { signInUrl, signUpUrl } = Route.useLoaderData();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
-
-  return <HomeContent signInUrl={signInUrl} signUpUrl={signUpUrl} />;
+  const { user, signInUrl, signUpUrl } = Route.useLoaderData();
+  return <HomeContent user={user} signInUrl={signInUrl} signUpUrl={signUpUrl} />;
 }
 
-function HomeContent({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: string }) {
-  const { user } = useAuth();
-
+function HomeContent({ user, signInUrl, signUpUrl }: { user: User | null; signInUrl: string; signUpUrl: string }) {
   return (
     <>
       <header className="sticky top-0 z-10 bg-background p-4 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
@@ -68,19 +58,18 @@ function SignInForm({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: st
 }
 
 function Content() {
-  const { viewer, numbers } =
-    useQuery(api.myFunctions.listNumbers, {
+  const {
+    data: { viewer, numbers },
+  } = useSuspenseQuery(
+    convexQuery(api.myFunctions.listNumbers, {
       count: 10,
-    }) ?? {};
+    }),
+  );
   const addNumber = useMutation(api.myFunctions.addNumber);
-
-  if (viewer === undefined || numbers === undefined) {
-    return <div className="mx-auto"></div>;
-  }
 
   return (
     <div className="flex flex-col gap-8 max-w-lg mx-auto">
-      <p>Welcome {viewer ?? 'Anonymous'}!</p>
+      <p>Welcome {viewer}!</p>
       <p>
         Click the button below and open this page in another window - this data is persisted in the Convex cloud
         database!
@@ -111,11 +100,11 @@ function Content() {
         to change your frontend
       </p>
       <p>
-        See the{' '}
-        <Link to="/server" className="underline hover:no-underline">
-          /server route
+        See{' '}
+        <Link to="/authenticated" className="underline hover:no-underline">
+          /authenticated
         </Link>{' '}
-        for an example of loading data in a server loader
+        for an example of a page only available to authenticated users.
       </p>
       <div className="flex flex-col">
         <p className="text-lg font-bold">Useful resources:</p>

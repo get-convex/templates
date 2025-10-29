@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as CallbackRouteImport } from './routes/callback'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedServerRouteImport } from './routes/_authenticated/server'
+import { Route as AuthenticatedAuthenticatedRouteImport } from './routes/_authenticated/authenticated'
 
 const CallbackRoute = CallbackRouteImport.update({
   id: '/callback',
@@ -28,40 +28,41 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedServerRoute = AuthenticatedServerRouteImport.update({
-  id: '/server',
-  path: '/server',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const AuthenticatedAuthenticatedRoute =
+  AuthenticatedAuthenticatedRouteImport.update({
+    id: '/authenticated',
+    path: '/authenticated',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/callback': typeof CallbackRoute
-  '/server': typeof AuthenticatedServerRoute
+  '/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/callback': typeof CallbackRoute
-  '/server': typeof AuthenticatedServerRoute
+  '/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/callback': typeof CallbackRoute
-  '/_authenticated/server': typeof AuthenticatedServerRoute
+  '/_authenticated/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/callback' | '/server'
+  fullPaths: '/' | '/callback' | '/authenticated'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/callback' | '/server'
+  to: '/' | '/callback' | '/authenticated'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/callback'
-    | '/_authenticated/server'
+    | '/_authenticated/authenticated'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -93,22 +94,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/server': {
-      id: '/_authenticated/server'
-      path: '/server'
-      fullPath: '/server'
-      preLoaderRoute: typeof AuthenticatedServerRouteImport
+    '/_authenticated/authenticated': {
+      id: '/_authenticated/authenticated'
+      path: '/authenticated'
+      fullPath: '/authenticated'
+      preLoaderRoute: typeof AuthenticatedAuthenticatedRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedServerRoute: typeof AuthenticatedServerRoute
+  AuthenticatedAuthenticatedRoute: typeof AuthenticatedAuthenticatedRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedServerRoute: AuthenticatedServerRoute,
+  AuthenticatedAuthenticatedRoute: AuthenticatedAuthenticatedRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
