@@ -56,11 +56,11 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <RootDocument>
-      <ConvexClientProvider>
+    <ConvexClientProvider>
+      <RootDocument>
         <Outlet />
-      </ConvexClientProvider>
-    </RootDocument>
+      </RootDocument>
+    </ConvexClientProvider>
   );
 }
 

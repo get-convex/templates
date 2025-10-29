@@ -6,16 +6,6 @@ import type { ReactNode } from 'react';
 const client = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <ConvexProvider client={client}>{children}</ConvexProvider>;
-  }
-
   return (
     <AuthKitProvider>
       <ConvexProviderWithAuth client={client} useAuth={useAuthFromAuthKit}>
