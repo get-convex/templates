@@ -8,7 +8,7 @@ import { routeTree } from './routeTree.gen';
 export function getRouter() {
   const CONVEX_URL = (import.meta as any).env.VITE_CONVEX_URL!;
   if (!CONVEX_URL) {
-    console.error('missing env var CONVEX_URL');
+    throw new Error('missing VITE_CONVEX_URL env var');
   }
   const convex = new ConvexReactClient(CONVEX_URL);
   const convexQueryClient = new ConvexQueryClient(convex);
@@ -39,10 +39,4 @@ export function getRouter() {
   );
 
   return router;
-}
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: ReturnType<typeof getRouter>;
-  }
 }
