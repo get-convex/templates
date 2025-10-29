@@ -20,7 +20,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
-  const { signInUrl, signUpUrl } = Route.useLoaderData();
+  const { user, signInUrl, signUpUrl } = Route.useLoaderData();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -31,12 +31,10 @@ function Home() {
     return null;
   }
 
-  return <HomeContent signInUrl={signInUrl} signUpUrl={signUpUrl} />;
+  return <HomeContent user={user} signInUrl={signInUrl} signUpUrl={signUpUrl} />;
 }
 
-function HomeContent({ signInUrl, signUpUrl }: { signInUrl: string; signUpUrl: string }) {
-  const { user } = useAuth();
-
+function HomeContent({ user, signInUrl, signUpUrl }: { user: User | null; signInUrl: string; signUpUrl: string }) {
   return (
     <>
       <header className="sticky top-0 z-10 bg-background p-4 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
