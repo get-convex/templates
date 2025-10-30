@@ -15,13 +15,13 @@
   "type": "module",
   "scripts": {
     "dev": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch'",
-    "dev:backend": "convex dev --live-component-sources --typecheck-components",
+    "dev:backend": "convex dev --typecheck-components",
     "dev:frontend": "cd example && vite --clearScreen false",
     "predev": "npm run dev:backend -- --until-success",
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "tsc --project ./tsconfig.build.json && npm run copy:dts",
     "copy:dts": "rsync -a --include='*/' --include='*.d.ts' --exclude='*' src/ dist/ || cpy 'src/**/*.d.ts' 'dist/' --parents",
-    "build:watch": "npx chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'npm run build' --initial",
+    "build:watch": "npx chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'npx convex codegen && npm run build' --initial",
     "typecheck": "tsc --noEmit && tsc -p example/convex",
     "lint": "eslint src && eslint example/convex",
     "all": "run-p -r 'dev:backend' 'dev:frontend' 'build:watch' 'test:watch'",
@@ -42,18 +42,15 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "@convex-dev/component-source": "./src/client/index.ts",
       "types": "./dist/client/index.d.ts",
       "default": "./dist/client/index.js"
     },
     "./react": {
-      "@convex-dev/component-source": "./src/react/index.ts",
       "types": "./dist/react/index.d.ts",
       "default": "./dist/react/index.js"
     },
     "./test": "./src/test.ts",
     "./convex.config": {
-      "@convex-dev/component-source": "./src/component/convex.config.ts",
       "types": "./dist/component/convex.config.d.ts",
       "default": "./dist/component/convex.config.js"
     }
@@ -85,7 +82,7 @@
     "prettier": "3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "5.5.4",
+    "typescript": "5.8.3",
     "typescript-eslint": "8.46.2",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"

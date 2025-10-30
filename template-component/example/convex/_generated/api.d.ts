@@ -8,38 +8,53 @@
  * @module
  */
 
-import type * as example from "../example.js";
-
-import type {
-  ApiFromModules,
-  FilterApi,
-  FunctionReference,
-} from "convex/server";
+import type { FunctionReference } from "convex/server";
 
 /**
- * A utility for referencing Convex functions in your app's API.
+ * A utility for referencing Convex functions in your app's public API.
  *
  * Usage:
  * ```js
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-declare const fullApi: ApiFromModules<{
-  example: typeof example;
-}>;
-declare const fullApiWithMounts: typeof fullApi;
+export declare const api: {
+  example: {
+    addOne: FunctionReference<"mutation", "public", {}, any>;
+    add: FunctionReference<"mutation", "public", { name: string }, any>;
+    count: FunctionReference<"query", "public", { name: string }, any>;
+  };
+};
 
-export declare const api: FilterApi<
-  typeof fullApiWithMounts,
-  FunctionReference<any, "public">
->;
-export declare const internal: FilterApi<
-  typeof fullApiWithMounts,
-  FunctionReference<any, "internal">
->;
+/**
+ * A utility for referencing Convex functions in your app's internal API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = internal.myModule.myFunction;
+ * ```
+ */
+export declare const internal: {};
 
 export declare const components: {
   shardedCounter: {
+    lib: {
+      add: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          count: number;
+          foo: number;
+          foo2: number;
+          name: string;
+          shards?: number;
+        },
+        null
+      >;
+      count: FunctionReference<"query", "internal", { name: string }, number>;
+    };
+  };
+  sibling: {
     lib: {
       add: FunctionReference<
         "mutation",

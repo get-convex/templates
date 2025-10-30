@@ -1,6 +1,6 @@
 import "./App.css";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
+import { api } from "../convex/_generated/api.js";
 
 function App() {
   const count = useQuery(api.example.count, { name: "accomplishments" });

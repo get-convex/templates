@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, test, vi } from "vitest";
-import { initConvexTest } from "./setup.test";
-import { api } from "./_generated/api";
+import { initConvexTest } from "./setup.test.js";
+import { api } from "./_generated/api.js";
 
 describe("example", () => {
   beforeEach(async () => {
