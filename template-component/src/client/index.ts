@@ -15,12 +15,12 @@ export class ShardedCounter<Shards extends Record<string, number>> {
       defaultShards?: number;
       // Common parameters:
       // logLevel
-    }
+    },
   ) {}
   async add<Name extends string = keyof Shards & string>(
     ctx: CtxWith<"runMutation">,
     name: Name,
-    count: number = 1
+    count: number = 1,
   ) {
     const shards = this.options?.shards?.[name] ?? this.options?.defaultShards;
     return ctx.runMutation(this.component.lib.add, {
@@ -31,7 +31,7 @@ export class ShardedCounter<Shards extends Record<string, number>> {
   }
   async count<Name extends string = keyof Shards & string>(
     ctx: CtxWith<"runQuery">,
-    name: Name
+    name: Name,
   ) {
     return ctx.runQuery(this.component.lib.count, { name });
   }
