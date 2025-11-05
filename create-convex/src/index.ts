@@ -16,6 +16,7 @@ const argv = minimist<{
   "dry-run"?: string;
   verbose?: boolean;
   component?: boolean;
+  "with-vercel-json"?: boolean;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
 
@@ -91,6 +92,7 @@ async function init() {
   const argTemplate = argv.template || argv.t;
   const verbose = !!argv.verbose;
   const component = !!argv.component;
+  const withVercelJson = !!argv["with-vercel-json"];
 
   let targetDir = argTargetDir || defaultTargetDir;
   const getProjectName = () =>
@@ -266,6 +268,18 @@ async function init() {
     fs.writeFileSync(
       path.join(root, "package.json"),
       JSON.stringify(pkg, null, 2) + "\n",
+    );
+  }
+
+  if (withVercelJson) {
+    const vercelConfig = {
+      $schema: "https://openapi.vercel.sh/vercel.json",
+      buildCommand: "npx convex deploy --cmd 'npm run build'",
+    };
+
+    fs.writeFileSync(
+      path.join(root, "vercel.json"),
+      JSON.stringify(vercelConfig, null, 2) + "\n",
     );
   }
 
