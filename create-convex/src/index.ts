@@ -474,12 +474,12 @@ function getTemplateRepoPath(templateName: string) {
   }
 
   if (TEMPLATES_IN_REPO.includes(templateName)) {
-    return `get-convex/templates/template-${templateName}#vercel-json-test`;
+    return `get-convex/templates/template-${templateName}#main`;
   }
 
   // This is one of our templates specifically for `npm create convex`
   // These are annoying to maintain, let's move the ones we care about to this repo.
-  const external = `get-convex/template-${templateName}#vercel-json-test`;
+  const external = `get-convex/template-${templateName}#main`;
   console.log(
     `Can't find template ${templateName} in create-convex repo, using external repo: ${external}`,
   );
