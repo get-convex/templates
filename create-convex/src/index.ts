@@ -271,16 +271,12 @@ async function init() {
     );
   }
 
-  if (withVercelJson) {
-    const vercelConfig = {
-      $schema: "https://openapi.vercel.sh/vercel.json",
-      buildCommand: "npx convex deploy --cmd 'npm run build'",
-    };
-
-    fs.writeFileSync(
-      path.join(root, "vercel.json"),
-      JSON.stringify(vercelConfig, null, 2) + "\n",
-    );
+  // Remove vercel.json from template if --with-vercel-json is not set
+  if (!withVercelJson) {
+    const vercelJsonPath = path.join(root, "vercel.json");
+    if (fs.existsSync(vercelJsonPath)) {
+      fs.rmSync(vercelJsonPath, { force: true });
+    }
   }
 
   const cdProjectName = path.relative(cwd, root);
