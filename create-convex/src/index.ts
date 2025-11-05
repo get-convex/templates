@@ -271,16 +271,12 @@ async function init() {
     );
   }
 
-  if (withVercelJson) {
-    const vercelConfig = {
-      $schema: "https://openapi.vercel.sh/vercel.json",
-      buildCommand: "npx convex deploy --cmd 'npm run build'",
-    };
-
-    fs.writeFileSync(
-      path.join(root, "vercel.json"),
-      JSON.stringify(vercelConfig, null, 2) + "\n",
-    );
+  // Remove vercel.json from template if --with-vercel-json is not set
+  if (!withVercelJson) {
+    const vercelJsonPath = path.join(root, "vercel.json");
+    if (fs.existsSync(vercelJsonPath)) {
+      fs.rmSync(vercelJsonPath, { force: true });
+    }
   }
 
   const cdProjectName = path.relative(cwd, root);
@@ -478,12 +474,12 @@ function getTemplateRepoPath(templateName: string) {
   }
 
   if (TEMPLATES_IN_REPO.includes(templateName)) {
-    return `get-convex/templates/template-${templateName}#main`;
+    return `get-convex/templates/template-${templateName}#vercel-json-test`;
   }
 
   // This is one of our templates specifically for `npm create convex`
   // These are annoying to maintain, let's move the ones we care about to this repo.
-  const external = `get-convex/template-${templateName}#main`;
+  const external = `get-convex/template-${templateName}#vercel-json-test`;
   console.log(
     `Can't find template ${templateName} in create-convex repo, using external repo: ${external}`,
   );
