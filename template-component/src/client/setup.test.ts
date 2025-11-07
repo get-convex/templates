@@ -8,7 +8,7 @@ import {
   type GenericSchema,
   type SchemaDefinition,
 } from "convex/server";
-import { type ComponentApi } from "./index.js";
+import { type ComponentApi } from "../component/_generated/component.js";
 import { componentsGeneric } from "convex/server";
 import componentSchema from "../component/schema.js";
 export { componentSchema };
