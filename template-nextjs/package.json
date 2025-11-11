@@ -9,7 +9,7 @@
     "predev": "convex dev --until-success && convex dashboard",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
   },
   "dependencies": {
     "convex": "^1.28.0",
@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.0.0",
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
