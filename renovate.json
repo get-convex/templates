@@ -15,6 +15,12 @@
   ],
   "packageRules": [
     {
+      "groupName": "Routine updates",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "prConcurrentLimit": 1,
+      "automerge": true
+    },
+    {
       "groupName": "Bump dependencies",
       "matchManagers": ["npm", "bun"],
       "rangeStrategy": "bump"
