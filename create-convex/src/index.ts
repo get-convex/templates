@@ -11,9 +11,9 @@ import { writeCursorRules } from "./cursorRules";
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
 const argv = minimist<{
-  t?: string;
-  template?: string;
-  "dry-run"?: string;
+  t?: string | boolean;
+  template?: string | boolean;
+  "dry-run"?: boolean | string;
   verbose?: boolean;
   component?: boolean;
   "with-vercel-json"?: boolean;
@@ -90,6 +90,11 @@ init().catch((e) => {
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
+  if (typeof argTemplate === "boolean") {
+    throw new Error(
+      red("✖") + " No template provided to -`t` or `--template`",
+    );
+  }
   const verbose = !!argv.verbose;
   const component = !!argv.component;
   const withVercelJson = !!argv["with-vercel-json"];
