@@ -60,7 +60,6 @@ const testApi: ApiFromModules<{
     testMutation: typeof testMutation;
     testAction: typeof testAction;
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }>["fns"] = anyApi["index.test"] as any;
 
 describe("ShardedCounter thick client", () => {

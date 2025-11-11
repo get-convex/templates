@@ -9,7 +9,7 @@ const modules = import.meta.glob("./**/*.*s");
 // explicitly register it with its schema and modules.
 export function initConvexTest() {
   const t = convexTest(schema, modules);
-  t.registerComponent("shardedCounter", component.schema, component.modules);
+  component.register(t);
   return t;
 }
 

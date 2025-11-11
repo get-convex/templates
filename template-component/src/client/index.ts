@@ -1,27 +1,26 @@
 import { mutationGeneric, queryGeneric } from "convex/server";
 import { v } from "convex/values";
-import type { Mounts } from "../component/_generated/api.js";
-import type { UseApi, RunMutationCtx, RunQueryCtx } from "./types.js";
+import type { ComponentApi } from "../component/_generated/component.js";
+import type { CtxWith } from "./types.js";
 
 // UseApi<typeof api> is an alternative that has jump-to-definition but is
 // less stable and reliant on types within the component files, which can cause
 // issues where passing `components.foo` doesn't match the argument
-export type ShardedCounterComponent = UseApi<Mounts>;
 
 export class ShardedCounter<Shards extends Record<string, number>> {
   constructor(
-    public component: ShardedCounterComponent,
+    public component: ComponentApi,
     public options?: {
       shards?: Shards;
       defaultShards?: number;
       // Common parameters:
       // logLevel
-    }
+    },
   ) {}
   async add<Name extends string = keyof Shards & string>(
-    ctx: RunMutationCtx,
+    ctx: CtxWith<"runMutation">,
     name: Name,
-    count: number = 1
+    count: number = 1,
   ) {
     const shards = this.options?.shards?.[name] ?? this.options?.defaultShards;
     return ctx.runMutation(this.component.lib.add, {
@@ -31,8 +30,8 @@ export class ShardedCounter<Shards extends Record<string, number>> {
     });
   }
   async count<Name extends string = keyof Shards & string>(
-    ctx: RunQueryCtx,
-    name: Name
+    ctx: CtxWith<"runQuery">,
+    name: Name,
   ) {
     return ctx.runQuery(this.component.lib.count, { name });
   }
