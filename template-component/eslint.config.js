@@ -12,7 +12,6 @@ export default [
       "*.config.{js,mjs,cjs,ts,tsx}",
       "example/**/*.config.{js,mjs,cjs,ts,tsx}",
       "**/_generated/",
-      "node10stubs.mjs",
       "rename.mjs",
     ],
   },
