@@ -3,7 +3,6 @@
   extends: ["config:recommended"],
   schedule: ["* 0-4 * * 1-5"],
   timezone: "America/Los_Angeles",
-  prConcurrentLimit: 1,
   ignorePaths: [
     "template-nextjs-clerk-shadcn/**",
     "template-nextjs-lucia-shadcn/**",
@@ -21,7 +20,6 @@
       automerge: true,
     },
     {
-      groupName: "bump dependencies",
       matchManagers: ["npm", "bun"],
       rangeStrategy: "bump",
     },
