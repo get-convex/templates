@@ -1,29 +1,29 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "schedule": ["* 0-4 * * 1-5"],
-  "timezone": "America/Los_Angeles",
-  "prConcurrentLimit": 1,
-  "ignorePaths": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  schedule: ["* 0-4 * * 1-5"],
+  timezone: "America/Los_Angeles",
+  prConcurrentLimit: 1,
+  ignorePaths: [
     "template-nextjs-clerk-shadcn/**",
     "template-nextjs-lucia-shadcn/**",
     "template-nextjs-convexauth-shadcn/**",
     "template-nextjs-shadcn/**",
     "template-react-vite-clerk-shadcn/**",
     "template-react-vite-convexauth-shadcn/**",
-    "template-react-vite-shadcn/**"
+    "template-react-vite-shadcn/**",
   ],
-  "packageRules": [
+  packageRules: [
     {
-      "groupName": "Routine updates",
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "prConcurrentLimit": 1,
-      "automerge": true
+      groupName: "Routine updates",
+      matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      prConcurrentLimit: 1,
+      automerge: true,
     },
     {
-      "groupName": "Bump dependencies",
-      "matchManagers": ["npm", "bun"],
-      "rangeStrategy": "bump"
-    }
-  ]
+      groupName: "bump dependencies",
+      matchManagers: ["npm", "bun"],
+      rangeStrategy: "bump",
+    },
+  ],
 }
