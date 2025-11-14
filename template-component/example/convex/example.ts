@@ -1,15 +1,15 @@
 import { mutation } from "./_generated/server.js";
 import { components } from "./_generated/api.js";
-import { ShardedCounter } from "@example/sharded-counter";
+import { SampleComponent } from "@example/sample-component";
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {});
+const sampleComponent = new SampleComponent(components.sampleComponent, {});
 
 export const addOne = mutation({
   args: {},
   handler: async (ctx, _args) => {
-    await shardedCounter.add(ctx, "accomplishments");
+    await sampleComponent.add(ctx, "accomplishments");
   },
 });
 
 // Direct re-export of component's API.
-export const { add, count } = shardedCounter.api();
+export const { add, count } = sampleComponent.api();

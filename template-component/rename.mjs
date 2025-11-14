@@ -203,26 +203,26 @@ async function setup() {
   // Define all replacements
   const replacements = [
     // NPM package name
-    ["@example/sharded-counter", npmPackageName],
+    ["@example/sample-component", npmPackageName],
 
     // Repository name
-    ["example-org/sharded-counter", repoName],
+    ["example-org/sample-component", repoName],
 
     // Component name variations
-    ["ShardedCounter", cases.pascal],
-    ["shardedCounter", cases.camel],
-    ["sharded-counter", cases.kebab],
-    ["sharded_counter", cases.snake],
-    ["sharded counter", cases.space],
-    ["Sharded Counter", cases.title],
+    ["SampleComponent", cases.pascal],
+    ["sampleComponent", cases.camel],
+    ["sample-component", cases.kebab],
+    ["sample_component", cases.snake],
+    ["sample component", cases.space],
+    ["Sample Component", cases.title],
   ];
   if (npmPackageName.includes("/")) {
     replacements.push([
-      "@example%2Fsharded-counter",
+      "@example%2Fsample-component",
       npmPackageName.replace("/", "%2F"),
     ]);
   } else {
-    replacements.push(["@example%2Fsharded-counter", npmPackageName]);
+    replacements.push(["@example%2Fsample-component", npmPackageName]);
   }
 
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));

@@ -48,5 +48,5 @@ export const internal: FilterApi<
 > = anyApi as any;
 
 export const components = componentsGeneric() as unknown as {
-  shardedCounter: import("@example/sharded-counter/_generated/component.js").ComponentApi<"shardedCounter">;
+  sampleComponent: import("@example/sample-component/_generated/component.js").ComponentApi<"sampleComponent">;
 };

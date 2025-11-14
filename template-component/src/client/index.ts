@@ -7,7 +7,7 @@ import type { CtxWith } from "./types.js";
 // less stable and reliant on types within the component files, which can cause
 // issues where passing `components.foo` doesn't match the argument
 
-export class ShardedCounter<Shards extends Record<string, number>> {
+export class SampleComponent<Shards extends Record<string, number>> {
   constructor(
     public component: ComponentApi,
     public options?: {
@@ -39,7 +39,7 @@ export class ShardedCounter<Shards extends Record<string, number>> {
    * For easy re-exporting.
    * Apps can do
    * ```ts
-   * export const { add, count } = shardedCounter.api();
+   * export const { add, count } = sampleComponent.api();
    * ```
    */
   api() {

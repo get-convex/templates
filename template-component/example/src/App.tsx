@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <h1>Sharded Counter Example</h1>
+      <h1>Sample Component Example</h1>
       <div className="card">
         <button onClick={() => addOne()}>count is {count}</button>
         <p>

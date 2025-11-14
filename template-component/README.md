@@ -65,9 +65,9 @@ package.json.
 
 ---
 
-# Convex Sharded Counter Component
+# Convex Sample Component Component
 
-[![npm version](https://badge.fury.io/js/@example%2Fsharded-counter.svg)](https://badge.fury.io/js/@example%2Fsharded-counter)
+[![npm version](https://badge.fury.io/js/@example%2Fsample-component.svg)](https://badge.fury.io/js/@example%2Fsample-component)
 
 <!-- START: Include on https://convex.dev/components -->
 
@@ -76,7 +76,7 @@ package.json.
 - [ ] Links to docs / other resources?
 
 Found a bug? Feature request?
-[File it here](https://github.com/example-org/sharded-counter/issues).
+[File it here](https://github.com/example-org/sample-component/issues).
 
 ## Pre-requisite: Convex
 
@@ -92,7 +92,7 @@ Run `npm create convex` or follow any of the
 Install the component package:
 
 ```sh
-npm install @example/sharded-counter
+npm install @example/sample-component
 ```
 
 Create a `convex.config.ts` file in your app's `convex/` folder and install the
@@ -101,10 +101,10 @@ component by calling `use`:
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import shardedCounter from "@example/sharded-counter/convex.config.js";
+import sampleComponent from "@example/sample-component/convex.config.js";
 
 const app = defineApp();
-app.use(shardedCounter);
+app.use(sampleComponent);
 
 export default app;
 ```
@@ -113,9 +113,9 @@ export default app;
 
 ```ts
 import { components } from "./_generated/api";
-import { ShardedCounter } from "@example/sharded-counter";
+import { SampleComponent } from "@example/sample-component";
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {
+const sampleComponent = new SampleComponent(components.sampleComponent, {
   ...options,
 });
 ```
