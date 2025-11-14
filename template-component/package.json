@@ -70,7 +70,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^5.1.0",
     "chokidar-cli": "3.0.0",
-    "convex": "1.29.0",
+    "convex": "1.29.1",
     "convex-test": "0.0.38",
     "cpy-cli": "^6.0.0",
     "eslint": "9.37.0",
