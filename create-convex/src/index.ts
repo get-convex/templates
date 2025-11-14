@@ -294,6 +294,20 @@ async function init() {
   } catch (error) {
     console.log(red("✖ Failed to install dependencies."));
   }
+
+  // Run rename.mjs for component projects
+  if (component) {
+    try {
+      console.log(`\n${green(`Configuring component...`)}\n`);
+      await runRenameMjs(root);
+    } catch (error) {
+      console.log(red("✖ Failed to configure component."));
+      if (verbose) {
+        console.log(red((error as any).toString()));
+      }
+    }
+  }
+
   let message = "Run the following commands to start the project:\n\n";
   if (root !== cwd) {
     message += `  cd ${
@@ -358,6 +372,33 @@ async function installDependencies(): Promise<void> {
     child.on("close", (code) => {
       if (code !== 0) {
         reject(code);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
+async function runRenameMjs(root: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const renamePath = path.join(root, "rename.mjs");
+
+    // Check if rename.mjs exists
+    if (!fs.existsSync(renamePath)) {
+      console.log("No rename.mjs found, skipping component configuration.");
+      resolve();
+      return;
+    }
+
+    // Run node rename.mjs
+    const child = spawn("node", [renamePath], {
+      cwd: root,
+      stdio: "inherit",
+    });
+
+    child.on("close", (code) => {
+      if (code !== 0) {
+        reject(new Error(`rename.mjs exited with code ${code}`));
         return;
       }
       resolve();
@@ -469,22 +510,25 @@ const TEMPLATES_IN_REPO = [
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
 function getTemplateRepoPath(templateName: string) {
+  // Allow overriding the branch via environment variable for development
+  const branch = process.env.CONVEX_TEMPLATE_BRANCH || "main";
+
   // Does this look like a repo name already?
   if (templateName.includes("/")) {
     if (templateName.includes("#")) {
       return templateName;
     } else {
-      return templateName + "#main";
+      return templateName + `#${branch}`;
     }
   }
 
   if (TEMPLATES_IN_REPO.includes(templateName)) {
-    return `get-convex/templates/template-${templateName}#main`;
+    return `get-convex/templates/template-${templateName}#${branch}`;
   }
 
   // This is one of our templates specifically for `npm create convex`
   // These are annoying to maintain, let's move the ones we care about to this repo.
-  const external = `get-convex/template-${templateName}#main`;
+  const external = `get-convex/template-${templateName}#${branch}`;
   console.log(
     `Can't find template ${templateName} in create-convex repo, using external repo: ${external}`,
   );

@@ -18,11 +18,11 @@ export function initConvexTest<
   Schema extends SchemaDefinition<GenericSchema, boolean>,
 >(schema?: Schema) {
   const t = convexTest(schema ?? defineSchema({}), modules);
-  t.registerComponent("shardedCounter", componentSchema, componentModules);
+  t.registerComponent("sampleComponent", componentSchema, componentModules);
   return t;
 }
 export const components = componentsGeneric() as unknown as {
-  shardedCounter: ComponentApi;
+  sampleComponent: ComponentApi;
 };
 
 test("setup", () => {});

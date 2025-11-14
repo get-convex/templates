@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { ShardedCounter } from "./index.js";
+import { SampleComponent } from "./index.js";
 import type { DataModelFromSchemaDefinition } from "convex/server";
 import {
   anyApi,
@@ -25,32 +25,26 @@ const query = queryGeneric as QueryBuilder<DataModel, "public">;
 const mutation = mutationGeneric as MutationBuilder<DataModel, "public">;
 const action = actionGeneric as ActionBuilder<DataModel, "public">;
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {
-  shards: {
-    beans: 1,
-    friends: 2,
-  },
-  defaultShards: 1,
-});
+const sampleComponent = new SampleComponent(components.sampleComponent, {});
 
 export const testQuery = query({
-  args: { name: v.string() },
-  handler: async (ctx, args) => {
-    return await shardedCounter.count(ctx, args.name);
+  args: {},
+  handler: async (ctx) => {
+    return await sampleComponent.list(ctx);
   },
 });
 
 export const testMutation = mutation({
-  args: { name: v.string(), count: v.number() },
+  args: { text: v.string() },
   handler: async (ctx, args) => {
-    return await shardedCounter.add(ctx, args.name, args.count);
+    return await sampleComponent.add(ctx, args.text);
   },
 });
 
 export const testAction = action({
-  args: { name: v.string(), count: v.number() },
+  args: { text: v.string() },
   handler: async (ctx, args) => {
-    return await shardedCounter.add(ctx, args.name, args.count);
+    return await sampleComponent.addWithValidation(ctx, args.text);
   },
 });
 
@@ -62,7 +56,7 @@ const testApi: ApiFromModules<{
   };
 }>["fns"] = anyApi["index.test"] as any;
 
-describe("ShardedCounter thick client", () => {
+describe("SampleComponent thick client", () => {
   beforeEach(async () => {
     vi.useFakeTimers();
   });
@@ -70,19 +64,29 @@ describe("ShardedCounter thick client", () => {
     vi.useRealTimers();
   });
   test("should make thick client", async () => {
-    const c = new ShardedCounter(components.shardedCounter);
+    const c = new SampleComponent(components.sampleComponent);
     const t = initConvexTest(schema);
     await t.run(async (ctx) => {
-      await c.add(ctx, "beans", 1);
-      expect(await c.count(ctx, "beans")).toBe(1);
+      await c.add(ctx, "My first note");
+      const notes = await c.list(ctx);
+      expect(notes).toHaveLength(1);
+      expect(notes[0].text).toBe("My first note");
     });
   });
   test("should work from a test function", async () => {
     const t = initConvexTest(schema);
-    const result = await t.mutation(testApi.testMutation, {
-      name: "beans",
-      count: 1,
+    const noteId = await t.mutation(testApi.testMutation, {
+      text: "Test note",
     });
-    expect(result).toBe(null);
+    expect(noteId).toBeDefined();
+  });
+  test("should work with action", async () => {
+    const t = initConvexTest(schema);
+    const noteId = await t.action(testApi.testAction, {
+      text: "  Action note  ",
+    });
+    expect(noteId).toBeDefined();
+    const notes = await t.query(testApi.testQuery, {});
+    expect(notes[0].text).toBe("Action note");
   });
 });

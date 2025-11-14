@@ -1,10 +1,10 @@
 {
-  "name": "@example/sharded-counter",
-  "description": "A sharded counter component for Convex.",
-  "repository": "github:example-org/sharded-counter",
-  "homepage": "https://github.com/example-org/sharded-counter#readme",
+  "name": "@example/sample-component",
+  "description": "A sample component component for Convex.",
+  "repository": "github:example-org/sample-component",
+  "homepage": "https://github.com/example-org/sample-component#readme",
   "bugs": {
-    "url": "https://github.com/example-org/sharded-counter/issues"
+    "url": "https://github.com/example-org/sample-component/issues"
   },
   "version": "0.1.0",
   "license": "Apache-2.0",
