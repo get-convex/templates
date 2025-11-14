@@ -136,46 +136,51 @@ async function setup() {
   const currentDirName = basename(process.cwd());
 
   // Prompt for component name
-  const componentName = await new Promise((resolve) => {
-    rl.question(
-      `Enter your component name (e.g., "document search" or "RAG") [${currentDirName}]: `,
-      (answer) => {
-        resolve(answer.trim() || currentDirName);
-      },
-    );
-  });
-
-  if (!componentName.trim()) {
-    console.error("❌ Component name is required!");
-    process.exit(1);
+  let componentName = "";
+  while (!componentName.trim()) {
+    componentName = await new Promise((resolve) => {
+      rl.question(
+        `Enter your component name (e.g., "document search" or "RAG") [${currentDirName}]: `,
+        (answer) => {
+          resolve(answer.trim() || currentDirName);
+        },
+      );
+    });
+    if (!componentName.trim()) {
+      console.log("❌ Component name is required! Please try again.\n");
+    }
   }
 
   // Prompt for npm package name
-  const npmPackageName = await new Promise((resolve) => {
-    rl.question(
-      `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
-      (answer) => {
-        resolve(answer.trim());
-      },
-    );
-  });
-  if (!npmPackageName) {
-    console.error("❌ NPM package name is required!");
-    process.exit(1);
+  let npmPackageName = "";
+  while (!npmPackageName.trim()) {
+    npmPackageName = await new Promise((resolve) => {
+      rl.question(
+        `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
+        (answer) => {
+          resolve(answer.trim());
+        },
+      );
+    });
+    if (!npmPackageName.trim()) {
+      console.log("❌ NPM package name is required! Please try again.\n");
+    }
   }
 
   // Prompt for repository name
-  const repoName = await new Promise((resolve) => {
-    rl.question(
-      `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
-      (answer) => {
-        resolve(answer.trim());
-      },
-    );
-  });
-  if (!repoName) {
-    console.error("❌ Repository name is required!");
-    process.exit(1);
+  let repoName = "";
+  while (!repoName.trim()) {
+    repoName = await new Promise((resolve) => {
+      rl.question(
+        `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
+        (answer) => {
+          resolve(answer.trim());
+        },
+      );
+    });
+    if (!repoName.trim()) {
+      console.log("❌ Repository name is required! Please try again.\n");
+    }
   }
 
   rl.close();
