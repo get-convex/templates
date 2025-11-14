@@ -510,22 +510,25 @@ const TEMPLATES_IN_REPO = [
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
 function getTemplateRepoPath(templateName: string) {
+  // Allow overriding the branch via environment variable for development
+  const branch = process.env.CONVEX_TEMPLATE_BRANCH || "main";
+
   // Does this look like a repo name already?
   if (templateName.includes("/")) {
     if (templateName.includes("#")) {
       return templateName;
     } else {
-      return templateName + "#main";
+      return templateName + `#${branch}`;
     }
   }
 
   if (TEMPLATES_IN_REPO.includes(templateName)) {
-    return `get-convex/templates/template-${templateName}#main`;
+    return `get-convex/templates/template-${templateName}#${branch}`;
   }
 
   // This is one of our templates specifically for `npm create convex`
   // These are annoying to maintain, let's move the ones we care about to this repo.
-  const external = `get-convex/template-${templateName}#main`;
+  const external = `get-convex/template-${templateName}#${branch}`;
   console.log(
     `Can't find template ${templateName} in create-convex repo, using external repo: ${external}`,
   );
