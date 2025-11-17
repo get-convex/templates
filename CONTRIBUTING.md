@@ -65,3 +65,19 @@ It's in `create-convex/src/index.ts`. It can be run locally by running `npm run 
 Since this script is used quite prominently, it's highly recommended to
 test it out manually immediately after publishing (in addition to testing
 before publishing).
+
+### Testing with different branches
+
+When developing templates, you can test the `create-convex` script with templates from a specific branch using the `CONVEX_TEMPLATE_BRANCH` environment variable:
+
+```bash
+CONVEX_TEMPLATE_BRANCH=my-feature-branch npm run build && node dist/index.mjs
+```
+
+This will make the script pull templates from the specified branch instead of the default `main` branch. This is useful for:
+
+- Testing template changes before merging to main
+- Developing new templates in a feature branch
+- Testing the interaction between script changes and template changes
+
+Without this environment variable, the script defaults to using the `main` branch.
