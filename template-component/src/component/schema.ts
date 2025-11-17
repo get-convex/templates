@@ -5,5 +5,5 @@ export default defineSchema({
   notes: defineTable({
     text: v.string(),
     createdAt: v.number(),
-  }).index("byCreatedAt", ["createdAt"]),
+  }),
 });

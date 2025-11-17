@@ -13,11 +13,7 @@ export const list = query({
     }),
   ),
   handler: async (ctx) => {
-    return await ctx.db
-      .query("notes")
-      .withIndex("byCreatedAt")
-      .order("desc")
-      .collect();
+    return await ctx.db.query("notes").order("desc").collect();
   },
 });
 
