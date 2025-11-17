@@ -1,10 +1,6 @@
 import { v } from "convex/values";
-import {
-  action,
-  internalMutation,
-  mutation,
-  query,
-} from "./_generated/server.js";
+import { action, mutation, query } from "./_generated/server.js";
+import { api } from "./_generated/api.js";
 
 export const list = query({
   args: {},
@@ -39,21 +35,6 @@ export const add = mutation({
   },
 });
 
-// Internal mutation that can be called from actions
-export const addInternal = internalMutation({
-  args: {
-    text: v.string(),
-  },
-  returns: v.id("notes"),
-  handler: async (ctx, args) => {
-    const noteId = await ctx.db.insert("notes", {
-      text: args.text,
-      createdAt: Date.now(),
-    });
-    return noteId;
-  },
-});
-
 export const addWithValidation = action({
   args: {
     text: v.string(),
@@ -66,9 +47,7 @@ export const addWithValidation = action({
       throw new Error("Note text cannot be empty");
     }
     // Call the internal mutation
-    // We use a lazy import to avoid circular reference issues
-    const { internal } = await import("./_generated/api.js");
-    const noteId = await ctx.runMutation(internal.lib.addInternal, {
+    const noteId = await ctx.runMutation(api.lib.add, {
       text: args.text.trim(),
     });
     return noteId;
