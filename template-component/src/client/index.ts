@@ -1,4 +1,10 @@
-import { actionGeneric, mutationGeneric, queryGeneric } from "convex/server";
+import {
+  actionGeneric,
+  httpActionGeneric,
+  mutationGeneric,
+  queryGeneric,
+} from "convex/server";
+import type { HttpRouter } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 import type { CtxWith } from "./types.js";
@@ -74,5 +80,46 @@ export class SampleComponent {
         },
       }),
     };
+  }
+
+  /**
+   * Register HTTP routes for the component.
+   * This allows you to expose HTTP endpoints for the component.
+   *
+   * @example
+   * ```ts
+   * import { httpRouter } from "convex/server";
+   * const http = httpRouter();
+   *
+   * const sampleComponent = new SampleComponent(components.sampleComponent);
+   * sampleComponent.registerRoutes(http, {
+   *   path: "/notes/last",
+   * });
+   *
+   * export default http;
+   * ```
+   */
+  registerRoutes(
+    http: HttpRouter,
+    {
+      path = "/notes/last",
+    }: {
+      path?: string;
+    } = {},
+  ) {
+    http.route({
+      path,
+      method: "GET",
+      handler: httpActionGeneric(async (ctx, _request) => {
+        const notes = await ctx.runQuery(this.component.lib.list, {});
+        const lastNote = notes[0] ?? null;
+        return new Response(JSON.stringify(lastNote), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }),
+    });
   }
 }

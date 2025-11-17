@@ -122,6 +122,30 @@ const sampleComponent = new SampleComponent(components.sampleComponent, {
 
 See more example usage in [example.ts](./example/convex/example.ts).
 
+### HTTP Routes
+
+You can register HTTP routes for the component to expose HTTP endpoints:
+
+```ts
+import { httpRouter } from "convex/server";
+import { components } from "./_generated/api";
+import { SampleComponent } from "@example/sample-component";
+
+const http = httpRouter();
+
+const sampleComponent = new SampleComponent(components.sampleComponent);
+
+// Register HTTP routes for the component
+sampleComponent.registerRoutes(http, {
+  path: "/notes/last", // optional, defaults to "/notes/last"
+});
+
+export default http;
+```
+
+This will expose a GET endpoint that returns the most recent note as JSON. See
+[http.ts](./example/convex/http.ts) for a complete example.
+
 <!-- END: Include on https://convex.dev/components -->
 
 Run the example:

@@ -30,3 +30,5 @@ export const addNoteWithValidation = action({
 // Here is an alternative way to use the component's methods directly by re-exporting
 // the component's API:
 export const { list, add, addWithValidation } = sampleComponent.api();
+
+// You can also register HTTP routes for the component. See http.ts for an example.

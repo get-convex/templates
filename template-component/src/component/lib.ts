@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { httpActionGeneric } from "convex/server";
 import { action, mutation, query } from "./_generated/server.js";
 import { api } from "./_generated/api.js";
 
@@ -48,4 +49,15 @@ export const addWithValidation = action({
     });
     return noteId;
   },
+});
+
+export const getLastNote = httpActionGeneric(async (ctx, _request) => {
+  const notes = await ctx.runQuery(api.lib.list, {});
+  const lastNote = notes[0] ?? null;
+  return new Response(JSON.stringify(lastNote), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 });
