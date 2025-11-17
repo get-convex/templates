@@ -12,7 +12,7 @@
     "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
   },
   "dependencies": {
-    "convex": "^1.29.1",
+    "convex": "^1.29.2",
     "next": "16.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
