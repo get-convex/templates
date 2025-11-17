@@ -27,5 +27,6 @@ export const addNoteWithValidation = action({
   },
 });
 
-// Direct re-export of component's API.
+// Here is an alternative way to use the component's methods directly by re-exporting
+// the component's API:
 export const { list, add, addWithValidation } = sampleComponent.api();

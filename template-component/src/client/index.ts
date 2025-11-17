@@ -3,6 +3,23 @@ import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 import type { CtxWith } from "./types.js";
 
+// This is a thick client for the component. In your convex app, you can re-export
+// the component's API like this:
+// ```ts
+// export const { list, add, addWithValidation } = sampleComponent.api();
+// ```
+// Then you can use the component's methods directly in your convex functions.
+// ```ts
+// export const addNote = mutation({
+//   args: { text: v.string() },
+//   handler: async (ctx, args) => {
+//     return await sampleComponent.add(ctx, args.text);
+//   },
+// });
+// ```
+
+// See the example/convex/example.ts file for an example of how to use this thick client.
+
 // UseApi<typeof api> is an alternative that has jump-to-definition but is
 // less stable and reliant on types within the component files, which can cause
 // issues where passing `components.foo` doesn't match the argument
@@ -10,6 +27,7 @@ import type { CtxWith } from "./types.js";
 export class SampleComponent {
   constructor(
     public component: ComponentApi,
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     public options?: {
       // Common parameters:
       // logLevel
