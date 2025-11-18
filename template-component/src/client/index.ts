@@ -33,6 +33,9 @@ export type AnyMutationCtx = {
     mutation: Mutation,
     args: FunctionArgs<Mutation>,
   ) => Promise<FunctionReturnType<Mutation>>;
+  auth: {
+    getUserIdentity: () => Promise<UserIdentity | null>;
+  };
 };
 
 // See the example/convex/example.ts file for an example of how to use this component from a convex app.
