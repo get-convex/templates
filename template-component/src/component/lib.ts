@@ -1,53 +1,82 @@
 import { v } from "convex/values";
 import { httpActionGeneric } from "convex/server";
-import { action, mutation, query } from "./_generated/server.js";
-import { api } from "./_generated/api.js";
+import {
+  action,
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server.js";
+import { api, internal } from "./_generated/api.js";
 
 export const list = query({
   args: {},
-  returns: v.array(
-    v.object({
-      _id: v.id("notes"),
-      _creationTime: v.number(),
-      text: v.string(),
-      createdAt: v.number(),
-    }),
-  ),
   handler: async (ctx) => {
     return await ctx.db.query("notes").order("desc").collect();
   },
 });
 
+export const getNote = internalQuery({
+  args: {
+    noteId: v.id("notes"),
+  },
+  returns: v.union(
+    v.null(),
+    v.object({
+      text: v.string(),
+      userId: v.string(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.noteId);
+  },
+});
 export const add = mutation({
   args: {
     text: v.string(),
+    userId: v.string(),
   },
   returns: v.id("notes"),
   handler: async (ctx, args) => {
     const noteId = await ctx.db.insert("notes", {
       text: args.text,
-      createdAt: Date.now(),
+      userId: args.userId,
     });
     return noteId;
   },
 });
-
-export const addWithValidation = action({
+export const updateNote = internalMutation({
   args: {
+    noteId: v.id("notes"),
     text: v.string(),
   },
-  returns: v.id("notes"),
-  handler: async (ctx, args): Promise<any> => {
-    // Simulate some external validation or API call
-    // In a real app, this might call an external API like OpenAI, Stripe, etc.
-    if (args.text.trim().length === 0) {
-      throw new Error("Note text cannot be empty");
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.noteId, { text: args.text });
+  },
+});
+
+export const convertToPirateTalk = action({
+  args: {
+    noteId: v.id("notes"),
+  },
+  returns: v.string(),
+  handler: async (ctx, args) => {
+    // $ curl 'https://pirate.monkeyness.com/api/translate?english=What%20is%20an%20API?'
+    const note = (await ctx.runQuery(internal.lib.getNote, {
+      noteId: args.noteId,
+    })) as { text: string; userId: string } | null;
+    if (!note) {
+      throw new Error("Note not found");
     }
-    // Call the internal mutation
-    const noteId = await ctx.runMutation(api.lib.add, {
-      text: args.text.trim(),
+    const response = await fetch(
+      `https://pirate.monkeyness.com/api/translate?english=${encodeURIComponent(note.text)}`,
+    );
+    const data = await response.text();
+    await ctx.runMutation(internal.lib.updateNote, {
+      noteId: args.noteId,
+      text: data,
     });
-    return noteId;
+    return data;
   },
 });
 

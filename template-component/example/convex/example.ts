@@ -3,7 +3,11 @@ import { components } from "./_generated/api.js";
 import { SampleComponent } from "@example/sample-component";
 import { v } from "convex/values";
 
-const sampleComponent = new SampleComponent(components.sampleComponent, {});
+export const sampleComponent = new SampleComponent(components.sampleComponent, {
+  getUserIdCallback: (_ctx) => {
+    return "user123";
+  },
+});
 
 // Example of using the component's methods directly
 export const addNote = mutation({
@@ -20,15 +24,15 @@ export const listNotes = query({
   },
 });
 
-export const addNoteWithValidation = action({
-  args: { text: v.string() },
+export const convertToPirateTalkAction = action({
+  args: { noteId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.addWithValidation(ctx, args.text);
+    return await sampleComponent.convertToPirateTalk(ctx, args.noteId);
   },
 });
 
 // Here is an alternative way to use the component's methods directly by re-exporting
 // the component's API:
-export const { list, add, addWithValidation } = sampleComponent.api();
+export const { list, add, convertToPirateTalk } = sampleComponent.api();
 
 // You can also register HTTP routes for the component. See http.ts for an example.

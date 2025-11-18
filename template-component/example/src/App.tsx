@@ -2,14 +2,11 @@ import "./App.css";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useState } from "react";
-import { useConvex } from "convex/react";
 
 function App() {
   const notes = useQuery(api.example.list, {});
   const addNote = useMutation(api.example.add);
   const [noteText, setNoteText] = useState("");
-  const convex = useConvex();
-
   const handleAddNote = () => {
     if (noteText.trim()) {
       addNote({ text: noteText });

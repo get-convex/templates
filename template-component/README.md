@@ -65,7 +65,7 @@ package.json.
 
 ---
 
-# Convex Sample Component Component
+# Convex Sample Component
 
 [![npm version](https://badge.fury.io/js/@example%2Fsample-component.svg)](https://badge.fury.io/js/@example%2Fsample-component)
 

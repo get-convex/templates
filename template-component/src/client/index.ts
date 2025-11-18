@@ -31,25 +31,33 @@ import type { CtxWith } from "./types.js";
 // issues where passing `components.foo` doesn't match the argument
 
 export class SampleComponent {
+  getUserIdCallback: (
+    ctx: CtxWith<"runQuery"> | CtxWith<"runMutation">,
+  ) => string;
   constructor(
     public component: ComponentApi,
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    public options?: {
+    public options: {
       // Common parameters:
       // logLevel
+      getUserIdCallback: (
+        ctx: CtxWith<"runQuery"> | CtxWith<"runMutation">,
+      ) => string;
     },
-  ) {}
+  ) {
+    this.getUserIdCallback = options.getUserIdCallback;
+  }
 
   async list(ctx: CtxWith<"runQuery">) {
     return ctx.runQuery(this.component.lib.list, {});
   }
 
   async add(ctx: CtxWith<"runMutation">, text: string) {
-    return ctx.runMutation(this.component.lib.add, { text });
+    const userId = this.getUserIdCallback(ctx);
+    return ctx.runMutation(this.component.lib.add, { text, userId });
   }
 
-  async addWithValidation(ctx: CtxWith<"runAction">, text: string) {
-    return ctx.runAction(this.component.lib.addWithValidation, { text });
+  async convertToPirateTalk(ctx: CtxWith<"runAction">, noteId: string) {
+    return ctx.runAction(this.component.lib.convertToPirateTalk, { noteId });
   }
 
   /**
@@ -73,10 +81,10 @@ export class SampleComponent {
           return await this.add(ctx, args.text);
         },
       }),
-      addWithValidation: actionGeneric({
-        args: { text: v.string() },
+      convertToPirateTalk: actionGeneric({
+        args: { noteId: v.id("notes") },
         handler: async (ctx, args) => {
-          return await this.addWithValidation(ctx, args.text);
+          return await this.convertToPirateTalk(ctx, args.noteId);
         },
       }),
     };

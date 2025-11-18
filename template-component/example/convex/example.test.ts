@@ -22,12 +22,16 @@ describe("example", () => {
     expect(notes[0].text).toBe("My note");
   });
 
-  test("addNoteWithValidation", async () => {
+  test("convertToPirateTalkAction", async () => {
     const t = initConvexTest();
-    await t.action(api.example.addNoteWithValidation, {
-      text: "  Validated note  ",
+    const noteId = await t.mutation(api.example.addNote, {
+      text: "My note",
     });
-    const notes = await t.query(api.example.list, {});
-    expect(notes[0].text).toBe("Validated note");
+    expect(noteId).toBeDefined();
+    await t.action(api.example.convertToPirateTalkAction, {
+      noteId: noteId,
+    });
+    const notes = await t.query(api.example.listNotes, {});
+    expect(notes[0].text).toBe("My note");
   });
 });

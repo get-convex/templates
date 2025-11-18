@@ -27,28 +27,17 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
       add: FunctionReference<
         "mutation",
         "internal",
-        { text: string },
+        { text: string; userId: string },
         string,
         Name
       >;
-      addWithValidation: FunctionReference<
+      convertToPirateTalk: FunctionReference<
         "action",
         "internal",
-        { text: string },
+        { noteId: string },
         string,
         Name
       >;
-      list: FunctionReference<
-        "query",
-        "internal",
-        {},
-        Array<{
-          _creationTime: number;
-          _id: string;
-          createdAt: number;
-          text: string;
-        }>,
-        Name
-      >;
+      list: FunctionReference<"query", "internal", {}, any, Name>;
     };
   };
