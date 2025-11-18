@@ -1,34 +1,5 @@
 {
-  /* This TypeScript project config describes the environment that
-   * Convex functions run in and is used to typecheck them.
-   * You can modify it, but some settings required to use Convex.
-   */
-  "compilerOptions": {
-    /* These settings are not required by Convex and can be modified. */
-    "allowJs": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
-
-    /* These compiler options are required by Convex */
-    "target": "ESNext",
-    "lib": ["ES2021", "dom", "ESNext.Array"],
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "isolatedModules": true,
-    "noEmit": true
-
-    /* This should only be used in this example. Real apps should not attempt
-     * to compile TypeScript because differences between tsconfig.json files can
-     * cause the code to be compiled differently.
-     */
-    // Un-comment this to get instant types between your component and example.
-    // However, if you're willing to wait for a build before the types update,
-    // it's better to leave this commented out to catch build errors faster.
-    // "customConditions": ["@convex-dev/component-source"]
-  },
-  "include": ["./**/*"],
-  "exclude": ["./_generated"]
+  "extends": "../tsconfig.json",
+  "include": ["."],
+  "exclude": ["_generated"]
 }

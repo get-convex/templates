@@ -18,21 +18,22 @@ npm i
 npm run dev
 ```
 
-`setup` will do the install and set up your convex backend (run once).
-`dev` will start both a file watcher to re-build the component, as well as run
-the example convex project alongside it.
+`npm i` will do the install and an initial build. `npm run dev` will start a
+file watcher to re-build the component, as well as the example project frontend
+and backend, which does codegen and installs the component.
 
 Modify the schema and index files in src/component/ to define your component.
 
 Write a client for using this component in src/client/index.ts.
 
-If you won't be adding frontend code (e.g. React components) to this
-component you can delete the following:
+If you won't be adding frontend code (e.g. React components) to this component
+you can delete the following:
 
 - "./react" exports in package.json
 - the "src/react/" directory
 
-If you will be adding frontend code, add a peer dependency on React in package.json.
+If you will be adding frontend code, add a peer dependency on React in
+package.json.
 
 ### Component Directory structure
 
@@ -74,15 +75,17 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 - [ ] Why should you use this component?
 - [ ] Links to docs / other resources?
 
-Found a bug? Feature request? [File it here](https://github.com/example-org/sharded-counter/issues).
+Found a bug? Feature request?
+[File it here](https://github.com/example-org/sharded-counter/issues).
 
 ## Pre-requisite: Convex
 
-You'll need an existing Convex project to use the component.
-Convex is a hosted backend platform, including a database, serverless functions,
-and a ton more you can learn about [here](https://docs.convex.dev/get-started).
+You'll need an existing Convex project to use the component. Convex is a hosted
+backend platform, including a database, serverless functions, and a ton more you
+can learn about [here](https://docs.convex.dev/get-started).
 
-Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.dev/home) to set one up.
+Run `npm create convex` or follow any of the
+[quickstarts](https://docs.convex.dev/home) to set one up.
 
 ## Installation
 
@@ -92,12 +95,13 @@ Install the component package:
 npm install @example/sharded-counter
 ```
 
-Create a `convex.config.ts` file in your app's `convex/` folder and install the component by calling `use`:
+Create a `convex.config.ts` file in your app's `convex/` folder and install the
+component by calling `use`:
 
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import shardedCounter from "@example/sharded-counter/convex.config";
+import shardedCounter from "@example/sharded-counter/convex.config.js";
 
 const app = defineApp();
 app.use(shardedCounter);

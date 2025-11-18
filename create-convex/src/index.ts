@@ -11,11 +11,12 @@ import { writeCursorRules } from "./cursorRules";
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
 const argv = minimist<{
-  t?: string;
-  template?: string;
-  "dry-run"?: string;
+  t?: string | boolean;
+  template?: string | boolean;
+  "dry-run"?: boolean | string;
   verbose?: boolean;
   component?: boolean;
+  "with-vercel-json"?: boolean;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
 
@@ -51,7 +52,7 @@ const AUTH: { name: string; display: string; frameworks?: string[] }[] = [
   {
     name: "authkit",
     display: "AuthKit (auto-creates a WorkOS account if needed)",
-    frameworks: ["react-vite", "nextjs"],
+    frameworks: ["react-vite", "nextjs", "tanstack-start"],
   },
   {
     name: "clerk",
@@ -89,8 +90,14 @@ init().catch((e) => {
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
+  if (typeof argTemplate === "boolean") {
+    throw new Error(
+      red("✖") + " No template provided to -`t` or `--template`",
+    );
+  }
   const verbose = !!argv.verbose;
   const component = !!argv.component;
+  const withVercelJson = !!argv["with-vercel-json"];
 
   let targetDir = argTargetDir || defaultTargetDir;
   const getProjectName = () =>
@@ -136,12 +143,15 @@ async function init() {
         },
         {
           // Prompt for the package name (if project name is not a valid package name)
-          type: () => (isValidPackageName(getProjectName()) ? null : "text"),
+          type: () =>
+            component || isValidPackageName(getProjectName()) ? null : "text",
           name: "packageName",
           message: reset("Package name:"),
           initial: () => toValidPackageName(getProjectName()),
           validate: (dir) =>
-            isValidPackageName(dir) || "Invalid package.json name",
+            !!component ||
+            isValidPackageName(dir) ||
+            "Invalid package.json name",
         },
         // The next two prompts are only shown if not targeting a specific template or using the component template
         {
@@ -253,16 +263,26 @@ async function init() {
 
   await writeCursorRules(root);
 
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(root, `package.json`), "utf-8"),
-  );
+  if (!component) {
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(root, `package.json`), "utf-8"),
+    );
 
-  pkg.name = packageName || getProjectName();
+    pkg.name = packageName || getProjectName();
 
-  fs.writeFileSync(
-    path.join(root, "package.json"),
-    JSON.stringify(pkg, null, 2) + "\n",
-  );
+    fs.writeFileSync(
+      path.join(root, "package.json"),
+      JSON.stringify(pkg, null, 2) + "\n",
+    );
+  }
+
+  // Remove vercel.json from template if --with-vercel-json is not set
+  if (!withVercelJson) {
+    const vercelJsonPath = path.join(root, "vercel.json");
+    if (fs.existsSync(vercelJsonPath)) {
+      fs.rmSync(vercelJsonPath, { force: true });
+    }
+  }
 
   const cdProjectName = path.relative(cwd, root);
   if (root !== cwd) {
@@ -280,17 +300,8 @@ async function init() {
       cdProjectName.includes(" ") ? `"${cdProjectName}"` : cdProjectName
     }\n`;
   }
-  // The TanStack basic template is confusing
-  // if you haven't imported the data.
-  if (givenTemplate === "tanstack-start") {
-    message += `  ${packageManager} run seed\n`;
-    message += `  ${packageManager} run dev\n`;
-  } else if (component) {
-    message += `  cd example\n`;
-    message += `  ${packageManager} run dev\n`;
-  } else {
-    message += `  ${packageManager} run dev\n`;
-  }
+
+  message += `  ${packageManager} run dev\n`;
 
   // Add a link to the Convex docs
   message += `\nCheck out the Convex docs at: ${bold(
@@ -432,15 +443,19 @@ function getGivenTemplate(args: {
 }
 
 const TEMPLATES_IN_REPO = [
+  // When adding a template, please also update `.github/workflows/ci.yml`.
+
   "astro",
   "bare",
   "component",
   "nextjs",
+  "nextjs-authkit",
   "nextjs-clerk",
   "nextjs-clerk-shadcn", // not suggested anymore
   "nextjs-convexauth",
   "nextjs-shadcn", // not suggested anymore
   "react-vite",
+  "react-vite-authkit",
   "react-vite-clerk",
   "react-vite-clerk-shadcn", // not suggested anymore
   "react-vite-convexauth",
@@ -448,13 +463,8 @@ const TEMPLATES_IN_REPO = [
   "react-vite-shadcn", //  not suggested anymore
   "tanstack-start",
   "tanstack-start-clerk",
+  "tanstack-start-authkit",
 ];
-
-// Templates in other repos that it's useful to have a short name for
-const EXTERNAL_TEMPLATES_WITH_NICKNAMES: Record<string, string> = {
-  "react-vite-authkit": "workos/template-convex-react-vite-authkit#main",
-  "nextjs-authkit": "workos/template-convex-nextjs-authkit#main",
-};
 
 // E.g. `get-convex/templates/template-nextjs-convexauth#main`
 // or `atrakh/one-million-checkboxes`
@@ -467,11 +477,9 @@ function getTemplateRepoPath(templateName: string) {
       return templateName + "#main";
     }
   }
+
   if (TEMPLATES_IN_REPO.includes(templateName)) {
     return `get-convex/templates/template-${templateName}#main`;
-  }
-  if (Object.hasOwn(EXTERNAL_TEMPLATES_WITH_NICKNAMES, templateName)) {
-    return EXTERNAL_TEMPLATES_WITH_NICKNAMES[templateName];
   }
 
   // This is one of our templates specifically for `npm create convex`

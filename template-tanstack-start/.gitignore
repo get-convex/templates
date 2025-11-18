@@ -15,6 +15,7 @@ node_modules
 /server/build
 /public/build
 /dist/
+/dist-ssr/
 
 # Sentry Config File
 .env.sentry-build-plugin

@@ -141,7 +141,7 @@ async function setup() {
       `Enter your component name (e.g., "document search" or "RAG") [${currentDirName}]: `,
       (answer) => {
         resolve(answer.trim() || currentDirName);
-      }
+      },
     );
   });
 
@@ -156,7 +156,7 @@ async function setup() {
       `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
       (answer) => {
         resolve(answer.trim());
-      }
+      },
     );
   });
   if (!npmPackageName) {
@@ -170,7 +170,7 @@ async function setup() {
       `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
       (answer) => {
         resolve(answer.trim());
-      }
+      },
     );
   });
   if (!repoName) {
@@ -225,6 +225,15 @@ async function setup() {
     replacements.push(["@example%2Fsharded-counter", npmPackageName]);
   }
 
+  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+  if (packageJson.name !== npmPackageName) {
+    console.log(
+      `Updating package.json name from ${packageJson.name} to ${npmPackageName}...`,
+    );
+    packageJson.name = npmPackageName;
+    writeFileSync("package.json", JSON.stringify(packageJson, null, 2), "utf8");
+  }
+
   console.log("🔍 Finding files to update...");
   const files = getAllFiles(".");
   console.log(`Found ${files.length} files to process.\n`);
@@ -252,9 +261,9 @@ async function setup() {
       (answer) => {
         resolve(
           answer.toLowerCase().trim() === "y" ||
-            answer.toLowerCase().trim() === "yes"
+            answer.toLowerCase().trim() === "yes",
         );
-      }
+      },
     );
   });
 

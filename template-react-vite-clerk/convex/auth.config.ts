@@ -1,4 +1,6 @@
-const authConfig = {
+import { AuthConfig } from "convex/server";
+
+export default {
   providers: [
     // Uncomment this once you have set up a Clerk app
     // {
@@ -10,6 +12,4 @@ const authConfig = {
     //   applicationID: "convex",
     // },
   ],
-};
-
-export default authConfig;
+} satisfies AuthConfig;
