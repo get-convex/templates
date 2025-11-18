@@ -11,6 +11,14 @@ import { api, internal } from "./_generated/api.js";
 
 export const list = query({
   args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("notes"),
+      text: v.string(),
+      userId: v.string(),
+      _creationTime: v.number(),
+    }),
+  ),
   handler: async (ctx) => {
     return await ctx.db.query("notes").order("desc").collect();
   },
@@ -23,8 +31,10 @@ export const getNote = internalQuery({
   returns: v.union(
     v.null(),
     v.object({
+      _id: v.id("notes"),
       text: v.string(),
       userId: v.string(),
+      _creationTime: v.number(),
     }),
   ),
   handler: async (ctx, args) => {

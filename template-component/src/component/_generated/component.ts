@@ -38,6 +38,17 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         string,
         Name
       >;
-      list: FunctionReference<"query", "internal", {}, any, Name>;
+      list: FunctionReference<
+        "query",
+        "internal",
+        {},
+        Array<{
+          _creationTime: number;
+          _id: string;
+          text: string;
+          userId: string;
+        }>,
+        Name
+      >;
     };
   };
