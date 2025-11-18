@@ -5,6 +5,9 @@ import { v } from "convex/values";
 
 export const sampleComponent = new SampleComponent(components.sampleComponent, {
   getUserIdCallback: (_ctx) => {
+    // in a real application, you would use the _ctx to get the user ID
+    // from the database or the authentication system.
+    //  _ctx.auth.getUserIdentity();
     return "user123";
   },
 });

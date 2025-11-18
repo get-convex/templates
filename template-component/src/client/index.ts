@@ -9,6 +9,7 @@ import type {
   FunctionReference,
   FunctionReturnType,
   HttpRouter,
+  UserIdentity,
 } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
@@ -19,6 +20,9 @@ export type AnyQueryCtx = {
     query: Query,
     args: FunctionArgs<Query>,
   ) => Promise<FunctionReturnType<Query>>;
+  auth: {
+    getUserIdentity: () => Promise<UserIdentity | null>;
+  };
 };
 export type AnyMutationCtx = {
   runQuery: <Query extends FunctionReference<"query", "internal">>(
@@ -38,13 +42,13 @@ export type AnyMutationCtx = {
 // issues where passing `components.foo` doesn't match the argument
 
 export class SampleComponent {
-  getUserIdCallback: (ctx: AnyMutationCtx | AnyQueryCtx) => string;
+  getUserIdCallback: (ctx: AnyQueryCtx) => string;
   constructor(
     public component: ComponentApi,
     public options: {
       // Common parameters:
       // logLevel
-      getUserIdCallback: (ctx: AnyMutationCtx | AnyQueryCtx) => string;
+      getUserIdCallback: (ctx: AnyQueryCtx) => string;
     },
   ) {
     this.getUserIdCallback = options.getUserIdCallback;
