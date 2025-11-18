@@ -82,7 +82,7 @@ export class SampleComponent {
         },
       }),
       convertToPirateTalk: actionGeneric({
-        args: { noteId: v.id("notes") },
+        args: { noteId: v.string() },
         handler: async (ctx, args) => {
           return await this.convertToPirateTalk(ctx, args.noteId);
         },

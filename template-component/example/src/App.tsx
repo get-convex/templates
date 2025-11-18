@@ -1,17 +1,21 @@
 import "./App.css";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useState } from "react";
 
 function App() {
   const notes = useQuery(api.example.list, {});
   const addNote = useMutation(api.example.add);
+  const convertToPirateTalk = useAction(api.example.convertToPirateTalk);
   const [noteText, setNoteText] = useState("");
   const handleAddNote = () => {
     if (noteText.trim()) {
       addNote({ text: noteText });
       setNoteText("");
     }
+  };
+  const handleConvertToPirateTalk = async (noteId: string) => {
+    await convertToPirateTalk({ noteId });
   };
 
   // Construct the HTTP endpoint URL
@@ -40,7 +44,23 @@ function App() {
           <h3>Notes ({notes?.length ?? 0})</h3>
           <ul style={{ textAlign: "left" }}>
             {notes?.map((note) => (
-              <li key={note._id}>{note.text}</li>
+              <li key={note._id} style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>{note.text}</span>
+                <button 
+                  onClick={() => handleConvertToPirateTalk(note._id)}
+                  style={{ 
+                    padding: "0.25rem 0.5rem", 
+                    fontSize: "0.75rem",
+                    backgroundColor: "#ff9800",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                >
+                  🏴‍☠️ Convert to Pirate Talk
+                </button>
+              </li>
             ))}
           </ul>
         </div>
