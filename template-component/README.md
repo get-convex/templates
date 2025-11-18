@@ -129,11 +129,9 @@ You can register HTTP routes for the component to expose HTTP endpoints:
 ```ts
 import { httpRouter } from "convex/server";
 import { components } from "./_generated/api";
-import { SampleComponent } from "@example/sample-component";
+import { sampleComponent } from "./example.js";
 
 const http = httpRouter();
-
-const sampleComponent = new SampleComponent(components.sampleComponent);
 
 // Register HTTP routes for the component
 sampleComponent.registerRoutes(http, {

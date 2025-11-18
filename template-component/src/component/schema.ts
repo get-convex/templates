@@ -6,7 +6,5 @@ export default defineSchema({
     text: v.string(),
     userId: v.string(), // Note: you can't use v.id referring to external tables
     targetId: v.string(),
-  })
-    .index("userId", ["userId"])
-    .index("targetId", ["targetId"]),
+  }).index("targetId", ["targetId"]),
 });

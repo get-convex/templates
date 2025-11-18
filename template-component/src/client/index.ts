@@ -4,44 +4,47 @@ import {
   mutationGeneric,
   queryGeneric,
 } from "convex/server";
-import type { HttpRouter } from "convex/server";
+import type {
+  FunctionArgs,
+  FunctionReference,
+  FunctionReturnType,
+  HttpRouter,
+} from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 import type { CtxWith } from "./types.js";
 
-// This is a thick client for the component. In your convex app, you can re-export
-// the component's API like this:
-// ```ts
-// export const { list, add, addWithValidation } = sampleComponent.api();
-// ```
-// Then you can use the component's methods directly in your convex functions.
-// ```ts
-// export const addNote = mutation({
-//   args: { text: v.string() },
-//   handler: async (ctx, args) => {
-//     return await sampleComponent.add(ctx, args.text);
-//   },
-// });
-// ```
+export type AnyQueryCtx = {
+  runQuery: <Query extends FunctionReference<"query", "internal">>(
+    query: Query,
+    args: FunctionArgs<Query>,
+  ) => Promise<FunctionReturnType<Query>>;
+};
+export type AnyMutationCtx = {
+  runQuery: <Query extends FunctionReference<"query", "internal">>(
+    query: Query,
+    args: FunctionArgs<Query>,
+  ) => Promise<FunctionReturnType<Query>>;
+  runMutation: <Mutation extends FunctionReference<"mutation", "internal">>(
+    mutation: Mutation,
+    args: FunctionArgs<Mutation>,
+  ) => Promise<FunctionReturnType<Mutation>>;
+};
 
-// See the example/convex/example.ts file for an example of how to use this thick client.
+// See the example/convex/example.ts file for an example of how to use this component from a convex app.
 
 // UseApi<typeof api> is an alternative that has jump-to-definition but is
 // less stable and reliant on types within the component files, which can cause
 // issues where passing `components.foo` doesn't match the argument
 
 export class SampleComponent {
-  getUserIdCallback: (
-    ctx: CtxWith<"runQuery"> | CtxWith<"runMutation">,
-  ) => string;
+  getUserIdCallback: (ctx: AnyMutationCtx | AnyQueryCtx) => string;
   constructor(
     public component: ComponentApi,
     public options: {
       // Common parameters:
       // logLevel
-      getUserIdCallback: (
-        ctx: CtxWith<"runQuery"> | CtxWith<"runMutation">,
-      ) => string;
+      getUserIdCallback: (ctx: AnyMutationCtx | AnyQueryCtx) => string;
     },
   ) {
     this.getUserIdCallback = options.getUserIdCallback;
@@ -51,7 +54,7 @@ export class SampleComponent {
     return ctx.runQuery(this.component.lib.list, { targetId });
   }
 
-  async add(ctx: CtxWith<"runMutation">, text: string, targetId: string) {
+  async add(ctx: AnyMutationCtx, text: string, targetId: string) {
     const userId = this.getUserIdCallback(ctx);
     return ctx.runMutation(this.component.lib.add, { text, userId, targetId });
   }
