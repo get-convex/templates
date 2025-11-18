@@ -137,13 +137,14 @@ const sampleComponent = new SampleComponent(components.sampleComponent);
 
 // Register HTTP routes for the component
 sampleComponent.registerRoutes(http, {
-  path: "/notes/last", // optional, defaults to "/notes/last"
+  path: "/comments/last", // optional, defaults to "/comments/last"
 });
 
 export default http;
 ```
 
-This will expose a GET endpoint that returns the most recent note as JSON. See
+This will expose a GET endpoint that returns the most recent comment as JSON.
+The endpoint requires a `targetId` query parameter. See
 [http.ts](./example/convex/http.ts) for a complete example.
 
 <!-- END: Include on https://convex.dev/components -->

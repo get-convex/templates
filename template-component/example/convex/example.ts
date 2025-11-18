@@ -10,24 +10,24 @@ export const sampleComponent = new SampleComponent(components.sampleComponent, {
 });
 
 // Example of using the component's methods directly
-export const addNote = mutation({
-  args: { text: v.string() },
+export const addComment = mutation({
+  args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.add(ctx, args.text);
+    return await sampleComponent.add(ctx, args.text, args.targetId);
   },
 });
 
-export const listNotes = query({
-  args: {},
-  handler: async (ctx) => {
-    return await sampleComponent.list(ctx);
+export const listComments = query({
+  args: { targetId: v.string() },
+  handler: async (ctx, args) => {
+    return await sampleComponent.list(ctx, args.targetId);
   },
 });
 
 export const convertToPirateTalkAction = action({
-  args: { noteId: v.string() },
+  args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.convertToPirateTalk(ctx, args.noteId);
+    return await sampleComponent.convertToPirateTalk(ctx, args.commentId);
   },
 });
 

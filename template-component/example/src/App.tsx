@@ -4,18 +4,19 @@ import { api } from "../convex/_generated/api";
 import { useState } from "react";
 
 function App() {
-  const notes = useQuery(api.example.list, {});
-  const addNote = useMutation(api.example.add);
+  const [targetId] = useState("example-subject-1");
+  const comments = useQuery(api.example.list, { targetId });
+  const addComment = useMutation(api.example.add);
   const convertToPirateTalk = useAction(api.example.convertToPirateTalk);
-  const [noteText, setNoteText] = useState("");
-  const handleAddNote = () => {
-    if (noteText.trim()) {
-      addNote({ text: noteText });
-      setNoteText("");
+  const [commentText, setCommentText] = useState("");
+  const handleAddComment = () => {
+    if (commentText.trim()) {
+      addComment({ text: commentText, targetId });
+      setCommentText("");
     }
   };
-  const handleConvertToPirateTalk = async (noteId: string) => {
-    await convertToPirateTalk({ noteId });
+  const handleConvertToPirateTalk = async (commentId: string) => {
+    await convertToPirateTalk({ commentId });
   };
 
   // Construct the HTTP endpoint URL
@@ -23,7 +24,7 @@ function App() {
 
   const convexUrl = (import.meta.env.VITE_CONVEX_URL).replace(".cloud", ".site");
 
-  const httpUrl = convexUrl + "/notes/last";
+  const httpUrl = convexUrl + `/comments/last?targetId=${encodeURIComponent(targetId)}`;
 
   return (
     <>
@@ -32,22 +33,22 @@ function App() {
         <div style={{ marginBottom: "1rem" }}>
           <input
             type="text"
-            value={noteText}
-            onChange={(e) => setNoteText(e.target.value)}
-            placeholder="Enter a note"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Enter a comment"
             style={{ marginRight: "0.5rem", padding: "0.5rem" }}
-            onKeyPress={(e) => e.key === "Enter" && handleAddNote()}
+            onKeyPress={(e) => e.key === "Enter" && handleAddComment()}
           />
-          <button onClick={handleAddNote}>Add Note</button>
+          <button onClick={handleAddComment}>Add Comment</button>
         </div>
         <div>
-          <h3>Notes ({notes?.length ?? 0})</h3>
+          <h3>Comments ({comments?.length ?? 0})</h3>
           <ul style={{ textAlign: "left" }}>
-            {notes?.map((note) => (
-              <li key={note._id} style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span>{note.text}</span>
+            {comments?.map((comment) => (
+              <li key={comment._id} style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>{comment.text}</span>
                 <button 
-                  onClick={() => handleConvertToPirateTalk(note._id)}
+                  onClick={() => handleConvertToPirateTalk(comment._id)}
                   style={{ 
                     padding: "0.25rem 0.5rem", 
                     fontSize: "0.75rem",
@@ -67,7 +68,7 @@ function App() {
         <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
           <h3>HTTP Endpoint Demo</h3>
           <p style={{ fontSize: "0.9rem", marginBottom: "0.5rem" }}>
-            The component exposes an HTTP endpoint to get the latest note:
+            The component exposes an HTTP endpoint to get the latest comment:
           </p>
           <a 
             href={httpUrl} 
@@ -83,7 +84,7 @@ function App() {
               fontSize: "0.9rem"
             }}
           >
-            Open HTTP Endpoint (GET /notes/last)
+            Open HTTP Endpoint (GET /comments/last)
           </a>
           <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.5rem" }}>
             See <code>example/convex/http.ts</code> for the HTTP route configuration

@@ -25,26 +25,28 @@ const query = queryGeneric as QueryBuilder<DataModel, "public">;
 const mutation = mutationGeneric as MutationBuilder<DataModel, "public">;
 const action = actionGeneric as ActionBuilder<DataModel, "public">;
 
-const sampleComponent = new SampleComponent(components.sampleComponent, {});
+const sampleComponent = new SampleComponent(components.sampleComponent, {
+  getUserIdCallback: () => "user1",
+});
 
 export const testQuery = query({
-  args: {},
-  handler: async (ctx) => {
-    return await sampleComponent.list(ctx);
+  args: { targetId: v.string() },
+  handler: async (ctx, args) => {
+    return await sampleComponent.list(ctx, args.targetId);
   },
 });
 
 export const testMutation = mutation({
-  args: { text: v.string() },
+  args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.add(ctx, args.text);
+    return await sampleComponent.add(ctx, args.text, args.targetId);
   },
 });
 
 export const testAction = action({
-  args: { text: v.string() },
+  args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.addWithValidation(ctx, args.text);
+    return await sampleComponent.add(ctx, args.text, args.targetId);
   },
 });
 
@@ -64,29 +66,36 @@ describe("SampleComponent thick client", () => {
     vi.useRealTimers();
   });
   test("should make thick client", async () => {
-    const c = new SampleComponent(components.sampleComponent);
+    const c = new SampleComponent(components.sampleComponent, {
+      getUserIdCallback: () => "user1",
+    });
     const t = initConvexTest(schema);
+    const targetId = "test-subject-1";
     await t.run(async (ctx) => {
-      await c.add(ctx, "My first note");
-      const notes = await c.list(ctx);
-      expect(notes).toHaveLength(1);
-      expect(notes[0].text).toBe("My first note");
+      await c.add(ctx, "My first comment", targetId);
+      const comments = await c.list(ctx, targetId);
+      expect(comments).toHaveLength(1);
+      expect(comments[0].text).toBe("My first comment");
     });
   });
   test("should work from a test function", async () => {
     const t = initConvexTest(schema);
-    const noteId = await t.mutation(testApi.testMutation, {
-      text: "Test note",
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(testApi.testMutation, {
+      text: "Test comment",
+      targetId,
     });
-    expect(noteId).toBeDefined();
+    expect(commentId).toBeDefined();
   });
   test("should work with action", async () => {
     const t = initConvexTest(schema);
-    const noteId = await t.action(testApi.testAction, {
-      text: "  Action note  ",
+    const targetId = "test-subject-1";
+    const commentId = await t.action(testApi.testAction, {
+      text: "  Action comment  ",
+      targetId,
     });
-    expect(noteId).toBeDefined();
-    const notes = await t.query(testApi.testQuery, {});
-    expect(notes[0].text).toBe("Action note");
+    expect(commentId).toBeDefined();
+    const comments = await t.query(testApi.testQuery, { targetId });
+    expect(comments[0].text).toBe("Action comment");
   });
 });

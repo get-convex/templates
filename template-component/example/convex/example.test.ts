@@ -11,27 +11,31 @@ describe("example", () => {
     vi.useRealTimers();
   });
 
-  test("addNote and listNotes", async () => {
+  test("addComment and listComments", async () => {
     const t = initConvexTest();
-    const noteId = await t.mutation(api.example.addNote, {
-      text: "My note",
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(api.example.addComment, {
+      text: "My comment",
+      targetId,
     });
-    expect(noteId).toBeDefined();
-    const notes = await t.query(api.example.listNotes, {});
-    expect(notes).toHaveLength(1);
-    expect(notes[0].text).toBe("My note");
+    expect(commentId).toBeDefined();
+    const comments = await t.query(api.example.listComments, { targetId });
+    expect(comments).toHaveLength(1);
+    expect(comments[0].text).toBe("My comment");
   });
 
   test("convertToPirateTalkAction", async () => {
     const t = initConvexTest();
-    const noteId = await t.mutation(api.example.addNote, {
-      text: "My note",
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(api.example.addComment, {
+      text: "My comment",
+      targetId,
     });
-    expect(noteId).toBeDefined();
+    expect(commentId).toBeDefined();
     await t.action(api.example.convertToPirateTalkAction, {
-      noteId: noteId,
+      commentId: commentId,
     });
-    const notes = await t.query(api.example.listNotes, {});
-    expect(notes[0].text).toBe("My note");
+    const comments = await t.query(api.example.listComments, { targetId });
+    expect(comments[0].text).toBe("My comment");
   });
 });

@@ -13,27 +13,13 @@ describe("component lib", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-  test("add and list notes", async () => {
+  test("add and list comments", async () => {
     const t = convexTest(schema, modules);
-    const noteId = await t.mutation(api.lib.add, { text: "Hello, world!" });
-    expect(noteId).toBeDefined();
-    const notes = await t.query(api.lib.list, {});
-    expect(notes).toHaveLength(1);
-    expect(notes[0].text).toEqual("Hello, world!");
-  });
-  test("addWithValidation action", async () => {
-    const t = convexTest(schema, modules);
-    const noteId = await t.action(api.lib.addWithValidation, {
-      text: "  Valid note  ",
-    });
-    expect(noteId).toBeDefined();
-    const notes = await t.query(api.lib.list, {});
-    expect(notes[0].text).toEqual("Valid note");
-  });
-  test("addWithValidation rejects empty text", async () => {
-    const t = convexTest(schema, modules);
-    await expect(
-      t.action(api.lib.addWithValidation, { text: "   " }),
-    ).rejects.toThrow("Note text cannot be empty");
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(api.lib.add, { text: "Hello, world!", userId: "user1", targetId });
+    expect(commentId).toBeDefined();
+    const comments = await t.query(api.lib.list, { targetId });
+    expect(comments).toHaveLength(1);
+    expect(comments[0].text).toEqual("Hello, world!");
   });
 });

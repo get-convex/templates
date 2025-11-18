@@ -10,90 +10,111 @@ import {
 import { api, internal } from "./_generated/api.js";
 
 export const list = query({
-  args: {},
+  args: {
+    targetId: v.string(),
+  },
   returns: v.array(
     v.object({
-      _id: v.id("notes"),
+      _id: v.id("comments"),
       text: v.string(),
       userId: v.string(),
-      _creationTime: v.number(),
-    }),
-  ),
-  handler: async (ctx) => {
-    return await ctx.db.query("notes").order("desc").collect();
-  },
-});
-
-export const getNote = internalQuery({
-  args: {
-    noteId: v.id("notes"),
-  },
-  returns: v.union(
-    v.null(),
-    v.object({
-      _id: v.id("notes"),
-      text: v.string(),
-      userId: v.string(),
+      targetId: v.string(),
       _creationTime: v.number(),
     }),
   ),
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.noteId);
+    return await ctx.db
+      .query("comments")
+      .withIndex("targetId", (q) => q.eq("targetId", args.targetId))
+      .order("desc")
+      .collect();
+  },
+});
+
+export const getComment = internalQuery({
+  args: {
+    commentId: v.id("comments"),
+  },
+  returns: v.union(
+    v.null(),
+    v.object({
+      _id: v.id("comments"),
+      text: v.string(),
+      userId: v.string(),
+      targetId: v.string(),
+      _creationTime: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.commentId);
   },
 });
 export const add = mutation({
   args: {
     text: v.string(),
     userId: v.string(),
+    targetId: v.string(),
   },
-  returns: v.id("notes"),
+  returns: v.id("comments"),
   handler: async (ctx, args) => {
-    const noteId = await ctx.db.insert("notes", {
+    const commentId = await ctx.db.insert("comments", {
       text: args.text,
       userId: args.userId,
+      targetId: args.targetId,
     });
-    return noteId;
+    return commentId;
   },
 });
-export const updateNote = internalMutation({
+export const updateComment = internalMutation({
   args: {
-    noteId: v.id("notes"),
+    commentId: v.id("comments"),
     text: v.string(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.noteId, { text: args.text });
+    await ctx.db.patch(args.commentId, { text: args.text });
   },
 });
 
 export const convertToPirateTalk = action({
   args: {
-    noteId: v.id("notes"),
+    commentId: v.id("comments"),
   },
   returns: v.string(),
   handler: async (ctx, args) => {
-    // $ curl 'https://pirate.monkeyness.com/api/translate?english=What%20is%20an%20API?'
-    const note = (await ctx.runQuery(internal.lib.getNote, {
-      noteId: args.noteId,
+    const comment = (await ctx.runQuery(internal.lib.getComment, {
+      commentId: args.commentId,
     })) as { text: string; userId: string } | null;
-    if (!note) {
-      throw new Error("Note not found");
+    if (!comment) {
+      throw new Error("Comment not found");
     }
     const response = await fetch(
-      `https://pirate.monkeyness.com/api/translate?english=${encodeURIComponent(note.text)}`,
+      `https://pirate.monkeyness.com/api/translate?english=${encodeURIComponent(comment.text)}`,
     );
     const data = await response.text();
-    await ctx.runMutation(internal.lib.updateNote, {
-      noteId: args.noteId,
+    await ctx.runMutation(internal.lib.updateComment, {
+      commentId: args.commentId,
       text: data,
     });
     return data;
   },
 });
 
-export const getLastNote = httpActionGeneric(async (ctx, _request) => {
-  const notes = await ctx.runQuery(api.lib.list, {});
-  const lastNote = notes[0] ?? null;
-  return new Response(JSON.stringify(lastNote), {
+export const getLastComment = httpActionGeneric(async (ctx, _request) => {
+  const targetId = new URL(_request.url).searchParams.get("targetId");
+  if (!targetId) {
+    return new Response(
+      JSON.stringify({ error: "targetId parameter required" }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  }
+  const comments = await ctx.runQuery(api.lib.list, { targetId });
+  const lastComment = comments[0] ?? null;
+  return new Response(JSON.stringify(lastComment), {
     status: 200,
     headers: {
       "Content-Type": "application/json",

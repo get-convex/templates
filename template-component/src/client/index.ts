@@ -47,17 +47,17 @@ export class SampleComponent {
     this.getUserIdCallback = options.getUserIdCallback;
   }
 
-  async list(ctx: CtxWith<"runQuery">) {
-    return ctx.runQuery(this.component.lib.list, {});
+  async list(ctx: CtxWith<"runQuery">, targetId: string) {
+    return ctx.runQuery(this.component.lib.list, { targetId });
   }
 
-  async add(ctx: CtxWith<"runMutation">, text: string) {
+  async add(ctx: CtxWith<"runMutation">, text: string, targetId: string) {
     const userId = this.getUserIdCallback(ctx);
-    return ctx.runMutation(this.component.lib.add, { text, userId });
+    return ctx.runMutation(this.component.lib.add, { text, userId, targetId });
   }
 
-  async convertToPirateTalk(ctx: CtxWith<"runAction">, noteId: string) {
-    return ctx.runAction(this.component.lib.convertToPirateTalk, { noteId });
+  async convertToPirateTalk(ctx: CtxWith<"runAction">, commentId: string) {
+    return ctx.runAction(this.component.lib.convertToPirateTalk, { commentId });
   }
 
   /**
@@ -70,21 +70,21 @@ export class SampleComponent {
   api() {
     return {
       list: queryGeneric({
-        args: {},
-        handler: async (ctx) => {
-          return await this.list(ctx);
+        args: { targetId: v.string() },
+        handler: async (ctx, args) => {
+          return await this.list(ctx, args.targetId);
         },
       }),
       add: mutationGeneric({
-        args: { text: v.string() },
+        args: { text: v.string(), targetId: v.string() },
         handler: async (ctx, args) => {
-          return await this.add(ctx, args.text);
+          return await this.add(ctx, args.text, args.targetId);
         },
       }),
       convertToPirateTalk: actionGeneric({
-        args: { noteId: v.string() },
+        args: { commentId: v.string() },
         handler: async (ctx, args) => {
-          return await this.convertToPirateTalk(ctx, args.noteId);
+          return await this.convertToPirateTalk(ctx, args.commentId);
         },
       }),
     };
@@ -101,7 +101,7 @@ export class SampleComponent {
    *
    * const sampleComponent = new SampleComponent(components.sampleComponent);
    * sampleComponent.registerRoutes(http, {
-   *   path: "/notes/last",
+   *   path: "/comments/last",
    * });
    *
    * export default http;
@@ -110,7 +110,7 @@ export class SampleComponent {
   registerRoutes(
     http: HttpRouter,
     {
-      path = "/notes/last",
+      path = "/comments/last",
     }: {
       path?: string;
     } = {},
@@ -118,10 +118,24 @@ export class SampleComponent {
     http.route({
       path,
       method: "GET",
-      handler: httpActionGeneric(async (ctx, _request) => {
-        const notes = await ctx.runQuery(this.component.lib.list, {});
-        const lastNote = notes[0] ?? null;
-        return new Response(JSON.stringify(lastNote), {
+      handler: httpActionGeneric(async (ctx, request) => {
+        const targetId = new URL(request.url).searchParams.get("targetId");
+        if (!targetId) {
+          return new Response(
+            JSON.stringify({ error: "targetId parameter required" }),
+            {
+              status: 400,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            },
+          );
+        }
+        const comments = await ctx.runQuery(this.component.lib.list, {
+          targetId,
+        });
+        const lastComment = comments[0] ?? null;
+        return new Response(JSON.stringify(lastComment), {
           status: 200,
           headers: {
             "Content-Type": "application/json",
