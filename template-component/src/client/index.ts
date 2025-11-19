@@ -4,39 +4,11 @@ import {
   mutationGeneric,
   queryGeneric,
 } from "convex/server";
-import type {
-  FunctionArgs,
-  FunctionReference,
-  FunctionReturnType,
-  HttpRouter,
-  UserIdentity,
-} from "convex/server";
+import type { HttpRouter } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 import type { CtxWith } from "./types.js";
-
-export type AnyQueryCtx = {
-  runQuery: <Query extends FunctionReference<"query", "internal">>(
-    query: Query,
-    args: FunctionArgs<Query>,
-  ) => Promise<FunctionReturnType<Query>>;
-  auth: {
-    getUserIdentity: () => Promise<UserIdentity | null>;
-  };
-};
-export type AnyMutationCtx = {
-  runQuery: <Query extends FunctionReference<"query", "internal">>(
-    query: Query,
-    args: FunctionArgs<Query>,
-  ) => Promise<FunctionReturnType<Query>>;
-  runMutation: <Mutation extends FunctionReference<"mutation", "internal">>(
-    mutation: Mutation,
-    args: FunctionArgs<Mutation>,
-  ) => Promise<FunctionReturnType<Mutation>>;
-  auth: {
-    getUserIdentity: () => Promise<UserIdentity | null>;
-  };
-};
+import type { MutationCtx, QueryCtx } from "../component/_generated/server.js";
 
 // See the example/convex/example.ts file for an example of how to use this component from a convex app.
 
@@ -45,13 +17,13 @@ export type AnyMutationCtx = {
 // issues where passing `components.foo` doesn't match the argument
 
 export class SampleComponent {
-  getUserIdCallback: (ctx: AnyQueryCtx) => string;
+  getUserIdCallback: (ctx: QueryCtx) => string;
   constructor(
     public component: ComponentApi,
     public options: {
       // Common parameters:
       // logLevel
-      getUserIdCallback: (ctx: AnyQueryCtx) => string;
+      getUserIdCallback: (ctx: QueryCtx) => string;
     },
   ) {
     this.getUserIdCallback = options.getUserIdCallback;
@@ -61,7 +33,7 @@ export class SampleComponent {
     return ctx.runQuery(this.component.lib.list, { targetId });
   }
 
-  async add(ctx: AnyMutationCtx, text: string, targetId: string) {
+  async add(ctx: MutationCtx, text: string, targetId: string) {
     const userId = this.getUserIdCallback(ctx);
     return ctx.runMutation(this.component.lib.add, { text, userId, targetId });
   }
