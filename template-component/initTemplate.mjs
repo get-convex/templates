@@ -253,38 +253,6 @@ async function setup() {
 
   console.log(`\n✅ Setup complete! Processed ${processedCount} files.`);
   console.log("\n📋 Next steps: check out README.md");
-
-  // Prompt to delete rename.mjs
-  const rl2 = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  const shouldDelete = await new Promise((resolve) => {
-    rl2.question(
-      "\n🗑️  Would you like to delete the rename.mjs file now? (y/N): ",
-      (answer) => {
-        resolve(
-          answer.toLowerCase().trim() === "y" ||
-            answer.toLowerCase().trim() === "yes",
-        );
-      },
-    );
-  });
-
-  rl2.close();
-
-  if (shouldDelete) {
-    try {
-      const { unlinkSync } = await import("fs");
-      unlinkSync("./rename.mjs");
-      console.log("✅ rename.mjs has been deleted.");
-    } catch (error) {
-      console.error("❌ Failed to delete rename.mjs:", error.message);
-    }
-  } else {
-    console.log("📝 rename.mjs kept. You can delete it manually when ready.");
-  }
 }
 
 // Run the setup

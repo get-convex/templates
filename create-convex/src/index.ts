@@ -295,11 +295,11 @@ async function init() {
     console.log(red("✖ Failed to install dependencies."));
   }
 
-  // Run rename.mjs for component projects
+  // Run initTemplate.mjs for component projects
   if (component) {
     try {
       console.log(`\n${green(`Configuring component...`)}\n`);
-      await runRenameMjs(root);
+      await runInitTemplate(root);
     } catch (error) {
       console.log(red("✖ Failed to configure component."));
       if (verbose) {
@@ -379,27 +379,37 @@ async function installDependencies(): Promise<void> {
   });
 }
 
-async function runRenameMjs(root: string): Promise<void> {
+async function runInitTemplate(root: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const renamePath = path.join(root, "rename.mjs");
+    const initTemplatePath = path.join(root, "initTemplate.mjs");
 
-    // Check if rename.mjs exists
-    if (!fs.existsSync(renamePath)) {
-      console.log("No rename.mjs found, skipping component configuration.");
+    // Check if initTemplate.mjs exists
+    if (!fs.existsSync(initTemplatePath)) {
+      console.log(
+        "No initTemplate.mjs found, skipping component configuration.",
+      );
       resolve();
       return;
     }
 
-    // Run node rename.mjs
-    const child = spawn("node", [renamePath], {
+    // Run node initTemplate.mjs
+    const child = spawn("node", [initTemplatePath], {
       cwd: root,
       stdio: "inherit",
     });
 
     child.on("close", (code) => {
       if (code !== 0) {
-        reject(new Error(`rename.mjs exited with code ${code}`));
+        reject(new Error(`initTemplate.mjs exited with code ${code}`));
         return;
+      }
+      // Delete initTemplate.mjs after successful completion
+      try {
+        fs.unlinkSync(initTemplatePath);
+      } catch (error) {
+        console.warn(
+          `Warning: Failed to delete initTemplate.mjs: ${(error as any).message}`,
+        );
       }
       resolve();
     });

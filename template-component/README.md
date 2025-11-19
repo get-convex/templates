@@ -4,9 +4,11 @@ This is a Convex component, ready to be published on npm.
 
 To create your own component:
 
-1. Run `node rename.mjs` to rename everything to your component's name.
-1. Write code in src/component for your component.
+1. Write code in src/component for your component. Component-specific tables,
+   queries, mutations, and actions go here.
 1. Write code in src/client for the Class that interfaces with the component.
+   This is the bridge your users will access to get information into and out of
+   your component
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
 1. Publish to npm with `npm run alpha` or `npm run release`.
