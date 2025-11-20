@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@convex-dev/eslint-plugin": "^1.0.0",
-    "@workos-inc/authkit-nextjs": "^2.7.1",
+    "@workos-inc/authkit-nextjs": "^2.11.1",
     "convex": "^1.29.1",
     "next": "15.4.7",
     "react": "^19.0.0",
