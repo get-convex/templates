@@ -44,9 +44,9 @@ export const testMutation = mutation({
 });
 
 export const testAction = action({
-  args: { text: v.string(), targetId: v.string() },
+  args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.add(ctx, args.text, args.targetId);
+    return await sampleComponent.convertToPirateTalk(ctx, args.commentId);
   },
 });
 
@@ -90,12 +90,13 @@ describe("SampleComponent thick client", () => {
   test("should work with action", async () => {
     const t = initConvexTest(schema);
     const targetId = "test-subject-1";
-    const commentId = await t.action(testApi.testAction, {
-      text: "  Action comment  ",
+    const commentId = await t.mutation(testApi.testMutation, {
+      text: "Test comment",
       targetId,
     });
-    expect(commentId).toBeDefined();
-    const comments = await t.query(testApi.testQuery, { targetId });
-    expect(comments[0].text).toBe("Action comment");
+    const translatedComment = await t.action(testApi.testAction, {
+      commentId: commentId,
+    });
+    expect(translatedComment).toBeDefined();
   });
 });
