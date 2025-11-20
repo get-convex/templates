@@ -152,6 +152,7 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: |
           if jq -e '.scripts.build' package.json > /dev/null; then
+            npm install
             npm run build
           else
             echo "No build script found, skipping"
