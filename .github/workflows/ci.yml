@@ -18,7 +18,7 @@ jobs:
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # When adding a template, please update the next two steps in this file,
       # as well as `TEMPLATES_IN_REPO` in create-convex/src/index.ts
@@ -123,7 +123,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
