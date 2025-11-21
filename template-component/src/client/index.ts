@@ -46,7 +46,7 @@ export class SampleComponent {
    * For easy re-exporting.
    * Apps can do
    * ```ts
-   * export const { list, add, addWithValidation } = sampleComponent.api();
+   * export const { list, add, convertToPirateTalk } = sampleComponent.api();
    * ```
    */
   api() {
