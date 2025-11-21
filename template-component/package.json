@@ -18,7 +18,7 @@
     "dev:backend": "convex dev --typecheck-components",
     "dev:frontend": "cd example && vite --clearScreen false",
     "dev:build": "chokidar 'tsconfig*.json' 'src/**/*.ts' -i '**/*.test.ts' -c 'convex codegen --component-dir ./src/component && npm run build' --initial",
-    "predev": "npm run dev:backend -- --until-success",
+    "predev": "npm run build; npm run dev:backend -- --until-success --typecheck disable",
     "clean": "rm -rf dist *.tsbuildinfo",
     "build": "tsc --project ./tsconfig.build.json",
     "typecheck": "tsc --noEmit && tsc -p example && tsc -p example/convex",
@@ -28,9 +28,10 @@
     "test:watch": "vitest --typecheck --clearScreen false",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:coverage": "vitest run --coverage --coverage.reporter=text",
-    "prepare": "npm run build",
-    "alpha": "npm run clean && npm ci && run-p test lint typecheck && npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
-    "release": "npm run clean && npm ci && run-p test lint typecheck && npm version patch && npm publish && git push --tags",
+    "prepublishOnly": "npm run build",
+    "preversion": "npm run clean && npm ci && run-p test lint typecheck",
+    "alpha": "npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
+    "release": "npm version patch && npm publish && git push --tags",
     "version": "pbcopy <<<$npm_package_version; vim CHANGELOG.md && prettier -w CHANGELOG.md && git add CHANGELOG.md"
   },
   "files": [
