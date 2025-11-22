@@ -62,14 +62,16 @@ npm version prerelease --preid alpha
 npm publish --tag alpha
 ```
 
-### Changelog
+## Package scripts for releasing
 
-To edit the changelog while changing the version, you can add this to your
-`package.json` scripts:
+Some package scripts that are useful for doing releases:
 
-```json
-"version": "vim CHANGELOG.md && prettier -w CHANGELOG.md && git add CHANGELOG.md"
+```
+    "preversion": "npm run clean && npm ci && run-p test lint typecheck",
+    "alpha": "npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
+    "release": "npm version patch && npm publish && git push --tags",
+    "version": "vim -c 'normal o' -c 'normal o## '$npm_package_version CHANGELOG.md && prettier -w CHANGELOG.md && git add CHANGELOG.md"
 ```
 
-It will open the changelog in vim and then save it before committing the new
-version.
+The version script will open the changelog in vim and then save it before
+committing the new version.
