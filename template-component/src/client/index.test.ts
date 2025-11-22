@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { ShardedCounter } from "./index.js";
+import { SampleComponent } from "./index.js";
 import type { DataModelFromSchemaDefinition } from "convex/server";
 import {
   anyApi,
@@ -25,32 +25,28 @@ const query = queryGeneric as QueryBuilder<DataModel, "public">;
 const mutation = mutationGeneric as MutationBuilder<DataModel, "public">;
 const action = actionGeneric as ActionBuilder<DataModel, "public">;
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {
-  shards: {
-    beans: 1,
-    friends: 2,
-  },
-  defaultShards: 1,
+const sampleComponent = new SampleComponent(components.sampleComponent, {
+  getUserIdCallback: () => "user1",
 });
 
 export const testQuery = query({
-  args: { name: v.string() },
+  args: { targetId: v.string() },
   handler: async (ctx, args) => {
-    return await shardedCounter.count(ctx, args.name);
+    return await sampleComponent.list(ctx, args.targetId);
   },
 });
 
 export const testMutation = mutation({
-  args: { name: v.string(), count: v.number() },
+  args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await shardedCounter.add(ctx, args.name, args.count);
+    return await sampleComponent.add(ctx, args.text, args.targetId);
   },
 });
 
 export const testAction = action({
-  args: { name: v.string(), count: v.number() },
+  args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await shardedCounter.add(ctx, args.name, args.count);
+    return await sampleComponent.convertToPirateTalk(ctx, args.commentId);
   },
 });
 
@@ -62,7 +58,7 @@ const testApi: ApiFromModules<{
   };
 }>["fns"] = anyApi["index.test"] as any;
 
-describe("ShardedCounter thick client", () => {
+describe("SampleComponent thick client", () => {
   beforeEach(async () => {
     vi.useFakeTimers();
   });
@@ -70,19 +66,37 @@ describe("ShardedCounter thick client", () => {
     vi.useRealTimers();
   });
   test("should make thick client", async () => {
-    const c = new ShardedCounter(components.shardedCounter);
+    const c = new SampleComponent(components.sampleComponent, {
+      getUserIdCallback: () => "user1",
+    });
     const t = initConvexTest(schema);
+    const targetId = "test-subject-1";
     await t.run(async (ctx) => {
-      await c.add(ctx, "beans", 1);
-      expect(await c.count(ctx, "beans")).toBe(1);
+      await c.add(ctx, "My first comment", targetId);
+      const comments = await c.list(ctx, targetId);
+      expect(comments).toHaveLength(1);
+      expect(comments[0].text).toBe("My first comment");
     });
   });
   test("should work from a test function", async () => {
     const t = initConvexTest(schema);
-    const result = await t.mutation(testApi.testMutation, {
-      name: "beans",
-      count: 1,
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(testApi.testMutation, {
+      text: "Test comment",
+      targetId,
     });
-    expect(result).toBe(null);
+    expect(commentId).toBeDefined();
+  });
+  test("should work with action", async () => {
+    const t = initConvexTest(schema);
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(testApi.testMutation, {
+      text: "Test comment",
+      targetId,
+    });
+    const translatedComment = await t.action(testApi.testAction, {
+      commentId: commentId,
+    });
+    expect(translatedComment).toBeDefined();
   });
 });

@@ -4,9 +4,11 @@ This is a Convex component, ready to be published on npm.
 
 To create your own component:
 
-1. Run `node rename.mjs` to rename everything to your component's name.
-1. Write code in src/component for your component.
+1. Write code in src/component for your component. Component-specific tables,
+   queries, mutations, and actions go here.
 1. Write code in src/client for the Class that interfaces with the component.
+   This is the bridge your users will access to get information into and out of
+   your component
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
 1. Publish to npm with `npm run alpha` or `npm run release`.
@@ -65,9 +67,9 @@ package.json.
 
 ---
 
-# Convex Sharded Counter Component
+# Convex Sample Component
 
-[![npm version](https://badge.fury.io/js/@example%2Fsharded-counter.svg)](https://badge.fury.io/js/@example%2Fsharded-counter)
+[![npm version](https://badge.fury.io/js/@example%2Fsample-component.svg)](https://badge.fury.io/js/@example%2Fsample-component)
 
 <!-- START: Include on https://convex.dev/components -->
 
@@ -76,7 +78,7 @@ package.json.
 - [ ] Links to docs / other resources?
 
 Found a bug? Feature request?
-[File it here](https://github.com/example-org/sharded-counter/issues).
+[File it here](https://github.com/example-org/sample-component/issues).
 
 ## Pre-requisite: Convex
 
@@ -92,7 +94,7 @@ Run `npm create convex` or follow any of the
 Install the component package:
 
 ```sh
-npm install @example/sharded-counter
+npm install @example/sample-component
 ```
 
 Create a `convex.config.ts` file in your app's `convex/` folder and install the
@@ -101,10 +103,10 @@ component by calling `use`:
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import shardedCounter from "@example/sharded-counter/convex.config.js";
+import sampleComponent from "@example/sample-component/convex.config.js";
 
 const app = defineApp();
-app.use(shardedCounter);
+app.use(sampleComponent);
 
 export default app;
 ```
@@ -113,14 +115,37 @@ export default app;
 
 ```ts
 import { components } from "./_generated/api";
-import { ShardedCounter } from "@example/sharded-counter";
+import { SampleComponent } from "@example/sample-component";
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {
+const sampleComponent = new SampleComponent(components.sampleComponent, {
   ...options,
 });
 ```
 
 See more example usage in [example.ts](./example/convex/example.ts).
+
+### HTTP Routes
+
+You can register HTTP routes for the component to expose HTTP endpoints:
+
+```ts
+import { httpRouter } from "convex/server";
+import { components } from "./_generated/api";
+import { sampleComponent } from "./example.js";
+
+const http = httpRouter();
+
+// Register HTTP routes for the component
+sampleComponent.registerRoutes(http, {
+  path: "/comments/last", // optional, defaults to "/comments/last"
+});
+
+export default http;
+```
+
+This will expose a GET endpoint that returns the most recent comment as JSON.
+The endpoint requires a `targetId` query parameter. See
+[http.ts](./example/convex/http.ts) for a complete example.
 
 <!-- END: Include on https://convex.dev/components -->
 

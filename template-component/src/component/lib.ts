@@ -1,41 +1,123 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server.js";
+import { httpActionGeneric } from "convex/server";
+import {
+  action,
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server.js";
+import { api, internal } from "./_generated/api.js";
 
-export const add = mutation({
+export const list = query({
   args: {
-    name: v.string(),
-    count: v.number(),
-    shards: v.optional(v.number()),
+    targetId: v.string(),
   },
-  returns: v.null(),
+  returns: v.array(
+    v.object({
+      _id: v.id("comments"),
+      text: v.string(),
+      userId: v.string(),
+      targetId: v.string(),
+      _creationTime: v.number(),
+    }),
+  ),
   handler: async (ctx, args) => {
-    const shard = Math.floor(Math.random() * (args.shards ?? 1));
-    const counter = await ctx.db
-      .query("counters")
-      .withIndex("name", (q) => q.eq("name", args.name).eq("shard", shard))
-      .unique();
-    if (counter) {
-      await ctx.db.patch(counter._id, {
-        value: counter.value + args.count,
-      });
-    } else {
-      await ctx.db.insert("counters", {
-        name: args.name,
-        value: args.count,
-        shard,
-      });
-    }
+    return await ctx.db
+      .query("comments")
+      .withIndex("targetId", (q) => q.eq("targetId", args.targetId))
+      .order("desc")
+      .collect();
   },
 });
 
-export const count = query({
-  args: { name: v.string() },
-  returns: v.number(),
-  handler: async (ctx, args) => {
-    const counters = await ctx.db
-      .query("counters")
-      .withIndex("name", (q) => q.eq("name", args.name))
-      .collect();
-    return counters.reduce((sum, counter) => sum + counter.value, 0);
+export const getComment = internalQuery({
+  args: {
+    commentId: v.id("comments"),
   },
+  returns: v.union(
+    v.null(),
+    v.object({
+      _id: v.id("comments"),
+      text: v.string(),
+      userId: v.string(),
+      targetId: v.string(),
+      _creationTime: v.number(),
+    }),
+  ),
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.commentId);
+  },
+});
+export const add = mutation({
+  args: {
+    text: v.string(),
+    userId: v.string(),
+    targetId: v.string(),
+  },
+  returns: v.id("comments"),
+  handler: async (ctx, args) => {
+    const commentId = await ctx.db.insert("comments", {
+      text: args.text,
+      userId: args.userId,
+      targetId: args.targetId,
+    });
+    return commentId;
+  },
+});
+export const updateComment = internalMutation({
+  args: {
+    commentId: v.id("comments"),
+    text: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.commentId, { text: args.text });
+  },
+});
+
+export const convertToPirateTalk = action({
+  args: {
+    commentId: v.id("comments"),
+  },
+  returns: v.string(),
+  handler: async (ctx, args) => {
+    const comment = (await ctx.runQuery(internal.lib.getComment, {
+      commentId: args.commentId,
+    })) as { text: string; userId: string } | null;
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+    const response = await fetch(
+      `https://pirate.monkeyness.com/api/translate?english=${encodeURIComponent(comment.text)}`,
+    );
+    const data = await response.text();
+    await ctx.runMutation(internal.lib.updateComment, {
+      commentId: args.commentId,
+      text: data,
+    });
+    return data;
+  },
+});
+
+export const getLastComment = httpActionGeneric(async (ctx, _request) => {
+  const targetId = new URL(_request.url).searchParams.get("targetId");
+  if (!targetId) {
+    return new Response(
+      JSON.stringify({ error: "targetId parameter required" }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  }
+  const comments = await ctx.runQuery(api.lib.list, { targetId });
+  const lastComment = comments[0] ?? null;
+  return new Response(JSON.stringify(lastComment), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 });
