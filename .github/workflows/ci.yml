@@ -141,7 +141,7 @@ jobs:
 
       - name: Setup Bun
         if: matrix.use_bun == true
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
 
       - name: Install Bun dependencies
         if: matrix.use_bun == true
