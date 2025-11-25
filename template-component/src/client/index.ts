@@ -35,7 +35,7 @@ export class SampleComponent {
   }
 
   async list(ctx: QueryCtx | MutationCtx | ActionCtx, targetId: string) {
-    return ctx.runQuery(this.component.lib.list, { targetId });
+    return await ctx.runQuery(this.component.lib.list, { targetId });
   }
 
   async add(
@@ -46,7 +46,7 @@ export class SampleComponent {
       text: string;
     },
   ) {
-    return ctx.runMutation(this.component.lib.add, {
+    return await ctx.runMutation(this.component.lib.add, {
       text: args.text,
       userId: args.userId,
       targetId: args.targetId,
@@ -54,7 +54,7 @@ export class SampleComponent {
   }
 
   async translate(ctx: ActionCtx, commentId: string) {
-    return ctx.runAction(this.component.lib.translate, {
+    return await ctx.runAction(this.component.lib.translate, {
       baseUrl: this.baseUrl,
       commentId,
     });
