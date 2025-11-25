@@ -1,11 +1,4 @@
-import {
-  action,
-  ActionCtx,
-  mutation,
-  MutationCtx,
-  query,
-  QueryCtx,
-} from "./_generated/server.js";
+import { action, mutation, query } from "./_generated/server.js";
 import { components } from "./_generated/api.js";
 import { SampleComponent } from "@example/sample-component";
 import { v } from "convex/values";
@@ -25,7 +18,7 @@ export const addComment = mutation({
   },
 });
 
-// Example of
+// Example of calling the component's raw API directly.
 export const listComments = query({
   args: { targetId: v.string() },
   handler: async (ctx, args) => {
@@ -47,7 +40,7 @@ export const translateComment = action({
 export const { list, add, translate } = sampleComponent.api({
   auth: async (ctx, operation) => {
     const userId = await getAuthUserId(ctx);
-    if (userId === null) {
+    if (userId === null && operation.type !== "read") {
       throw new Error("Unauthorized");
     }
     return userId;
