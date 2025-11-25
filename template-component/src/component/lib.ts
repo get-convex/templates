@@ -8,21 +8,19 @@ import {
   query,
 } from "./_generated/server.js";
 import { api, internal } from "./_generated/api.js";
+import schema from "./schema.js";
+
+const commentValidator = schema.tables.comments.validator.extend({
+  _id: v.id("comments"),
+  _creationTime: v.number(),
+});
 
 export const list = query({
   args: {
     targetId: v.string(),
     limit: v.optional(v.number()),
   },
-  returns: v.array(
-    v.object({
-      _id: v.id("comments"),
-      text: v.string(),
-      userId: v.string(),
-      targetId: v.string(),
-      _creationTime: v.number(),
-    }),
-  ),
+  returns: v.array(commentValidator),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("comments")
@@ -36,16 +34,7 @@ export const getComment = internalQuery({
   args: {
     commentId: v.id("comments"),
   },
-  returns: v.union(
-    v.null(),
-    v.object({
-      _id: v.id("comments"),
-      text: v.string(),
-      userId: v.string(),
-      targetId: v.string(),
-      _creationTime: v.number(),
-    }),
-  ),
+  returns: v.union(v.null(), commentValidator),
   handler: async (ctx, args) => {
     return await ctx.db.get(args.commentId);
   },
