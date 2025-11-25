@@ -111,7 +111,7 @@ function App() {
 
   return (
     <>
-      <h1>Sample Component Example</h1>
+      <h1>Example App</h1>
       <div className="card">
         {blogPosts.map((post) => (
           <div
