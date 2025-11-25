@@ -304,7 +304,7 @@ async function init() {
   // Run initTemplate.mjs for component projects
   if (component) {
     try {
-      console.log(`\n${green(`Configuring component...`)}\n`);
+      console.log(`\nConfiguring component...\n`);
       await runInitTemplate(root);
     } catch (error) {
       console.log(red("✖ Failed to configure component."));
