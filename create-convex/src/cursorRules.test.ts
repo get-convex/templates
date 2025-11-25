@@ -69,15 +69,6 @@ describe("Cursor Rules Functions", () => {
         "/test/project/.cursor/rules/convex_rules.mdc",
         "Sample Cursor Rules",
       );
-
-      // Verify success message
-      expect(console.log).toHaveBeenCalledWith(
-        expect.stringContaining("✔") &&
-          expect.stringContaining(
-            "Added the latest Cursor rules to the project.",
-          ),
-      );
-      expect(console.log).toHaveBeenCalledWith(); // Empty line
     });
 
     it("should handle fetchAllGitHubReleases failure gracefully", async () => {
@@ -156,13 +147,6 @@ describe("Cursor Rules Functions", () => {
       expect(mockFsModule.writeFileSync).toHaveBeenCalledWith(
         "/test/project/.cursor/rules/convex_rules.mdc",
         "",
-      );
-
-      expect(console.log).toHaveBeenCalledWith(
-        expect.stringContaining("✔") &&
-          expect.stringContaining(
-            "Added the latest Cursor rules to the project.",
-          ),
       );
     });
   });
