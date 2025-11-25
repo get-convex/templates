@@ -1,5 +1,6 @@
 import { httpRouter } from "convex/server";
-import { sampleComponent } from "./example.js";
+import { registerRoutes } from "@example/sample-component";
+import { components } from "./_generated/api";
 
 const http = httpRouter();
 
@@ -7,8 +8,8 @@ const http = httpRouter();
 
 // Register HTTP routes for the component
 // This will expose a GET endpoint at /comments/last that returns the most recent comment
-sampleComponent.registerRoutes(http, {
-  path: "/comments/last",
+registerRoutes(http, components.sampleComponent, {
+  pathPrefix: "/comments",
 });
 
 // You can also register routes at different paths

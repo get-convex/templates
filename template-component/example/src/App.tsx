@@ -26,7 +26,7 @@ const blogPosts = [
 function BlogPostComments({ postId }: { postId: string }) {
   const comments = useQuery(api.example.list, { targetId: postId });
   const addComment = useMutation(api.example.add);
-  const convertToPirateTalk = useAction(api.example.convertToPirateTalk);
+  const translateComment = useAction(api.example.translateComment);
   const [commentText, setCommentText] = useState("");
 
   const handleAddComment = () => {
@@ -36,8 +36,8 @@ function BlogPostComments({ postId }: { postId: string }) {
     }
   };
 
-  const handleConvertToPirateTalk = async (commentId: string) => {
-    await convertToPirateTalk({ commentId });
+  const handleTranslateComment = async (commentId: string) => {
+    await translateComment({ commentId });
   };
 
   return (
@@ -45,7 +45,7 @@ function BlogPostComments({ postId }: { postId: string }) {
       style={{
         marginTop: "1.5rem",
         padding: "1rem",
-        border: "1px solid #ddd",
+        border: "1px solid rgba(128, 128, 128, 0.3)",
         borderRadius: "8px",
       }}
     >
@@ -73,13 +73,13 @@ function BlogPostComments({ postId }: { postId: string }) {
               alignItems: "center",
               gap: "0.5rem",
               padding: "0.5rem",
-              backgroundColor: "#f9f9f9",
+              backgroundColor: "rgba(128, 128, 128, 0.1)",
               borderRadius: "4px",
             }}
           >
             <span style={{ flex: 1 }}>{comment.text}</span>
             <button
-              onClick={() => handleConvertToPirateTalk(comment._id)}
+              onClick={() => handleTranslateComment(comment._id)}
               style={{
                 padding: "0.25rem 0.5rem",
                 fontSize: "0.75rem",
@@ -90,12 +90,14 @@ function BlogPostComments({ postId }: { postId: string }) {
                 cursor: "pointer",
               }}
             >
-              🏴‍☠️ Convert to Pirate Talk
+              🏴‍☠️ Translate to Pirate Talk
             </button>
           </li>
         ))}
         {comments?.length === 0 && (
-          <li style={{ color: "#666", fontStyle: "italic" }}>
+          <li
+            style={{ color: "rgba(128, 128, 128, 0.8)", fontStyle: "italic" }}
+          >
             No comments yet. Be the first to comment!
           </li>
         )}
@@ -119,7 +121,7 @@ function App() {
             style={{
               marginBottom: "2rem",
               padding: "1.5rem",
-              border: "1px solid #e0e0e0",
+              border: "1px solid rgba(128, 128, 128, 0.3)",
               borderRadius: "8px",
             }}
           >
@@ -127,7 +129,7 @@ function App() {
             <div
               style={{
                 marginBottom: "0.5rem",
-                color: "#666",
+                color: "rgba(128, 128, 128, 0.8)",
                 fontSize: "0.9rem",
               }}
             >
@@ -143,7 +145,7 @@ function App() {
           style={{
             marginTop: "1.5rem",
             padding: "1rem",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "rgba(128, 128, 128, 0.1)",
             borderRadius: "8px",
           }}
         >
@@ -151,7 +153,14 @@ function App() {
           <p style={{ fontSize: "0.9rem", marginBottom: "0.5rem" }}>
             The component exposes an HTTP endpoint to get the latest comment:
           </p>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
             {blogPosts.map((post) => {
               const httpUrl =
                 convexUrl +

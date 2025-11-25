@@ -31,17 +31,10 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         string,
         Name
       >;
-      convertToPirateTalk: FunctionReference<
-        "action",
-        "internal",
-        { commentId: string },
-        string,
-        Name
-      >;
       list: FunctionReference<
         "query",
         "internal",
-        { targetId: string },
+        { limit?: number; targetId: string },
         Array<{
           _creationTime: number;
           _id: string;
@@ -49,6 +42,13 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
           text: string;
           userId: string;
         }>,
+        Name
+      >;
+      translate: FunctionReference<
+        "action",
+        "internal",
+        { baseUrl: string; commentId: string },
+        string,
         Name
       >;
     };

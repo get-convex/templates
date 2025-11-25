@@ -13,10 +13,14 @@ describe("component lib", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-  test("add and list comments", async () => {
+  test("example lib test", async () => {
     const t = convexTest(schema, modules);
     const targetId = "test-subject-1";
-    const commentId = await t.mutation(api.lib.add, { text: "Hello, world!", userId: "user1", targetId });
+    const commentId = await t.mutation(api.lib.add, {
+      text: "Hello, world!",
+      userId: "user1",
+      targetId,
+    });
     expect(commentId).toBeDefined();
     const comments = await t.query(api.lib.list, { targetId });
     expect(comments).toHaveLength(1);

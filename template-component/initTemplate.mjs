@@ -113,7 +113,6 @@ function replaceInFile(filePath, replacements) {
 
     if (hasChanges) {
       writeFileSync(filePath, content, "utf8");
-      console.log(`Updated: ${filePath}`);
     }
   } catch (error) {
     // Skip files that can't be read as text
@@ -193,16 +192,6 @@ async function setup() {
     title: toTitleCase(componentName),
   };
 
-  console.log("\n📝 Component name variations:");
-  console.log(`  PascalCase: ${cases.pascal}`);
-  console.log(`  camelCase: ${cases.camel}`);
-  console.log(`  kebab-case: ${cases.kebab}`);
-  console.log(`  snake_case: ${cases.snake}`);
-  console.log(`  space case: ${cases.space}`);
-  console.log(`  Title Case: ${cases.title}`);
-  console.log(`  NPM package: ${npmPackageName}`);
-  console.log(`  Repository: ${repoName}\n`);
-
   // Define all replacements
   const replacements = [
     // NPM package name
@@ -230,18 +219,11 @@ async function setup() {
 
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
   if (packageJson.name !== npmPackageName) {
-    console.log(
-      `Updating package.json name from ${packageJson.name} to ${npmPackageName}...`,
-    );
     packageJson.name = npmPackageName;
     writeFileSync("package.json", JSON.stringify(packageJson, null, 2), "utf8");
   }
 
-  console.log("🔍 Finding files to update...");
   const files = getAllFiles(".");
-  console.log(`Found ${files.length} files to process.\n`);
-
-  console.log("🔄 Processing files...");
   let processedCount = 0;
 
   for (const file of files) {
@@ -249,8 +231,7 @@ async function setup() {
     processedCount++;
   }
 
-  console.log(`\n✅ Setup complete! Processed ${processedCount} files.`);
-  console.log("\n📋 Next steps: check out README.md");
+  console.log("\n📋 Check out the README.md");
 }
 
 // Run the setup

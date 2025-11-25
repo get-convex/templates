@@ -24,7 +24,7 @@ describe("example", () => {
     expect(comments[0].text).toBe("My comment");
   });
 
-  test("convertToPirateTalkAction", async () => {
+  test("translateComment", async () => {
     const t = initConvexTest();
     const targetId = "test-subject-1";
     const commentId = await t.mutation(api.example.addComment, {
@@ -32,7 +32,7 @@ describe("example", () => {
       targetId,
     });
     expect(commentId).toBeDefined();
-    await t.action(api.example.convertToPirateTalkAction, {
+    await t.action(api.example.translateComment, {
       commentId: commentId,
     });
     const comments = await t.query(api.example.listComments, { targetId });

@@ -46,7 +46,7 @@ export const testMutation = mutation({
 export const testAction = action({
   args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.convertToPirateTalk(ctx, args.commentId);
+    return await sampleComponent.translate(ctx, args.commentId);
   },
 });
 

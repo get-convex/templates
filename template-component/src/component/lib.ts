@@ -12,6 +12,7 @@ import { api, internal } from "./_generated/api.js";
 export const list = query({
   args: {
     targetId: v.string(),
+    limit: v.optional(v.number()),
   },
   returns: v.array(
     v.object({
@@ -27,7 +28,7 @@ export const list = query({
       .query("comments")
       .withIndex("targetId", (q) => q.eq("targetId", args.targetId))
       .order("desc")
-      .collect();
+      .take(args.limit ?? 100);
   },
 });
 
@@ -75,9 +76,10 @@ export const updateComment = internalMutation({
   },
 });
 
-export const convertToPirateTalk = action({
+export const translate = action({
   args: {
     commentId: v.id("comments"),
+    baseUrl: v.string(),
   },
   returns: v.string(),
   handler: async (ctx, args) => {
@@ -88,7 +90,7 @@ export const convertToPirateTalk = action({
       throw new Error("Comment not found");
     }
     const response = await fetch(
-      `https://pirate.monkeyness.com/api/translate?english=${encodeURIComponent(comment.text)}`,
+      `${args.baseUrl}/api/translate?english=${encodeURIComponent(comment.text)}`,
     );
     const data = await response.text();
     await ctx.runMutation(internal.lib.updateComment, {
