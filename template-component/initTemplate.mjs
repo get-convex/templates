@@ -125,8 +125,6 @@ function replaceInFile(filePath, replacements) {
 
 // Main setup function
 async function setup() {
-  console.log("🚀 Convex Component Setup\n");
-
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,

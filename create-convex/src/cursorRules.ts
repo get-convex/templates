@@ -22,5 +22,4 @@ export async function writeCursorRules(root: string) {
     rules,
   );
   console.log(`${green("✔")} Added the latest Cursor rules to the project.`);
-  console.log();
 }

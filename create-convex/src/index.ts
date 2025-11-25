@@ -289,8 +289,8 @@ async function init() {
     process.chdir(root);
   }
   try {
+    console.log(`Installing dependencies with ${packageManager}...`);
     await installDependencies();
-    console.log(`\n${green(`✔`)} Done.`);
   } catch (error) {
     console.log(red("✖ Failed to install dependencies."));
   }
