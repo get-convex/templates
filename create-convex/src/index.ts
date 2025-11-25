@@ -89,14 +89,20 @@ init().catch((e) => {
 
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
-  const argTemplate = argv.template || argv.t;
-  if (typeof argTemplate === "boolean") {
+  const argTemplateRaw = argv.template || argv.t;
+  if (typeof argTemplateRaw === "boolean") {
     throw new Error(
       red("✖") + " No template provided to -`t` or `--template`",
     );
   }
+  if (argTemplateRaw && argv.component) {
+    throw new Error(
+      red("✖") + " Cannot use -`t` or `--template` with `--component`",
+    );
+  }
+  const component = argTemplateRaw === "component" || !!argv.component;
+  const argTemplate = component ? "component" : argTemplateRaw;
   const verbose = !!argv.verbose;
-  const component = !!argv.component;
   const withVercelJson = !!argv["with-vercel-json"];
 
   let targetDir = argTargetDir || defaultTargetDir;
