@@ -8,14 +8,16 @@ const blogPosts = [
   {
     id: "blog-post-1",
     title: "Getting Started with Convex Components",
-    content: "Convex components are a powerful way to build reusable functionality that can be shared across different applications. In this post, we'll explore how to create and use components in your Convex applications.",
+    content:
+      "Convex components are a powerful way to build reusable functionality that can be shared across different applications. In this post, we'll explore how to create and use components in your Convex applications.",
     author: "Jane Doe",
     date: "2024-01-15",
   },
   {
     id: "blog-post-2",
     title: "Building Scalable Comment Systems",
-    content: "Comments are a fundamental feature of many web applications. Learn how to build a scalable comment system using Convex components that can handle thousands of comments efficiently.",
+    content:
+      "Comments are a fundamental feature of many web applications. Learn how to build a scalable comment system using Convex components that can handle thousands of comments efficiently.",
     author: "John Smith",
     date: "2024-01-20",
   },
@@ -39,8 +41,17 @@ function BlogPostComments({ postId }: { postId: string }) {
   };
 
   return (
-    <div style={{ marginTop: "1.5rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "8px" }}>
-      <h4 style={{ marginTop: 0, marginBottom: "1rem" }}>Comments ({comments?.length ?? 0})</h4>
+    <div
+      style={{
+        marginTop: "1.5rem",
+        padding: "1rem",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+      }}
+    >
+      <h4 style={{ marginTop: 0, marginBottom: "1rem" }}>
+        Comments ({comments?.length ?? 0})
+      </h4>
       <div style={{ marginBottom: "1rem" }}>
         <input
           type="text"
@@ -54,18 +65,29 @@ function BlogPostComments({ postId }: { postId: string }) {
       </div>
       <ul style={{ textAlign: "left", listStyle: "none", padding: 0 }}>
         {comments?.map((comment) => (
-          <li key={comment._id} style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem", backgroundColor: "#f9f9f9", borderRadius: "4px" }}>
+          <li
+            key={comment._id}
+            style={{
+              marginBottom: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              padding: "0.5rem",
+              backgroundColor: "#f9f9f9",
+              borderRadius: "4px",
+            }}
+          >
             <span style={{ flex: 1 }}>{comment.text}</span>
-            <button 
+            <button
               onClick={() => handleConvertToPirateTalk(comment._id)}
-              style={{ 
-                padding: "0.25rem 0.5rem", 
+              style={{
+                padding: "0.25rem 0.5rem",
                 fontSize: "0.75rem",
                 backgroundColor: "#ff9800",
                 color: "white",
                 border: "none",
                 borderRadius: "4px",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               🏴‍☠️ Convert to Pirate Talk
@@ -73,7 +95,9 @@ function BlogPostComments({ postId }: { postId: string }) {
           </li>
         ))}
         {comments?.length === 0 && (
-          <li style={{ color: "#666", fontStyle: "italic" }}>No comments yet. Be the first to comment!</li>
+          <li style={{ color: "#666", fontStyle: "italic" }}>
+            No comments yet. Be the first to comment!
+          </li>
         )}
       </ul>
     </div>
@@ -83,44 +107,69 @@ function BlogPostComments({ postId }: { postId: string }) {
 function App() {
   // Construct the HTTP endpoint URL
   // Replace .convex.cloud with .convex.site for HTTP endpoints
-  const convexUrl = (import.meta.env.VITE_CONVEX_URL).replace(".cloud", ".site");
+  const convexUrl = import.meta.env.VITE_CONVEX_URL.replace(".cloud", ".site");
 
   return (
     <>
       <h1>Sample Component Example</h1>
       <div className="card">
         {blogPosts.map((post) => (
-          <div key={post.id} style={{ marginBottom: "2rem", padding: "1.5rem", border: "1px solid #e0e0e0", borderRadius: "8px" }}>
+          <div
+            key={post.id}
+            style={{
+              marginBottom: "2rem",
+              padding: "1.5rem",
+              border: "1px solid #e0e0e0",
+              borderRadius: "8px",
+            }}
+          >
             <h2 style={{ marginTop: 0 }}>{post.title}</h2>
-            <div style={{ marginBottom: "0.5rem", color: "#666", fontSize: "0.9rem" }}>
+            <div
+              style={{
+                marginBottom: "0.5rem",
+                color: "#666",
+                fontSize: "0.9rem",
+              }}
+            >
               By {post.author} • {post.date}
             </div>
-            <p style={{ lineHeight: "1.6", marginBottom: "1rem" }}>{post.content}</p>
+            <p style={{ lineHeight: "1.6", marginBottom: "1rem" }}>
+              {post.content}
+            </p>
             <BlogPostComments postId={post.id} />
           </div>
         ))}
-        <div style={{ marginTop: "1.5rem", padding: "1rem", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
+        <div
+          style={{
+            marginTop: "1.5rem",
+            padding: "1rem",
+            backgroundColor: "#f5f5f5",
+            borderRadius: "8px",
+          }}
+        >
           <h3>HTTP Endpoint Demo</h3>
           <p style={{ fontSize: "0.9rem", marginBottom: "0.5rem" }}>
             The component exposes an HTTP endpoint to get the latest comment:
           </p>
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {blogPosts.map((post) => {
-              const httpUrl = convexUrl + `/comments/last?targetId=${encodeURIComponent(post.id)}`;
+              const httpUrl =
+                convexUrl +
+                `/comments/last?targetId=${encodeURIComponent(post.id)}`;
               return (
-                <a 
+                <a
                   key={post.id}
-                  href={httpUrl} 
-                  target="_blank" 
+                  href={httpUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  style={{ 
+                  style={{
                     display: "inline-block",
-                    padding: "0.5rem 1rem", 
-                    backgroundColor: "#007bff", 
-                    color: "white", 
+                    padding: "0.5rem 1rem",
+                    backgroundColor: "#007bff",
+                    color: "white",
                     textDecoration: "none",
                     borderRadius: "4px",
-                    fontSize: "0.9rem"
+                    fontSize: "0.9rem",
                   }}
                 >
                   {post.title} - HTTP Endpoint
@@ -129,7 +178,8 @@ function App() {
             })}
           </div>
           <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.5rem" }}>
-            See <code>example/convex/http.ts</code> for the HTTP route configuration
+            See <code>example/convex/http.ts</code> for the HTTP route
+            configuration
           </p>
         </div>
         <p>
