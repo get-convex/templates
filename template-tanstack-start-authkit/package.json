@@ -16,7 +16,7 @@
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "vite dev",
     "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
+    "predev": "convex dev --skip-push && convex dashboard",
     "build": "vite build",
     "start": "vite start",
     "format": "prettier --write .",
