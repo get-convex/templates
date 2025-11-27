@@ -67,6 +67,7 @@ npm publish --tag alpha
 Some package scripts that are useful for doing releases:
 
 ```
+    "prepublishOnly": "npm run clean && npm run build",
     "preversion": "npm run clean && npm ci && run-p test lint typecheck",
     "alpha": "npm version prerelease --preid alpha && npm publish --tag alpha && git push --tags",
     "release": "npm version patch && npm publish && git push --tags",
