@@ -1,16 +1,17 @@
 import { action, mutation, query } from "./_generated/server.js";
 import { components } from "./_generated/api.js";
-import { SampleComponent } from "@example/sample-component";
+import { exposeApi } from "@example/sample-component";
 import { v } from "convex/values";
 import { Auth } from "convex/server";
 
-export const sampleComponent = new SampleComponent(components.sampleComponent);
+// Environment variables aren't available in the component,
+// so we need to pass it in as an argument to the component when necessary.
+const BASE_URL = process.env.BASE_URL ?? "https://pirate.monkeyness.com";
 
-// Example of using the component's Class-based client
 export const addComment = mutation({
   args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.add(ctx, {
+    return await ctx.runMutation(components.sampleComponent.lib.add, {
       text: args.text,
       targetId: args.targetId,
       userId: await getAuthUserId(ctx),
@@ -18,7 +19,6 @@ export const addComment = mutation({
   },
 });
 
-// Example of calling the component's raw API directly.
 export const listComments = query({
   args: { targetId: v.string() },
   handler: async (ctx, args) => {
@@ -31,13 +31,16 @@ export const listComments = query({
 export const translateComment = action({
   args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await sampleComponent.translate(ctx, args.commentId);
+    return await ctx.runAction(components.sampleComponent.lib.translate, {
+      baseUrl: BASE_URL,
+      commentId: args.commentId,
+    });
   },
 });
 
 // Here is an alternative way to use the component's methods directly by re-exporting
 // the component's API:
-export const { list, add, translate } = sampleComponent.api({
+export const { list, add, translate } = exposeApi(components.sampleComponent, {
   auth: async (ctx, operation) => {
     const userId = await getAuthUserId(ctx);
     if (userId === null && operation.type !== "read") {
@@ -45,6 +48,7 @@ export const { list, add, translate } = sampleComponent.api({
     }
     return userId;
   },
+  baseUrl: BASE_URL,
 });
 
 // You can also register HTTP routes for the component. See http.ts for an example.

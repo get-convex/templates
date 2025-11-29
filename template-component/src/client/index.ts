@@ -17,55 +17,17 @@ import type { ComponentApi } from "../component/_generated/component.js";
 
 // See the example/convex/example.ts file for how to use this component.
 
-export class SampleComponent {
-  private baseUrl: string;
-  constructor(
-    public component: ComponentApi,
-    public options?: {
-      // Allows overriding the base URL for the component.
-      BASE_URL?: string;
-    },
-  ) {
-    this.baseUrl =
-      options?.BASE_URL ??
-      // process.env isn't available in the component,
-      // so we need to pass it in as an argument to translate.
-      process.env.BASE_URL ??
-      "https://pirate.monkeyness.com";
-  }
-
-  async list(ctx: QueryCtx | MutationCtx | ActionCtx, targetId: string) {
-    return await ctx.runQuery(this.component.lib.list, { targetId });
-  }
-
-  async add(
-    ctx: MutationCtx | ActionCtx,
-    args: {
-      targetId: string;
-      userId: string;
-      text: string;
-    },
-  ) {
-    return await ctx.runMutation(this.component.lib.add, {
-      text: args.text,
-      userId: args.userId,
-      targetId: args.targetId,
-    });
-  }
-
-  async translate(ctx: ActionCtx, commentId: string) {
-    return await ctx.runAction(this.component.lib.translate, {
-      baseUrl: this.baseUrl,
-      commentId,
-    });
-  }
-
-  /**
-   * For easy re-exporting of an API accessible from React clients.
-   * e.g. `export const { list, add, translate } = sampleComponent.api({ });`
-   * See example/convex/example.ts.
-   */
-  api(options: {
+/**
+ * For re-exporting of an API accessible from React clients.
+ * e.g. `export const { list, add, translate } =
+ * exposeApi(components.sampleComponent, {
+ *   auth: async (ctx, operation) => { ... },
+ * });`
+ * See example/convex/example.ts.
+ */
+export function exposeApi(
+  component: ComponentApi,
+  options: {
     /**
      * It's very important to authenticate any functions that users will export.
      * This function should return the authorized user's ID.
@@ -77,41 +39,47 @@ export class SampleComponent {
         | { type: "create"; targetId: string }
         | { type: "update"; commentId: string },
     ) => Promise<string>;
-  }) {
-    return {
-      list: queryGeneric({
-        args: { targetId: v.string() },
-        handler: async (ctx, args) => {
-          await options.auth(ctx, { type: "read", targetId: args.targetId });
-          return await this.list(ctx, args.targetId);
-        },
-      }),
-      add: mutationGeneric({
-        args: { text: v.string(), targetId: v.string() },
-        handler: async (ctx, args) => {
-          const userId = await options.auth(ctx, {
-            type: "create",
-            targetId: args.targetId,
-          });
-          return await this.add(ctx, {
-            text: args.text,
-            userId: userId,
-            targetId: args.targetId,
-          });
-        },
-      }),
-      translate: actionGeneric({
-        args: { commentId: v.string() },
-        handler: async (ctx, args) => {
-          await options.auth(ctx, {
-            type: "update",
-            commentId: args.commentId,
-          });
-          return await this.translate(ctx, args.commentId);
-        },
-      }),
-    };
-  }
+    baseUrl: string;
+  },
+) {
+  return {
+    list: queryGeneric({
+      args: { targetId: v.string() },
+      handler: async (ctx, args) => {
+        await options.auth(ctx, { type: "read", targetId: args.targetId });
+        return await ctx.runQuery(component.lib.list, {
+          targetId: args.targetId,
+        });
+      },
+    }),
+    add: mutationGeneric({
+      args: { text: v.string(), targetId: v.string() },
+      handler: async (ctx, args) => {
+        const userId = await options.auth(ctx, {
+          type: "create",
+          targetId: args.targetId,
+        });
+        return await ctx.runMutation(component.lib.add, {
+          text: args.text,
+          userId: userId,
+          targetId: args.targetId,
+        });
+      },
+    }),
+    translate: actionGeneric({
+      args: { commentId: v.string() },
+      handler: async (ctx, args) => {
+        await options.auth(ctx, {
+          type: "update",
+          commentId: args.commentId,
+        });
+        return await ctx.runAction(component.lib.translate, {
+          commentId: args.commentId,
+          baseUrl: options.baseUrl,
+        });
+      },
+    }),
+  };
 }
 
 /**
