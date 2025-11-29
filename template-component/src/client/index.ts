@@ -95,6 +95,8 @@ export function registerRoutes(
   http.route({
     path: `${pathPrefix}/last`,
     method: "GET",
+    // Note we use httpActionGeneric here because it will be registered in
+    // the app's http.ts file, which has a different type than our `httpAction`.
     handler: httpActionGeneric(async (ctx, request) => {
       const targetId = new URL(request.url).searchParams.get("targetId");
       if (!targetId) {
