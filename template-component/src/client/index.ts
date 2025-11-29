@@ -125,12 +125,12 @@ export function registerRoutes(
 }
 
 // Convenient types for `ctx` args, that only include the bare minimum.
-type QueryCtx = Pick<GenericQueryCtx<GenericDataModel>, "runQuery">;
-type MutationCtx = Pick<
-  GenericMutationCtx<GenericDataModel>,
-  "runQuery" | "runMutation"
->;
-type ActionCtx = Pick<
-  GenericActionCtx<GenericDataModel>,
-  "runQuery" | "runMutation" | "runAction"
->;
+// type QueryCtx = Pick<GenericQueryCtx<GenericDataModel>, "runQuery">;
+// type MutationCtx = Pick<
+//   GenericMutationCtx<GenericDataModel>,
+//   "runQuery" | "runMutation"
+// >;
+// type ActionCtx = Pick<
+//   GenericActionCtx<GenericDataModel>,
+//   "runQuery" | "runMutation" | "runAction"
+// >;
