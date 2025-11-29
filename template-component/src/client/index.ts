@@ -4,14 +4,7 @@ import {
   mutationGeneric,
   queryGeneric,
 } from "convex/server";
-import type {
-  Auth,
-  GenericActionCtx,
-  GenericDataModel,
-  GenericMutationCtx,
-  GenericQueryCtx,
-  HttpRouter,
-} from "convex/server";
+import type { Auth, HttpRouter } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 

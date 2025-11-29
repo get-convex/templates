@@ -4,7 +4,7 @@ import { anyApi, type ApiFromModules } from "convex/server";
 import { components, initConvexTest } from "./setup.test.js";
 
 export const { add, list } = exposeApi(components.sampleComponent, {
-  auth: async (ctx, operation) => {
+  auth: async (ctx, _operation) => {
     return (await ctx.auth.getUserIdentity())?.subject ?? "anonymous";
   },
   baseUrl: "https://pirate.monkeyness.com",
