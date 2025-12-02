@@ -4,11 +4,31 @@ import {
   mutationGeneric,
   queryGeneric,
 } from "convex/server";
-import type { Auth, HttpRouter } from "convex/server";
+import type {
+  Auth,
+  GenericActionCtx,
+  GenericDataModel,
+  HttpRouter,
+} from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
 
 // See the example/convex/example.ts file for how to use this component.
+
+/**
+ *
+ * @param ctx
+ * @param targetId
+ */
+export function translate(
+  ctx: ActionCtx,
+  component: ComponentApi,
+  commentId: string,
+) {
+  // By wrapping the function call, we can read from environment variables.
+  const baseUrl = getDefaultBaseUrlUsingEnv();
+  return ctx.runAction(component.lib.translate, { commentId, baseUrl });
+}
 
 /**
  * For re-exporting of an API accessible from React clients.
@@ -32,9 +52,10 @@ export function exposeApi(
         | { type: "create"; targetId: string }
         | { type: "update"; commentId: string },
     ) => Promise<string>;
-    baseUrl: string;
+    baseUrl?: string;
   },
 ) {
+  const baseUrl = options.baseUrl ?? getDefaultBaseUrlUsingEnv();
   return {
     list: queryGeneric({
       args: { targetId: v.string() },
@@ -68,7 +89,7 @@ export function exposeApi(
         });
         return await ctx.runAction(component.lib.translate, {
           commentId: args.commentId,
-          baseUrl: options.baseUrl,
+          baseUrl,
         });
       },
     }),
@@ -117,13 +138,18 @@ export function registerRoutes(
   });
 }
 
+function getDefaultBaseUrlUsingEnv() {
+  return process.env.BASE_URL ?? "https://pirate.monkeyness.com";
+}
+
 // Convenient types for `ctx` args, that only include the bare minimum.
+
 // type QueryCtx = Pick<GenericQueryCtx<GenericDataModel>, "runQuery">;
 // type MutationCtx = Pick<
 //   GenericMutationCtx<GenericDataModel>,
 //   "runQuery" | "runMutation"
 // >;
-// type ActionCtx = Pick<
-//   GenericActionCtx<GenericDataModel>,
-//   "runQuery" | "runMutation" | "runAction"
-// >;
+type ActionCtx = Pick<
+  GenericActionCtx<GenericDataModel>,
+  "runQuery" | "runMutation" | "runAction"
+>;
