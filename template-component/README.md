@@ -29,11 +29,7 @@ Modify the schema and index files in src/component/ to define your component.
 Write a client for using this component in src/client/index.ts.
 
 If you won't be adding frontend code (e.g. React components) to this component
-you can delete the following:
-
-- "./react" exports in package.json
-- the "src/react/" directory
-
+you can delete "./react" references in package.json and "src/react/" directory.
 If you will be adding frontend code, add a peer dependency on React in
 package.json.
 
@@ -51,7 +47,10 @@ package.json.
 │   │   ├── convex.config.ts  Name your component here and use other components
 │   │   ├── lib.ts    Define functions here and in new files in this directory
 │   │   └── schema.ts   schema specific to this component
-│   ├── client/index.ts "Thick" client code goes here.
+│   ├── client/
+│   │   └── index.ts    Code that needs to run in the app that uses the
+│   │                   component. Generally the app interacts directly with
+│   │                   the component's exposed API (src/component/*).
 │   └── react/          Code intended to be used on the frontend goes here.
 │       │               Your are free to delete this if this component
 │       │               does not provide code.
@@ -80,22 +79,7 @@ package.json.
 Found a bug? Feature request?
 [File it here](https://github.com/example-org/sample-component/issues).
 
-## Pre-requisite: Convex
-
-You'll need an existing Convex project to use the component. Convex is a hosted
-backend platform, including a database, serverless functions, and a ton more you
-can learn about [here](https://docs.convex.dev/get-started).
-
-Run `npm create convex` or follow any of the
-[quickstarts](https://docs.convex.dev/home) to set one up.
-
 ## Installation
-
-Install the component package:
-
-```sh
-npm install @example/sample-component
-```
 
 Create a `convex.config.ts` file in your app's `convex/` folder and install the
 component by calling `use`:
@@ -115,10 +99,16 @@ export default app;
 
 ```ts
 import { components } from "./_generated/api";
-import { SampleComponent } from "@example/sample-component";
 
-const sampleComponent = new SampleComponent(components.sampleComponent, {
-  ...options,
+export const addComment = mutation({
+  args: { text: v.string(), targetId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.runMutation(components.sampleComponent.lib.add, {
+      text: args.text,
+      targetId: args.targetId,
+      userId: await getAuthUserId(ctx),
+    });
+  },
 });
 ```
 
@@ -130,14 +120,13 @@ You can register HTTP routes for the component to expose HTTP endpoints:
 
 ```ts
 import { httpRouter } from "convex/server";
+import { registerRoutes } from "@example/sample-component";
 import { components } from "./_generated/api";
-import { sampleComponent } from "./example.js";
 
 const http = httpRouter();
 
-// Register HTTP routes for the component
-sampleComponent.registerRoutes(http, {
-  path: "/comments/last", // optional, defaults to "/comments/last"
+registerRoutes(http, components.sampleComponent, {
+  pathPrefix: "/comments",
 });
 
 export default http;
