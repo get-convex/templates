@@ -52,6 +52,9 @@
     "./_generated/component.js": {
       "types": "./dist/component/_generated/component.d.ts"
     },
+    "./_generated/component": {
+      "types": "./dist/component/_generated/component.d.ts"
+    },
     "./convex.config.js": {
       "types": "./dist/component/convex.config.d.ts",
       "default": "./dist/component/convex.config.js"
