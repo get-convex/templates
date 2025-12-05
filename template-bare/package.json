@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
+    "predev": "convex dev --skip-push && convex dashboard",
     "logs": "convex logs",
     "lint": "tsc -p convex && eslint . --report-unused-disable-directives --max-warnings 0"
   },

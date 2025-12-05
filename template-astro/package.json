@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "run-p -r dev:*",
-    "predev": "convex dev --until-success",
+    "predev": "convex dev --skip-push",
     "dev:astro": "astro dev",
     "dev:convex": "convex dev",
     "build": "astro build",
