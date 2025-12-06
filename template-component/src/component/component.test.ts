@@ -14,13 +14,13 @@ describe("component lib", () => {
   test("example lib test", async () => {
     const t = initConvexTest();
     const targetId = "test-subject-1";
-    const commentId = await t.mutation(api.lib.add, {
+    const commentId = await t.mutation(api.mutations.add, {
       text: "Hello, world!",
       userId: "user1",
       targetId,
     });
     expect(commentId).toBeDefined();
-    const comments = await t.query(api.lib.list, { targetId });
+    const comments = await t.query(api.queries.list, { targetId });
     expect(comments).toHaveLength(1);
     expect(comments[0].text).toEqual("Hello, world!");
   });

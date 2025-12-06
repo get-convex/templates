@@ -11,7 +11,7 @@ const BASE_URL = process.env.BASE_URL ?? "https://pirate.monkeyness.com";
 export const addComment = mutation({
   args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.runMutation(components.sampleComponent.lib.add, {
+    return await ctx.runMutation(components.sampleComponent.mutations.add, {
       text: args.text,
       targetId: args.targetId,
       userId: await getAuthUserId(ctx),
@@ -22,7 +22,7 @@ export const addComment = mutation({
 export const listComments = query({
   args: { targetId: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.runQuery(components.sampleComponent.lib.list, {
+    return await ctx.runQuery(components.sampleComponent.queries.list, {
       targetId: args.targetId,
     });
   },
@@ -31,7 +31,7 @@ export const listComments = query({
 export const translateComment = action({
   args: { commentId: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.runAction(components.sampleComponent.lib.translate, {
+    return await ctx.runAction(components.sampleComponent.actions.translate, {
       baseUrl: BASE_URL,
       commentId: args.commentId,
     });

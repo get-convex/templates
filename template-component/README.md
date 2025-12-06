@@ -11,7 +11,8 @@ To create your own component:
    your component
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
-1. Publish to npm with `npm run alpha` or `npm run release`.
+1. See [PUBLISHING.md](./PUBLISHING.md) for instructions on how to publish your
+   component to npm.
 
 To develop your component run a dev process in the example project:
 
@@ -45,8 +46,8 @@ package.json.
 │   ├── component/
 │   │   ├── _generated/ Files here are generated for the component.
 │   │   ├── convex.config.ts  Name your component here and use other components
-│   │   ├── lib.ts    Define functions here and in new files in this directory
-│   │   └── schema.ts   schema specific to this component
+│   │   ├── schema.ts   schema specific to this component
+│   │   └── <...>.ts    Define your functions here.
 │   ├── client/
 │   │   └── index.ts    Code that needs to run in the app that uses the
 │   │                   component. Generally the app interacts directly with
@@ -103,7 +104,7 @@ import { components } from "./_generated/api";
 export const addComment = mutation({
   args: { text: v.string(), targetId: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.runMutation(components.sampleComponent.lib.add, {
+    return await ctx.runMutation(components.sampleComponent.mutations.add, {
       text: args.text,
       targetId: args.targetId,
       userId: await getAuthUserId(ctx),
