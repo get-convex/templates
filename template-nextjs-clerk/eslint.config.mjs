@@ -1,17 +1,15 @@
 import { defineConfig } from "eslint/config";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
 import convexPlugin from "@convex-dev/eslint-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
 export default defineConfig([
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  ...convexPlugin.configs.recommended,
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  ...convexPlugin.configs.recommended
 ]);
