@@ -15,7 +15,7 @@
     "@clerk/clerk-react": "^5.56.0",
     "@clerk/nextjs": "^6.35.2",
     "convex": "^1.29.3",
-    "next": "15.5.8",
+    "next": "15.5.9",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
