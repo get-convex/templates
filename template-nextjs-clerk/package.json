@@ -14,13 +14,13 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.56.0",
     "@clerk/nextjs": "^6.35.2",
-    "convex": "^1.29.3",
-    "next": "15.5.8",
+    "convex": "^1.31.0",
+    "next": "15.5.9",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
   "devDependencies": {
-    "@convex-dev/eslint-plugin": "^1.0.0",
+    "@convex-dev/eslint-plugin": "^1.1.1",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^20.19.25",

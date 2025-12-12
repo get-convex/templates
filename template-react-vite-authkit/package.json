@@ -23,9 +23,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@convex-dev/eslint-plugin": "^1.0.0",
+    "@convex-dev/eslint-plugin": "^1.1.1",
     "@workos-inc/authkit-react": "^0.13.0",
-    "convex": "^1.29.3",
+    "convex": "^1.31.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
