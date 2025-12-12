@@ -77,7 +77,7 @@ regenerate-codegen: install-all
     cd ..
 
     counter=0
-    install_deps() {
+    regenerate() {
         dir="$1"
 
         counter=$((counter+1))
@@ -93,7 +93,7 @@ regenerate-codegen: install-all
 
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$(basename $dir)"
+            regenerate "$(basename $dir)"
         fi
     done
 
