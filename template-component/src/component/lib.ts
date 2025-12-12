@@ -89,26 +89,3 @@ export const translate = action({
     return data;
   },
 });
-
-export const getLastComment = httpActionGeneric(async (ctx, _request) => {
-  const targetId = new URL(_request.url).searchParams.get("targetId");
-  if (!targetId) {
-    return new Response(
-      JSON.stringify({ error: "targetId parameter required" }),
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-  }
-  const comments = await ctx.runQuery(api.lib.list, { targetId });
-  const lastComment = comments[0] ?? null;
-  return new Response(JSON.stringify(lastComment), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-});

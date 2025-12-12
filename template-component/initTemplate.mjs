@@ -231,7 +231,9 @@ async function setup() {
     processedCount++;
   }
 
-  console.log("\nℹ️ Read the README.md to learn about the component template.");
+  console.log(
+    "\nℹ️  Read the README.md to learn about the component template.",
+  );
 }
 
 // Run the setup
