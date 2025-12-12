@@ -88,6 +88,7 @@ regenerate-codegen: install-all
             # convex-playground/templates-regenerate-codegen is an empty project that has
             # mock values for all environment variables used in templates
             (cd "$dir" && npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud)
+            (cd "$dir" && npx convex codegen --init)
         fi
     }
 
