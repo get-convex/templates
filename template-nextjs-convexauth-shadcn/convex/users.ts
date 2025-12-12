@@ -8,7 +8,7 @@ export const viewer = query({
     if (userId === null) {
       throw new Error("Not signed in");
     }
-    const user = await ctx.db.get(userId);
+    const user = await ctx.db.get("users", userId);
     if (user === null) {
       throw new Error("User was deleted");
     }

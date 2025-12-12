@@ -23,7 +23,7 @@ export const listNumbers = query({
       .order("desc")
       .take(args.count);
     const userId = await getAuthUserId(ctx);
-    const user = userId === null ? null : await ctx.db.get(userId);
+    const user = userId === null ? null : await ctx.db.get("users", userId);
     return {
       viewer: user?.email ?? null,
       numbers: numbers.reverse().map((number) => number.value),

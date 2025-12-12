@@ -10,7 +10,7 @@ export const list = query({
     // Add the author's name to each message.
     return Promise.all(
       messages.map(async (message) => {
-        const { name, email } = (await ctx.db.get(message.userId))!;
+        const { name, email } = (await ctx.db.get("users", message.userId))!;
         return { ...message, author: name ?? email! };
       }),
     );

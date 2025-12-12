@@ -1,7 +1,0 @@
-{
-  "name": "templates",
-  "devDependencies": {
-    "bun": "^1.3.2",
-    "bun-types": "^1.3.2"
-  }
-}
