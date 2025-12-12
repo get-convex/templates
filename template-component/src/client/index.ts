@@ -27,7 +27,7 @@ export function translate(
 ) {
   // By wrapping the function call, we can read from environment variables.
   const baseUrl = getDefaultBaseUrlUsingEnv();
-  return ctx.runAction(component.lib.translate, { commentId, baseUrl });
+  return ctx.runAction(component.actions.translate, { commentId, baseUrl });
 }
 
 /**
@@ -61,7 +61,7 @@ export function exposeApi(
       args: { targetId: v.string() },
       handler: async (ctx, args) => {
         await options.auth(ctx, { type: "read", targetId: args.targetId });
-        return await ctx.runQuery(component.lib.list, {
+        return await ctx.runQuery(component.queries.list, {
           targetId: args.targetId,
         });
       },
@@ -73,7 +73,7 @@ export function exposeApi(
           type: "create",
           targetId: args.targetId,
         });
-        return await ctx.runMutation(component.lib.add, {
+        return await ctx.runMutation(component.mutations.add, {
           text: args.text,
           userId: userId,
           targetId: args.targetId,
@@ -87,7 +87,7 @@ export function exposeApi(
           type: "update",
           commentId: args.commentId,
         });
-        return await ctx.runAction(component.lib.translate, {
+        return await ctx.runAction(component.actions.translate, {
           commentId: args.commentId,
           baseUrl,
         });
@@ -124,7 +124,7 @@ export function registerRoutes(
           },
         );
       }
-      const comments = await ctx.runQuery(component.lib.list, {
+      const comments = await ctx.runQuery(component.queries.list, {
         targetId,
       });
       const lastComment = comments[0] ?? null;
