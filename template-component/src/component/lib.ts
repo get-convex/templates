@@ -36,7 +36,7 @@ export const getComment = internalQuery({
   },
   returns: v.union(v.null(), commentValidator),
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.commentId);
+    return await ctx.db.get("comments", args.commentId);
   },
 });
 export const add = mutation({
@@ -61,7 +61,7 @@ export const updateComment = internalMutation({
     text: v.string(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.commentId, { text: args.text });
+    await ctx.db.patch("comments", args.commentId, { text: args.text });
   },
 });
 
