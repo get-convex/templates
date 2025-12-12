@@ -24,7 +24,7 @@
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.0.3",
+    "eslint-config-next": "16.0.10",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.17",
