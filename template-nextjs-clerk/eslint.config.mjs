@@ -6,6 +6,6 @@ import convexPlugin from "@convex-dev/eslint-plugin";
 export default defineConfig([
   ...nextCoreWebVitals,
   ...nextTypescript,
-  ...convexPlugin.configs.recommended
-  globalIgnores(['convex/_generated']),
+  ...convexPlugin.configs.recommended,
+  globalIgnores(["convex/_generated"]),
 ]);
