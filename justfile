@@ -82,13 +82,13 @@ regenerate-codegen: install-all
 
         counter=$((counter+1))
         printf "\n\033[35m[%s/%s] Updating codegen in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
+        # convex-playground/templates-regenerate-codegen is an empty project that has
+        # mock values for all environment variables used in templates
+        (cd "$dir" && npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud)
+        (cd "$dir" && npx convex codegen --init)
         if [ "$dir" = "template-component" ]; then
-            printf "\033[33mWarning: Skipping codegen for %s\033[0m\n" "$dir"
-        else
-            # convex-playground/templates-regenerate-codegen is an empty project that has
-            # mock values for all environment variables used in templates
-            (cd "$dir" && npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud)
-            (cd "$dir" && npx convex codegen --init)
+            # The component codegen uses a separate command
+            (cd "$dir" && npm run build:codegen)
         fi
     }
 
