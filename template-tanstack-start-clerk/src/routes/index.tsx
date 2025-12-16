@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import 'use-sync-external-store'
 
 export const Route = createFileRoute('/')({
   component: Home,
