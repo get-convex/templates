@@ -27,15 +27,28 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
       add: FunctionReference<
         "mutation",
         "internal",
-        { count: number; name: string; shards?: number },
-        null,
+        { targetId: string; text: string; userId: string },
+        string,
         Name
       >;
-      count: FunctionReference<
+      list: FunctionReference<
         "query",
         "internal",
-        { name: string },
-        number,
+        { limit?: number; targetId: string },
+        Array<{
+          _creationTime: number;
+          _id: string;
+          targetId: string;
+          text: string;
+          userId: string;
+        }>,
+        Name
+      >;
+      translate: FunctionReference<
+        "action",
+        "internal",
+        { baseUrl: string; commentId: string },
+        string,
         Name
       >;
     };

@@ -113,7 +113,6 @@ function replaceInFile(filePath, replacements) {
 
     if (hasChanges) {
       writeFileSync(filePath, content, "utf8");
-      console.log(`Updated: ${filePath}`);
     }
   } catch (error) {
     // Skip files that can't be read as text
@@ -125,8 +124,6 @@ function replaceInFile(filePath, replacements) {
 
 // Main setup function
 async function setup() {
-  console.log("🚀 Convex Component Setup\n");
-
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -136,46 +133,51 @@ async function setup() {
   const currentDirName = basename(process.cwd());
 
   // Prompt for component name
-  const componentName = await new Promise((resolve) => {
-    rl.question(
-      `Enter your component name (e.g., "document search" or "RAG") [${currentDirName}]: `,
-      (answer) => {
-        resolve(answer.trim() || currentDirName);
-      },
-    );
-  });
-
-  if (!componentName.trim()) {
-    console.error("❌ Component name is required!");
-    process.exit(1);
+  let componentName = "";
+  while (!componentName.trim()) {
+    componentName = await new Promise((resolve) => {
+      rl.question(
+        `Enter your component name (e.g., "document search" or "RAG") [${currentDirName}]: `,
+        (answer) => {
+          resolve(answer.trim() || currentDirName);
+        },
+      );
+    });
+    if (!componentName.trim()) {
+      console.log("❌ Component name is required! Please try again.\n");
+    }
   }
 
   // Prompt for npm package name
-  const npmPackageName = await new Promise((resolve) => {
-    rl.question(
-      `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
-      (answer) => {
-        resolve(answer.trim());
-      },
-    );
-  });
-  if (!npmPackageName) {
-    console.error("❌ NPM package name is required!");
-    process.exit(1);
+  let npmPackageName = "";
+  while (!npmPackageName.trim()) {
+    npmPackageName = await new Promise((resolve) => {
+      rl.question(
+        `NPM package name (e.g. @your-org/${toKebabCase(componentName)}): `,
+        (answer) => {
+          resolve(answer.trim());
+        },
+      );
+    });
+    if (!npmPackageName.trim()) {
+      console.log("❌ NPM package name is required! Please try again.\n");
+    }
   }
 
   // Prompt for repository name
-  const repoName = await new Promise((resolve) => {
-    rl.question(
-      `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
-      (answer) => {
-        resolve(answer.trim());
-      },
-    );
-  });
-  if (!repoName) {
-    console.error("❌ Repository name is required!");
-    process.exit(1);
+  let repoName = "";
+  while (!repoName.trim()) {
+    repoName = await new Promise((resolve) => {
+      rl.question(
+        `GitHub repository name (e.g. username/${toKebabCase(componentName)}): `,
+        (answer) => {
+          resolve(answer.trim());
+        },
+      );
+    });
+    if (!repoName.trim()) {
+      console.log("❌ Repository name is required! Please try again.\n");
+    }
   }
 
   rl.close();
@@ -190,55 +192,38 @@ async function setup() {
     title: toTitleCase(componentName),
   };
 
-  console.log("\n📝 Component name variations:");
-  console.log(`  PascalCase: ${cases.pascal}`);
-  console.log(`  camelCase: ${cases.camel}`);
-  console.log(`  kebab-case: ${cases.kebab}`);
-  console.log(`  snake_case: ${cases.snake}`);
-  console.log(`  space case: ${cases.space}`);
-  console.log(`  Title Case: ${cases.title}`);
-  console.log(`  NPM package: ${npmPackageName}`);
-  console.log(`  Repository: ${repoName}\n`);
-
   // Define all replacements
   const replacements = [
     // NPM package name
-    ["@example/sharded-counter", npmPackageName],
+    ["@example/sample-component", npmPackageName],
 
     // Repository name
-    ["example-org/sharded-counter", repoName],
+    ["example-org/sample-component", repoName],
 
     // Component name variations
-    ["ShardedCounter", cases.pascal],
-    ["shardedCounter", cases.camel],
-    ["sharded-counter", cases.kebab],
-    ["sharded_counter", cases.snake],
-    ["sharded counter", cases.space],
-    ["Sharded Counter", cases.title],
+    ["SampleComponent", cases.pascal],
+    ["sampleComponent", cases.camel],
+    ["sample-component", cases.kebab],
+    ["sample_component", cases.snake],
+    ["sample component", cases.space],
+    ["Sample Component", cases.title],
   ];
   if (npmPackageName.includes("/")) {
     replacements.push([
-      "@example%2Fsharded-counter",
+      "@example%2Fsample-component",
       npmPackageName.replace("/", "%2F"),
     ]);
   } else {
-    replacements.push(["@example%2Fsharded-counter", npmPackageName]);
+    replacements.push(["@example%2Fsample-component", npmPackageName]);
   }
 
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
   if (packageJson.name !== npmPackageName) {
-    console.log(
-      `Updating package.json name from ${packageJson.name} to ${npmPackageName}...`,
-    );
     packageJson.name = npmPackageName;
     writeFileSync("package.json", JSON.stringify(packageJson, null, 2), "utf8");
   }
 
-  console.log("🔍 Finding files to update...");
   const files = getAllFiles(".");
-  console.log(`Found ${files.length} files to process.\n`);
-
-  console.log("🔄 Processing files...");
   let processedCount = 0;
 
   for (const file of files) {
@@ -246,40 +231,9 @@ async function setup() {
     processedCount++;
   }
 
-  console.log(`\n✅ Setup complete! Processed ${processedCount} files.`);
-  console.log("\n📋 Next steps: check out README.md");
-
-  // Prompt to delete rename.mjs
-  const rl2 = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  const shouldDelete = await new Promise((resolve) => {
-    rl2.question(
-      "\n🗑️  Would you like to delete the rename.mjs file now? (y/N): ",
-      (answer) => {
-        resolve(
-          answer.toLowerCase().trim() === "y" ||
-            answer.toLowerCase().trim() === "yes",
-        );
-      },
-    );
-  });
-
-  rl2.close();
-
-  if (shouldDelete) {
-    try {
-      const { unlinkSync } = await import("fs");
-      unlinkSync("./rename.mjs");
-      console.log("✅ rename.mjs has been deleted.");
-    } catch (error) {
-      console.error("❌ Failed to delete rename.mjs:", error.message);
-    }
-  } else {
-    console.log("📝 rename.mjs kept. You can delete it manually when ready.");
-  }
+  console.log(
+    "\nℹ️  Read the README.md to learn about the component template.",
+  );
 }
 
 // Run the setup

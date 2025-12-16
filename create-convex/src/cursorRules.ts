@@ -1,5 +1,5 @@
 import fs from "fs";
-import { green, gray, red } from "kolorist";
+import { gray, red } from "kolorist";
 import path from "path";
 import { getLatestCursorRules } from "./versionApi";
 
@@ -21,6 +21,4 @@ export async function writeCursorRules(root: string) {
     path.join(root, ".cursor", "rules", CURSOR_RULES_FILE_NAME),
     rules,
   );
-  console.log(`${green("✔")} Added the latest Cursor rules to the project.`);
-  console.log();
 }

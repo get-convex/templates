@@ -9,17 +9,18 @@
  */
 
 import type * as example from "../example.js";
+import type * as http from "../http.js";
 
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import { anyApi, componentsGeneric } from "convex/server";
 
-const fullApi: ApiFromModules<{
+declare const fullApi: ApiFromModules<{
   example: typeof example;
-}> = anyApi as any;
+  http: typeof http;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
@@ -29,10 +30,10 @@ const fullApi: ApiFromModules<{
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-export const api: FilterApi<
+export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">
-> = anyApi as any;
+>;
 
 /**
  * A utility for referencing Convex functions in your app's internal API.
@@ -42,11 +43,11 @@ export const api: FilterApi<
  * const myFunctionReference = internal.myModule.myFunction;
  * ```
  */
-export const internal: FilterApi<
+export declare const internal: FilterApi<
   typeof fullApi,
   FunctionReference<any, "internal">
-> = anyApi as any;
+>;
 
-export const components = componentsGeneric() as unknown as {
-  shardedCounter: import("@example/sharded-counter/_generated/component.js").ComponentApi<"shardedCounter">;
+export declare const components: {
+  sampleComponent: import("@example/sample-component/_generated/component.js").ComponentApi<"sampleComponent">;
 };

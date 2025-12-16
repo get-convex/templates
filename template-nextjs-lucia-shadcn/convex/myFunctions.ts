@@ -24,7 +24,7 @@ export const listNumbers = queryWithAuth({
       .take(args.count);
     return {
       viewer: ctx.session?.user.email,
-      numbers: numbers.toReversed().map((number) => number.value),
+      numbers: numbers.map((number) => number.value),
     };
   },
 });
