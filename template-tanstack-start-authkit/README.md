@@ -27,7 +27,7 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
 3. Configure WorkOS AuthKit:
    - Create a [WorkOS account](https://workos.com/)
    - Get your Client ID and API Key from the WorkOS dashboard
-   - In the WorkOS dashboard, add `http://localhost:3000/api/auth/callback` as a redirect URI
+   - In the WorkOS dashboard, add `http://localhost:3000/callback` as a redirect URI
    - Generate a secure password for cookie encryption (minimum 32 characters)
    - Update your `.env.local` file with these values
 

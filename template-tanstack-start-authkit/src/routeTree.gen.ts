@@ -9,11 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CallbackRouteImport } from './routes/callback'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedServerRouteImport } from './routes/_authenticated/server'
-import { Route as ApiAuthCallbackRouteImport } from './routes/api/auth/callback'
+import { Route as AuthenticatedAuthenticatedRouteImport } from './routes/_authenticated/authenticated'
 
+const CallbackRoute = CallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -23,55 +28,58 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedServerRoute = AuthenticatedServerRouteImport.update({
-  id: '/server',
-  path: '/server',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const ApiAuthCallbackRoute = ApiAuthCallbackRouteImport.update({
-  id: '/api/auth/callback',
-  path: '/api/auth/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedAuthenticatedRoute =
+  AuthenticatedAuthenticatedRouteImport.update({
+    id: '/authenticated',
+    path: '/authenticated',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/server': typeof AuthenticatedServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/callback': typeof CallbackRoute
+  '/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/server': typeof AuthenticatedServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/callback': typeof CallbackRoute
+  '/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_authenticated/server': typeof AuthenticatedServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/callback': typeof CallbackRoute
+  '/_authenticated/authenticated': typeof AuthenticatedAuthenticatedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/server' | '/api/auth/callback'
+  fullPaths: '/' | '/callback' | '/authenticated'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/server' | '/api/auth/callback'
+  to: '/' | '/callback' | '/authenticated'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/_authenticated/server'
-    | '/api/auth/callback'
+    | '/callback'
+    | '/_authenticated/authenticated'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  ApiAuthCallbackRoute: typeof ApiAuthCallbackRoute
+  CallbackRoute: typeof CallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/callback': {
+      id: '/callback'
+      path: '/callback'
+      fullPath: '/callback'
+      preLoaderRoute: typeof CallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -86,29 +94,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/server': {
-      id: '/_authenticated/server'
-      path: '/server'
-      fullPath: '/server'
-      preLoaderRoute: typeof AuthenticatedServerRouteImport
+    '/_authenticated/authenticated': {
+      id: '/_authenticated/authenticated'
+      path: '/authenticated'
+      fullPath: '/authenticated'
+      preLoaderRoute: typeof AuthenticatedAuthenticatedRouteImport
       parentRoute: typeof AuthenticatedRoute
-    }
-    '/api/auth/callback': {
-      id: '/api/auth/callback'
-      path: '/api/auth/callback'
-      fullPath: '/api/auth/callback'
-      preLoaderRoute: typeof ApiAuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedServerRoute: typeof AuthenticatedServerRoute
+  AuthenticatedAuthenticatedRoute: typeof AuthenticatedAuthenticatedRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedServerRoute: AuthenticatedServerRoute,
+  AuthenticatedAuthenticatedRoute: AuthenticatedAuthenticatedRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -118,7 +119,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  ApiAuthCallbackRoute: ApiAuthCallbackRoute,
+  CallbackRoute: CallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

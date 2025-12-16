@@ -4,9 +4,11 @@ This is a Convex component, ready to be published on npm.
 
 To create your own component:
 
-1. Run `node rename.mjs` to rename everything to your component's name.
-1. Write code in src/component for your component.
+1. Write code in src/component for your component. Component-specific tables,
+   queries, mutations, and actions go here.
 1. Write code in src/client for the Class that interfaces with the component.
+   This is the bridge your users will access to get information into and out of
+   your component
 1. Write example usage in example/convex/example.ts.
 1. Delete the text in this readme until `---` and flesh out the README.
 1. Publish to npm with `npm run alpha` or `npm run release`.
@@ -18,22 +20,18 @@ npm i
 npm run dev
 ```
 
-`npm i` will do the install and an initial build.
-`npm run dev` will start a file watcher to re-build the component, as well as
-the example project frontend and backend, which does codegen and installs the
-component.
+`npm i` will do the install and an initial build. `npm run dev` will start a
+file watcher to re-build the component, as well as the example project frontend
+and backend, which does codegen and installs the component.
 
 Modify the schema and index files in src/component/ to define your component.
 
 Write a client for using this component in src/client/index.ts.
 
-If you won't be adding frontend code (e.g. React components) to this
-component you can delete the following:
-
-- "./react" exports in package.json
-- the "src/react/" directory
-
-If you will be adding frontend code, add a peer dependency on React in package.json.
+If you won't be adding frontend code (e.g. React components) to this component
+you can delete "./react" references in package.json and "src/react/" directory.
+If you will be adding frontend code, add a peer dependency on React in
+package.json.
 
 ### Component Directory structure
 
@@ -49,7 +47,10 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 │   │   ├── convex.config.ts  Name your component here and use other components
 │   │   ├── lib.ts    Define functions here and in new files in this directory
 │   │   └── schema.ts   schema specific to this component
-│   ├── client/index.ts "Thick" client code goes here.
+│   ├── client/
+│   │   └── index.ts    Code that needs to run in the app that uses the
+│   │                   component. Generally the app interacts directly with
+│   │                   the component's exposed API (src/component/*).
 │   └── react/          Code intended to be used on the frontend goes here.
 │       │               Your are free to delete this if this component
 │       │               does not provide code.
@@ -65,9 +66,9 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 
 ---
 
-# Convex Sharded Counter Component
+# Convex Sample Component
 
-[![npm version](https://badge.fury.io/js/@example%2Fsharded-counter.svg)](https://badge.fury.io/js/@example%2Fsharded-counter)
+[![npm version](https://badge.fury.io/js/@example%2Fsample-component.svg)](https://badge.fury.io/js/@example%2Fsample-component)
 
 <!-- START: Include on https://convex.dev/components -->
 
@@ -75,33 +76,21 @@ If you will be adding frontend code, add a peer dependency on React in package.j
 - [ ] Why should you use this component?
 - [ ] Links to docs / other resources?
 
-Found a bug? Feature request? [File it here](https://github.com/example-org/sharded-counter/issues).
-
-## Pre-requisite: Convex
-
-You'll need an existing Convex project to use the component.
-Convex is a hosted backend platform, including a database, serverless functions,
-and a ton more you can learn about [here](https://docs.convex.dev/get-started).
-
-Run `npm create convex` or follow any of the [quickstarts](https://docs.convex.dev/home) to set one up.
+Found a bug? Feature request?
+[File it here](https://github.com/example-org/sample-component/issues).
 
 ## Installation
 
-Install the component package:
-
-```sh
-npm install @example/sharded-counter
-```
-
-Create a `convex.config.ts` file in your app's `convex/` folder and install the component by calling `use`:
+Create a `convex.config.ts` file in your app's `convex/` folder and install the
+component by calling `use`:
 
 ```ts
 // convex/convex.config.ts
 import { defineApp } from "convex/server";
-import shardedCounter from "@example/sharded-counter/convex.config";
+import sampleComponent from "@example/sample-component/convex.config.js";
 
 const app = defineApp();
-app.use(shardedCounter);
+app.use(sampleComponent);
 
 export default app;
 ```
@@ -110,14 +99,42 @@ export default app;
 
 ```ts
 import { components } from "./_generated/api";
-import { ShardedCounter } from "@example/sharded-counter";
 
-const shardedCounter = new ShardedCounter(components.shardedCounter, {
-  ...options,
+export const addComment = mutation({
+  args: { text: v.string(), targetId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.runMutation(components.sampleComponent.lib.add, {
+      text: args.text,
+      targetId: args.targetId,
+      userId: await getAuthUserId(ctx),
+    });
+  },
 });
 ```
 
 See more example usage in [example.ts](./example/convex/example.ts).
+
+### HTTP Routes
+
+You can register HTTP routes for the component to expose HTTP endpoints:
+
+```ts
+import { httpRouter } from "convex/server";
+import { registerRoutes } from "@example/sample-component";
+import { components } from "./_generated/api";
+
+const http = httpRouter();
+
+registerRoutes(http, components.sampleComponent, {
+  pathPrefix: "/comments",
+});
+
+export default http;
+```
+
+This will expose a GET endpoint that returns the most recent comment as JSON.
+The endpoint requires a `targetId` query parameter. See
+[http.ts](./example/convex/http.ts) for a complete example.
 
 <!-- END: Include on https://convex.dev/components -->
 

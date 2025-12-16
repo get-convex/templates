@@ -1,72 +1,83 @@
-import { defineConfig } from "eslint/config";
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
-import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
-import convexPlugin from "@convex-dev/eslint-plugin";
+import reactRefresh from "eslint-plugin-react-refresh";
 
-export default defineConfig([
-  { files: ["src/**/*.{js,mjs,cjs,ts,tsx}"] },
+export default [
   {
     ignores: [
       "dist/**",
-      "eslint.config.js",
-      "vitest.config.js",
+      "example/dist/**",
+      "*.config.{js,mjs,cjs,ts,tsx}",
+      "example/**/*.config.{js,mjs,cjs,ts,tsx}",
       "**/_generated/",
-      "node10stubs.mjs",
-      "rename.mjs",
+      "initTemplate.mjs",
     ],
   },
   {
+    files: ["src/**/*.{js,mjs,cjs,ts,tsx}", "example/**/*.{js,mjs,cjs,ts,tsx}"],
     languageOptions: {
-      globals: globals.worker,
       parser: tseslint.parser,
-
       parserOptions: {
-        project: true,
+        project: [
+          "./tsconfig.json",
+          "./example/tsconfig.json",
+          "./example/convex/tsconfig.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  // Convex code - Worker environment
   {
-    files: [
-      "src/react/**/*.{jsx,tsx}",
-      "src/react/**/*.js",
-      "src/react/**/*.ts",
-    ],
-    plugins: { react: reactPlugin, "react-hooks": reactHooks },
-    settings: {
-      react: {
-        version: "detect",
-      },
+    files: ["src/**/*.{ts,tsx}", "example/convex/**/*.{ts,tsx}"],
+    ignores: ["src/react/**"],
+    languageOptions: {
+      globals: globals.worker,
     },
-    rules: {
-      ...reactPlugin.configs["recommended"].rules,
-      "react/jsx-uses-react": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-    },
-  },
-  {
     rules: {
       "@typescript-eslint/no-floating-promises": "error",
-      "@typescript-eslint/consistent-type-imports": [
-        "error",
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
         {
-          prefer: "type-imports",
-          fixStyle: "separate-type-imports",
-          disallowTypeAnnotations: false,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
         },
       ],
-      "eslint-comments/no-unused-disable": "off",
-
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: true,
+        },
+      ],
+    },
+  },
+  // React app code - Browser environment
+  {
+    files: ["src/react/**/*.{ts,tsx}", "example/src/**/*.{ts,tsx}"],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
+      "@typescript-eslint/no-explicit-any": "off",
       "no-unused-vars": "off",
-      // allow (_arg: number) => {} and const _foo = 1;
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -76,5 +87,4 @@ export default defineConfig([
       ],
     },
   },
-  ...convexPlugin.configs.recommended,
-]);
+];

@@ -1,10 +1,8 @@
 /// <reference types="vite/client" />
 
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { convexTest } from "convex-test";
-import schema from "./schema.js";
 import { api } from "./_generated/api.js";
-import { modules } from "./setup.test.js";
+import { initConvexTest } from "./setup.test.js";
 
 describe("component lib", () => {
   beforeEach(async () => {
@@ -13,9 +11,17 @@ describe("component lib", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-  test("add and subtract", async () => {
-    const t = convexTest(schema, modules);
-    await t.mutation(api.lib.add, { name: "beans", count: 10 });
-    expect(await t.query(api.lib.count, { name: "beans" })).toEqual(10);
+  test("example lib test", async () => {
+    const t = initConvexTest();
+    const targetId = "test-subject-1";
+    const commentId = await t.mutation(api.lib.add, {
+      text: "Hello, world!",
+      userId: "user1",
+      targetId,
+    });
+    expect(commentId).toBeDefined();
+    const comments = await t.query(api.lib.list, { targetId });
+    expect(comments).toHaveLength(1);
+    expect(comments[0].text).toEqual("Hello, world!");
   });
 });
