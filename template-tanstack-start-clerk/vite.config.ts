@@ -16,4 +16,8 @@ export default defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  // Workaround for https://github.com/TanStack/router/issues/5738
+  optimizeDeps: {
+    include: ['@clerk/tanstack-react-start', 'cookie'],
+  },
 })
