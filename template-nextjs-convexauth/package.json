@@ -21,7 +21,7 @@
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
     "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^20.19.25",
+    "@types/node": "^24.10.4",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "dotenv": "^17.2.3",
