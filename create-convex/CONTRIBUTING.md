@@ -20,7 +20,7 @@ node <path to here>/create-convex/dist/index.mjs -t react-vite-shadcn
 **Note:** With `npm create` `--` is required:
 
 ```sh
-npm create convex -- -t react-vite-shadcn
+npx create-convex  -t react-vite-shadcn
 ```
 
 # Publish CLI

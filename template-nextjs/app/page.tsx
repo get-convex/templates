@@ -215,9 +215,9 @@ function AuthPopoverButton() {
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const commands = {
-    authkit: "npm create convex@latest -- --template nextjs-authkit",
-    clerk: "npm create convex@latest -- --template nextjs-clerk",
-    convexauth: "npm create convex@latest -- --template nextjs-convexauth",
+    authkit: "npx create-convex@latest  --template nextjs-authkit",
+    clerk: "npx create-convex@latest  --template nextjs-clerk",
+    convexauth: "npx create-convex@latest  --template nextjs-convexauth",
   };
 
   const handleCopy = () => {

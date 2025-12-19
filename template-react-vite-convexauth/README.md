@@ -22,7 +22,7 @@ npm run dev
 If you're reading this README on GitHub and want to use this template, run:
 
 ```
-npm create convex@latest -- -t react-vite-convexauth
+npx create-convex@latest  -t react-vite-convexauth
 ```
 
 For more information on how to configure Convex Auth, check out the [Convex Auth docs](https://labs.convex.dev/auth/).

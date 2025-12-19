@@ -22,7 +22,7 @@ npm run dev
 If you're reading this README on GitHub and want to use this template, run:
 
 ```
-npm create convex@latest -- -t react-vite-convexauth-shadcn
+npx create-convex@latest  -t react-vite-convexauth-shadcn
 ```
 
 ## The app
