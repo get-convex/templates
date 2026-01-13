@@ -38,7 +38,7 @@ describe("Cursor Rules Functions", () => {
   const mockFsModule = (fs as any).default;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
     // Reset console spies
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
