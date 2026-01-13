@@ -64,7 +64,7 @@ This app uses WorkOS AuthKit for authentication. Key features:
 
 - **Redirect-based authentication**: Users are redirected to WorkOS for sign-in/sign-up
 - **Session management**: Automatic token refresh and session handling
-- **Middleware protection**: Routes are protected using Next.js middleware
+- **Route protection**: Routes are protected using Next.js Proxy
 - **Client and server hooks**: `useAuth()` for client components, `withAuth()` for server components
 
 ## Learn more
