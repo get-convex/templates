@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/convex/schemas/convex.schema.json",
+  "authKit": {
+    "dev": {
+      "configure": {
+        "redirectUris": ["http://localhost:5173/callback"],
+        "appHomepageUrl": "http://localhost:5173",
+        "corsOrigins": ["http://localhost:5173"]
+      },
+      "localEnvVars": {
+        "VITE_WORKOS_CLIENT_ID": "${authEnv.WORKOS_CLIENT_ID}",
+        "VITE_WORKOS_REDIRECT_URI": "http://localhost:5173/callback"
+      }
+    },
+    "preview": {
+      "configure": {
+        "redirectUris": ["https://${buildEnv.VERCEL_BRANCH_URL}/callback"],
+        "appHomepageUrl": "https://${buildEnv.VERCEL_PROJECT_PRODUCTION_URL}",
+        "corsOrigins": ["https://${buildEnv.VERCEL_BRANCH_URL}"]
+      }
+    },
+    "prod": {
+      "configure": {
+        "redirectUris": [
+          "https://${buildEnv.VERCEL_PROJECT_PRODUCTION_URL}/callback"
+        ],
+        "appHomepageUrl": "https://${buildEnv.VERCEL_PROJECT_PRODUCTION_URL}",
+        "corsOrigins": ["https://${buildEnv.VERCEL_PROJECT_PRODUCTION_URL}"]
+      }
+    }
+  }
+}
