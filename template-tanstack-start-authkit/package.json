@@ -23,31 +23,31 @@
     "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "@convex-dev/react-query": "^0.0.0-alpha.11",
-    "@tanstack/react-query": "^5.89.0",
-    "@tanstack/react-router": "^1.132.41",
-    "@tanstack/react-router-ssr-query": "^1.132.43",
-    "@tanstack/react-start": "^1.132.43",
-    "@workos/authkit-tanstack-react-start": "0.1.0",
-    "convex": "^1.31.0",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "@convex-dev/react-query": "^0.1.0",
+    "@tanstack/react-query": "^5.90.19",
+    "@tanstack/react-router": "^1.154.5",
+    "@tanstack/react-router-ssr-query": "^1.154.5",
+    "@tanstack/react-start": "^1.154.5",
+    "@workos/authkit-tanstack-react-start": "0.5.0",
+    "convex": "^1.31.5",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
-    "@tailwindcss/postcss": "^4",
-    "@tanstack/eslint-config": "^0.3.2",
-    "@tanstack/react-router-devtools": "^1.132.41",
-    "@types/node": "^24.10.4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.0.4",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tanstack/eslint-config": "^0.3.4",
+    "@tanstack/react-router-devtools": "^1.154.5",
+    "@types/node": "^24.10.9",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
     "dotenv": "^17.2.3",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.5.3",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vite": "^7.1.8",
-    "vite-tsconfig-paths": "^6.0.1"
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^6.0.4"
   }
 }

@@ -24,22 +24,22 @@
   },
   "dependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
-    "@workos-inc/authkit-nextjs": "^2.11.1",
-    "convex": "^1.31.0",
-    "next": "^16.0.10",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "@workos-inc/authkit-nextjs": "^2.13.0",
+    "convex": "^1.31.5",
+    "next": "^16.1.4",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.4",
-    "@types/react": "^19.2.6",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^24.10.9",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.10",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.4",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.17",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }
 }
