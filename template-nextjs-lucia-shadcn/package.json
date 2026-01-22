@@ -48,7 +48,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "convex": "^1.31.0",
+    "convex": "^1.31.6",
     "date-fns": "^2.30.0",
     "eslint": "8.57.1",
     "eslint-config-next": "^14.1.4",
