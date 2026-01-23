@@ -45,7 +45,7 @@
     "prettier": "^3.8.1",
     "prompts": "^2.4.2",
     "unbuild": "^3.6.1",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "degit": "^2.8.4"
