@@ -26,7 +26,7 @@
     "@convex-dev/eslint-plugin": "^1.1.1",
     "@workos-inc/authkit-nextjs": "^2.13.0",
     "convex": "^1.31.6",
-    "next": "^16.1.5",
+    "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
@@ -36,7 +36,7 @@
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.2",
-    "eslint-config-next": "^16.1.5",
+    "eslint-config-next": "^16.1.6",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.1.18",
