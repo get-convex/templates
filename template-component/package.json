@@ -66,7 +66,7 @@
     }
   },
   "peerDependencies": {
-    "convex": "^1.31.6",
+    "convex": "^1.31.7",
     "react": "^18.3.1 || ^19.0.0"
   },
   "devDependencies": {
@@ -79,7 +79,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "chokidar-cli": "3.0.0",
-    "convex": "1.31.6",
+    "convex": "1.31.7",
     "convex-test": "0.0.41",
     "cpy-cli": "^6.0.0",
     "eslint": "9.39.2",
