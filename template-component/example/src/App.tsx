@@ -24,14 +24,14 @@ const blogPosts = [
 ];
 
 function BlogPostComments({ postId }: { postId: string }) {
-  const comments = useQuery(api.example.list, { targetId: postId });
-  const addComment = useMutation(api.example.add);
+  const comments = useQuery(api.example.listComments, { postId });
+  const addComment = useMutation(api.example.addComment);
   const translateComment = useAction(api.example.translateComment);
   const [commentText, setCommentText] = useState("");
 
   const handleAddComment = () => {
     if (commentText.trim()) {
-      addComment({ text: commentText, targetId: postId });
+      addComment({ text: commentText, postId });
       setCommentText("");
     }
   };
