@@ -23,13 +23,13 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@convex-dev/eslint-plugin": "^1.1.1",
     "@workos-inc/authkit-react": "^0.16.0",
     "convex": "^1.31.7",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^1.1.1",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^24.10.9",

@@ -23,7 +23,6 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@convex-dev/eslint-plugin": "^1.1.1",
     "@workos-inc/authkit-nextjs": "^2.13.0",
     "convex": "^1.31.7",
     "next": "^16.1.6",
@@ -31,6 +30,7 @@
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@convex-dev/eslint-plugin": "^1.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.9",
     "@types/react": "^19.2.10",
