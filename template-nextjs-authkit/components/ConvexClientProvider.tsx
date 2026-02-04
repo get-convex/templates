@@ -7,7 +7,7 @@ import { AuthKitProvider, useAuth, useAccessToken } from '@workos-inc/authkit-ne
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [convex] = useState(() => {
-    return new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+    return new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!, {expectAuth: true});
   });
   return (
     <AuthKitProvider>
