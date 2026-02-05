@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ConvexClientProvider } from '@/components/ConvexClientProvider';
+import { withAuth } from '@workos-inc/authkit-nextjs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -21,15 +22,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { accessToken } = await withAuth();
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider accessToken={accessToken}>{children}</ConvexClientProvider>
       </body>
     </html>
   );
