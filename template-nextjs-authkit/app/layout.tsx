@@ -31,7 +31,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ConvexClientProvider accessToken={accessToken}>{children}</ConvexClientProvider>
+        <ConvexClientProvider expectAuth={!!accessToken}>{children}</ConvexClientProvider>
       </body>
     </html>
   );
