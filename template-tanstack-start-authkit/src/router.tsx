@@ -49,17 +49,21 @@ export function getRouter() {
 
 function useAuthFromWorkOS() {
   const { loading, user } = useAuth();
-  const { accessToken, getAccessToken } = useAccessToken();
+  const { getAccessToken, refresh } = useAccessToken();
 
   const fetchAccessToken = useCallback(
     async ({ forceRefreshToken }: { forceRefreshToken: boolean }) => {
-      if (!accessToken || forceRefreshToken) {
-        return (await getAccessToken()) ?? null;
+      if (!user) {
+        return null;
       }
 
-      return accessToken;
+      if (forceRefreshToken) {
+        return (await refresh()) ?? null;
+      }
+
+      return (await getAccessToken()) ?? null;
     },
-    [accessToken, getAccessToken],
+    [user, refresh, getAccessToken],
   );
 
   return useMemo(
