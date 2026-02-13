@@ -71,7 +71,7 @@ describe("Cursor Rules Functions", () => {
       );
     });
 
-    it("should handle fetchAllGitHubReleases failure gracefully", async () => {
+    it("should handle getLatestCursorRules failure gracefully", async () => {
       const error = new Error("API error");
       vi.mocked(version.getLatestCursorRules).mockRejectedValue(error);
 
