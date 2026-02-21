@@ -1,0 +1,1 @@
+export type MicState = "open" | "loading" | "closed";
