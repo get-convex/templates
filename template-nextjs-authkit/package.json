@@ -23,23 +23,23 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@workos-inc/authkit-nextjs": "^2.13.0",
-    "convex": "^1.31.7",
+    "@workos-inc/authkit-nextjs": "^2.15.0",
+    "convex": "^1.32.0",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^1.1.1",
-    "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^24.10.11",
-    "@types/react": "^19.2.13",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.3",
     "eslint-config-next": "^16.1.6",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.1",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   }
 }
