@@ -5,7 +5,7 @@
     "strict": true,
 
     "target": "ESNext",
-    "lib": ["ES2025", "dom", "DOM.Iterable"],
+    "lib": ["ES2023", "dom", "DOM.Iterable"],
     "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
