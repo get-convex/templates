@@ -29,7 +29,7 @@
     "@tanstack/eslint-config": "^0.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "concurrently": "~9.2.1",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.2.1",
