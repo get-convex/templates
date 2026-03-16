@@ -22,7 +22,7 @@ jobs:
 
       # When adding a template, please update the next two steps in this file,
       # as well as `TEMPLATES_IN_REPO` in create-convex/src/index.ts
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: changes
         with:
           filters: |
