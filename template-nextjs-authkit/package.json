@@ -24,13 +24,13 @@
   },
   "dependencies": {
     "@workos-inc/authkit-nextjs": "^2.17.0",
-    "convex": "^1.33.0",
+    "convex": "^1.33.1",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "@convex-dev/eslint-plugin": "^1.1.1",
+    "@convex-dev/eslint-plugin": "^1.2.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
