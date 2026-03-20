@@ -12,26 +12,38 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
 
 ## Get started
 
-1. Clone this repository and install dependencies:
+Clone this repository and install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Set up your environment variables:
+### Automatic setup
+
+Run `npx convex dev` and follow the prompts!
+
+Most of the setup should be automated.
+
+Consult the official [Convex WorkOS AuthKit docs](https://docs.convex.dev/auth/authkit/) for more details.
+
+### Manual setup w/ existing WorkOS team
+
+Set up your environment variables:
+
+1. Get a template `.env.local` file ready:
 
    ```bash
    cp .env.local.example .env.local
    ```
 
-3. Configure WorkOS AuthKit:
-   - Create a [WorkOS account](https://workos.com/)
+2. Configure WorkOS AuthKit:
    - Get your Client ID and API Key from the WorkOS dashboard
    - In the WorkOS dashboard, add `http://localhost:3000/callback` as a redirect URI
    - Generate a secure password for cookie encryption (minimum 32 characters)
+     - If you have `openssl` installed, you can use `openssl rand -base64 24`
    - Update your `.env.local` file with these values
 
-4. Configure Convex:
+3. Configure Convex:
 
    ```bash
    npx convex dev
@@ -40,17 +52,17 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
    This will:
    - Set up your Convex deployment
    - Add your Convex URL to `.env.local`
-   - Open the Convex dashboard
 
-   Then set your WorkOS Client ID in Convex:
+   Then set your WorkOS Client ID and API key in your Convex deployment:
 
    ```bash
    npx convex env set WORKOS_CLIENT_ID <your_client_id>
+   npx convex env set WORKOS_API_KEY <your_api_key>
    ```
 
    This allows Convex to validate JWT tokens from WorkOS
 
-5. Run the development server:
+4. Run the development server:
 
    ```bash
    npm run dev
@@ -58,7 +70,7 @@ After the initial setup (<2 minutes) you'll have a working full-stack app using:
 
    This starts both the Vite dev server (TanStack Start frontend) and Convex backend in parallel
 
-6. Open [http://localhost:3000](http://localhost:3000) to see your app
+5. Open [http://localhost:3000](http://localhost:3000) to see your app
 
 ## WorkOS AuthKit Setup
 
