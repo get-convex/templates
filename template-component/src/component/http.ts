@@ -1,5 +1,4 @@
 import { httpRouter } from "convex/server";
-import { registerRoutes } from "@example/sample-component";
 import { api } from "./_generated/api";
 import { httpAction } from "./_generated/server";
 

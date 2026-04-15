@@ -1,6 +1,5 @@
 import {
   actionGeneric,
-  httpActionGeneric,
   mutationGeneric,
   queryGeneric,
 } from "convex/server";
@@ -8,7 +7,6 @@ import type {
   Auth,
   GenericActionCtx,
   GenericDataModel,
-  HttpRouter,
 } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
@@ -96,47 +94,6 @@ export function exposeApi(
   };
 }
 
-/**
- * Register HTTP routes for the component.
- * This allows you to expose HTTP endpoints for the component.
- * See example/convex/http.ts for an example.
- */
-export function registerRoutes(
-  http: HttpRouter,
-  component: ComponentApi,
-  { pathPrefix = "/comments" }: { pathPrefix?: string } = {},
-) {
-  http.route({
-    path: `${pathPrefix}/last`,
-    method: "GET",
-    // Note we use httpActionGeneric here because it will be registered in
-    // the app's http.ts file, which has a different type than our `httpAction`.
-    handler: httpActionGeneric(async (ctx, request) => {
-      const targetId = new URL(request.url).searchParams.get("targetId");
-      if (!targetId) {
-        return new Response(
-          JSON.stringify({ error: "targetId parameter required" }),
-          {
-            status: 400,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-      }
-      const comments = await ctx.runQuery(component.lib.list, {
-        targetId,
-      });
-      const lastComment = comments[0] ?? null;
-      return new Response(JSON.stringify(lastComment), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    }),
-  });
-}
 
 function getDefaultBaseUrlUsingEnv() {
   return process.env.BASE_URL ?? "https://pirate.monkeyness.com";
