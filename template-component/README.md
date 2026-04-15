@@ -20,9 +20,9 @@ npm i
 npm run dev
 ```
 
-`npm i` will do the install and an initial build. `npm run dev` will start a
-file watcher to re-build the component, as well as the example project frontend
-and backend, which does codegen and installs the component.
+`npm run dev` will start a file watcher to re-build the component, as well as
+the example project backend, which installs and uses the component. Run
+`npm run dev:frontend` to interact with it through a Vite app.
 
 Modify the schema and index files in src/component/ to define your component.
 

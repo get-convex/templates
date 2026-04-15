@@ -1,5 +1,4 @@
 import { v } from "convex/values";
-import { httpActionGeneric } from "convex/server";
 import {
   action,
   internalMutation,
@@ -7,7 +6,7 @@ import {
   mutation,
   query,
 } from "./_generated/server.js";
-import { api, internal } from "./_generated/api.js";
+import { internal } from "./_generated/api.js";
 import schema from "./schema.js";
 
 const commentValidator = schema.tables.comments.validator.extend({
