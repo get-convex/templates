@@ -200,6 +200,12 @@ jobs:
 
           # Boot a local anonymous Convex deployment so codegen can run in CI.
           CONVEX_AGENT_MODE=anonymous npx convex dev --once --codegen disable --typecheck disable
+          # Some templates (e.g. authkit/workos) require these env vars during push/codegen.
+          CONVEX_AGENT_MODE=anonymous npx convex env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
+          CONVEX_AGENT_MODE=anonymous npx convex env set WORKOS_CLIENT_ID client_placeholder
+          CONVEX_AGENT_MODE=anonymous npx convex env set WORKOS_CLIENT_SECRET placeholder
+          CONVEX_AGENT_MODE=anonymous npx convex env set WORKOS_ENVIRONMENT_ID environment_placeholder
+          CONVEX_AGENT_MODE=anonymous npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
           CONVEX_AGENT_MODE=anonymous npx convex dev --codegen disable --typecheck disable --tail-logs disable > /tmp/convex-dev.log 2>&1 &
           convex_dev_pid=$!
           cleanup() {
