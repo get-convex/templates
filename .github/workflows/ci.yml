@@ -193,7 +193,30 @@ jobs:
       - name: Verify Convex codegen is up to date
         working-directory: ${{ matrix.project }}
         run: |
-          CONVEX_AGENT_MODE=anonymous npx convex codegen --init
+          if ! jq -e '.dependencies.convex // .devDependencies.convex // .peerDependencies.convex' package.json > /dev/null; then
+            echo "No Convex dependency found in package.json, skipping codegen check."
+            exit 0
+          fi
+
+          # Boot a local anonymous Convex deployment so codegen can run in CI.
+          CONVEX_AGENT_MODE=anonymous npx convex dev --once --codegen disable --typecheck disable
+          CONVEX_AGENT_MODE=anonymous npx convex dev --codegen disable --typecheck disable --tail-logs disable > /tmp/convex-dev.log 2>&1 &
+          convex_dev_pid=$!
+          cleanup() {
+            if kill -0 "$convex_dev_pid" 2>/dev/null; then
+              kill "$convex_dev_pid" 2>/dev/null || true
+              wait "$convex_dev_pid" 2>/dev/null || true
+            fi
+          }
+          trap cleanup EXIT
+
+          sleep 5
+          if ! CONVEX_AGENT_MODE=anonymous npx convex codegen --init; then
+            echo "Convex codegen command failed."
+            echo "Convex dev logs:"
+            cat /tmp/convex-dev.log || true
+            exit 1
+          fi
 
           untracked_files="$(git ls-files --others --exclude-standard -- .)"
           if ! git diff --quiet -- . || [ -n "$untracked_files" ]; then
