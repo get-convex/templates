@@ -194,7 +194,11 @@ jobs:
         if: matrix.project != 'create-convex'
         working-directory: ${{ matrix.project }}
         run: |
-          npx convex dev --once --configure=new
+          # Bootstrap a local deployment non-interactively in CI.
+          set +e
+          npx convex dev --once --codegen disable --typecheck disable
+          initial_dev_once_status=$?
+          set -e
 
           # Some templates (e.g. authkit/workos) require these env vars during push/codegen.
           npx convex env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
@@ -202,6 +206,22 @@ jobs:
           npx convex env set WORKOS_CLIENT_SECRET placeholder
           npx convex env set WORKOS_ENVIRONMENT_ID environment_placeholder
           npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
+
+          if [ "$initial_dev_once_status" -ne 0 ]; then
+            echo "Initial convex bootstrap failed; continuing after setting placeholder env vars."
+          fi
+
+          npx convex dev --codegen disable --typecheck disable --tail-logs always > /tmp/convex-dev.log 2>&1 &
+          convex_dev_pid=$!
+          cleanup() {
+            if kill -0 "$convex_dev_pid" 2>/dev/null; then
+              kill "$convex_dev_pid" 2>/dev/null || true
+              wait "$convex_dev_pid" 2>/dev/null || true
+            fi
+          }
+          trap cleanup EXIT
+
+          sleep 5
 
           npx convex codegen --init
 
