@@ -189,3 +189,23 @@ jobs:
           else
             echo "No test script found, skipping"
           fi
+
+      - name: Verify Convex codegen is up to date
+        working-directory: ${{ matrix.project }}
+        run: |
+          CONVEX_AGENT_MODE=anonymous npx convex codegen --init
+
+          untracked_files="$(git ls-files --others --exclude-standard -- .)"
+          if ! git diff --quiet -- . || [ -n "$untracked_files" ]; then
+            echo "Convex codegen is out of date in ${{ matrix.project }}."
+            echo "Detected git changes:"
+            git status --short -- .
+            git --no-pager diff -- .
+            if [ -n "$untracked_files" ]; then
+              echo "Untracked files:"
+              printf '%s\n' "$untracked_files"
+            fi
+            echo "**You must run \`just regenerate-codegen\`.**" >> "$GITHUB_STEP_SUMMARY"
+            printf '\033[1mYou must run `just regenerate-codegen`.\033[0m\n'
+            exit 1
+          fi

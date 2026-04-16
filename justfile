@@ -65,36 +65,12 @@ regenerate-codegen: install-all
         fi
     done
 
-    # Set up environment variables in a new dev deployment
-    printf "\n\033[35mSetting up environment variables in a dev deployment\033[0m\n"
-    cd template-bare
-    npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud
-    npx convex env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
-    npx convex env set WORKOS_CLIENT_ID client_placeholder
-    npx convex env set WORKOS_CLIENT_SECRET placeholder
-    npx convex env set WORKOS_ENVIRONMENT_ID environment_placeholder
-    npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
-    cd ..
-
     counter=0
-    regenerate() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Updating codegen in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        # convex-playground/templates-regenerate-codegen is an empty project that has
-        # mock values for all environment variables used in templates
-        (cd "$dir" && test -f ".env.local" || npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud --skip-push)
-        if [ "$dir" = "template-component" ]; then
-            # The component codegen uses a separate command
-            (cd "$dir" && npm run build:codegen)
-        fi
-        (cd "$dir" && npx convex codegen --init)
-    }
-
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            regenerate "$(basename $dir)"
+            counter=$((counter+1))
+            printf "\n\033[35m[%s/%s] Regenerating codegen in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
+            (cd "$dir" && CONVEX_AGENT_MODE=anonymous npx convex codegen --init)
         fi
     done
 
