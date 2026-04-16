@@ -214,7 +214,8 @@ jobs:
           if [ "$initial_dev_once_status" -ne 0 ]; then
             echo "Initial convex dev bootstrap failed; continuing after setting placeholder env vars."
           fi
-          CONVEX_AGENT_MODE=anonymous npx convex dev --codegen disable --typecheck disable --tail-logs disable > /tmp/convex-dev.log 2>&1 &
+          # Keep the local backend alive while codegen runs.
+          CONVEX_AGENT_MODE=anonymous npx convex dev --codegen disable --typecheck disable --tail-logs always > /tmp/convex-dev.log 2>&1 &
           convex_dev_pid=$!
           cleanup() {
             if kill -0 "$convex_dev_pid" 2>/dev/null; then
