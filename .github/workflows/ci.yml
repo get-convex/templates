@@ -196,22 +196,22 @@ jobs:
         run: |
           # Bootstrap a local deployment non-interactively in CI.
           set +e
-          npx convex dev --once --codegen disable --typecheck disable
+          npx convex@latest dev --once --codegen disable --typecheck disable
           initial_dev_once_status=$?
           set -e
 
           # Some templates (e.g. authkit/workos) require these env vars during push/codegen.
-          npx convex env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
-          npx convex env set WORKOS_CLIENT_ID client_placeholder
-          npx convex env set WORKOS_CLIENT_SECRET placeholder
-          npx convex env set WORKOS_ENVIRONMENT_ID environment_placeholder
-          npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
+          npx convex@latest env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
+          npx convex@latest env set WORKOS_CLIENT_ID client_placeholder
+          npx convex@latest env set WORKOS_CLIENT_SECRET placeholder
+          npx convex@latest env set WORKOS_ENVIRONMENT_ID environment_placeholder
+          npx convex@latest env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
 
           if [ "$initial_dev_once_status" -ne 0 ]; then
             echo "Initial convex bootstrap failed; continuing after setting placeholder env vars."
           fi
 
-          npx convex dev --codegen disable --typecheck disable --tail-logs always > /tmp/convex-dev.log 2>&1 &
+          npx convex@latest dev --codegen disable --typecheck disable --tail-logs always > /tmp/convex-dev.log 2>&1 &
           convex_dev_pid=$!
           cleanup() {
             if kill -0 "$convex_dev_pid" 2>/dev/null; then
@@ -223,7 +223,7 @@ jobs:
 
           sleep 5
 
-          npx convex codegen --init
+          npx convex@latest codegen --init
 
           untracked_files="$(git ls-files --others --exclude-standard -- .)"
           if ! git diff --quiet -- . || [ -n "$untracked_files" ]; then
