@@ -1,21 +1,18 @@
-import spawn from "cross-spawn";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { isGitInstalled, printMissingGitMessage } from "./git";
 
-vi.mock("cross-spawn", async () => {
-  const mockSpawn = {
-    sync: vi.fn(),
-  };
+const mockSpawnSync = vi.hoisted(() => vi.fn());
 
+vi.mock("cross-spawn", async () => {
   return {
-    default: mockSpawn,
-    ...mockSpawn,
+    default: {
+      sync: mockSpawnSync,
+    },
+    sync: mockSpawnSync,
   };
 });
 
 describe("git helpers", () => {
-  const mockSpawn = (spawn as any).default;
-
   beforeEach(() => {
     vi.resetAllMocks();
     vi.spyOn(console, "log").mockImplementation(() => {});
@@ -26,22 +23,22 @@ describe("git helpers", () => {
   });
 
   it("returns true when git --version succeeds", () => {
-    mockSpawn.sync.mockReturnValue({ status: 0 });
+    mockSpawnSync.mockReturnValue({ status: 0 });
 
     expect(isGitInstalled()).toBe(true);
-    expect(mockSpawn.sync).toHaveBeenCalledWith("git", ["--version"], {
+    expect(mockSpawnSync).toHaveBeenCalledWith("git", ["--version"], {
       stdio: "ignore",
     });
   });
 
   it("returns false when git is not installed", () => {
-    mockSpawn.sync.mockReturnValue({ error: { code: "ENOENT" }, status: null });
+    mockSpawnSync.mockReturnValue({ error: { code: "ENOENT" }, status: null });
 
     expect(isGitInstalled()).toBe(false);
   });
 
   it("returns false when git exits with non-zero status", () => {
-    mockSpawn.sync.mockReturnValue({ status: 1 });
+    mockSpawnSync.mockReturnValue({ status: 1 });
 
     expect(isGitInstalled()).toBe(false);
   });
