@@ -50,7 +50,7 @@ describe("git helpers", () => {
       expect.stringContaining("Git is required to download project templates."),
     );
     expect(console.log).toHaveBeenCalledWith(
-      expect.stringContaining("https://git-scm.com/downloads"),
+      expect.stringContaining("https://git-scm.com/install/"),
     );
   });
 });

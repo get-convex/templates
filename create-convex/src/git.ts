@@ -18,5 +18,5 @@ export function isGitInstalled(): boolean {
 
 export function printMissingGitMessage() {
   console.log(red("✖ Git is required to download project templates."));
-  console.log("Install Git and try again: https://git-scm.com/downloads");
+  console.log("Install Git and try again: https://git-scm.com/install/");
 }
