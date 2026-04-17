@@ -7,6 +7,7 @@ import path from "path";
 import prompts from "prompts";
 import { PackageManager, detectPackageManager } from "./packageManagers";
 import { writeCursorRules } from "./cursorRules";
+import { isGitInstalled, printMissingGitMessage } from "./git";
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -245,6 +246,11 @@ async function init() {
     console.log(`    ${repo}`);
     console.log("  into:");
     console.log(`    ${root}`);
+    return;
+  }
+
+  if (!isGitInstalled()) {
+    printMissingGitMessage();
     return;
   }
 
