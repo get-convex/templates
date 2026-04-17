@@ -204,18 +204,6 @@ jobs:
           npx convex@latest env set WORKOS_ENVIRONMENT_ID environment_placeholder
           npx convex@latest env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
 
-          npx convex@latest dev --codegen disable --typecheck disable --tail-logs always > /tmp/convex-dev.log 2>&1 &
-          convex_dev_pid=$!
-          cleanup() {
-            if kill -0 "$convex_dev_pid" 2>/dev/null; then
-              kill "$convex_dev_pid" 2>/dev/null || true
-              wait "$convex_dev_pid" 2>/dev/null || true
-            fi
-          }
-          trap cleanup EXIT
-
-          sleep 5
-
           npx convex@latest codegen --init
 
           untracked_files="$(git ls-files --others --exclude-standard -- .)"
