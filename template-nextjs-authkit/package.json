@@ -13,10 +13,7 @@
     "url": "https://github.com/workos/template-convex-nextjs-authkit/issues"
   },
   "scripts": {
-    "dev": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "next dev",
-    "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
+    "dev": "convex dev --start 'next dev'",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -37,7 +34,6 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.3",
-    "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.2",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
