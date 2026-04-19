@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev --start 'vite --open'",
-    "predev": "convex dev --until-success --run-sh 'node setup.mjs --once'",
+    "predev": "node setup.mjs --once",
     "build": "tsc -b && vite build",
     "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "convex dev --start 'next dev --turbopack'",
-    "predev": "convex dev --until-success --run-sh 'node setup.mjs --once'",
+    "predev": "node setup.mjs --once",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
