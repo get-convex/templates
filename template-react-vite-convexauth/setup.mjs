@@ -9,8 +9,10 @@ import fs from "fs";
 import { config as loadEnvFile } from "dotenv";
 import { spawnSync } from "child_process";
 
-// Ensure the backend is set up and .env.local exists.
-spawnSync("npx", ["convex", "init"], { stdio: "inherit" });
+if (!fs.existsSync(".env.local")) {
+  // Something is off, skip the script.
+  process.exit(0);
+}
 
 const config = {};
 loadEnvFile({ path: ".env.local", processEnv: config, quiet: true });

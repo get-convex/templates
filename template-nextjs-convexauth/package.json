@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "convex dev --start 'next dev'",
-    "predev": "node setup.mjs --once",
+    "predev": "convex init && node setup.mjs --once",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ignore-pattern \"convex/_generated/**\""
