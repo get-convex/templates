@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "next dev",
-    "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && convex dashboard",
+    "dev": "convex dev --start 'next dev'",
     "build": "next build",
     "start": "next start",
     "lint": "tsc && next lint"
@@ -66,8 +63,5 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
     "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "npm-run-all2": "^5.0.0"
   }
 }
