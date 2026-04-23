@@ -18,6 +18,11 @@
     {
       "matchDepTypes": ["devDependencies"],
       "automerge": true
+    },
+    {
+      "description": "Bypass minimum release age for Convex packages",
+      "matchPackageNames": ["convex", "@convex-dev/**"],
+      "minimumReleaseAge": null
     }
   ]
 }
