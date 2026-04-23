@@ -15,11 +15,6 @@
   ],
   packageRules: [
     {
-      description: "Bypass minimum release age for Convex packages",
-      matchPackageNames: ["convex", "@convex-dev/**"],
-      minimumReleaseAge: null,
-    },
-    {
       groupName: "Routine updates",
       matchUpdateTypes: ["minor", "patch", "pin", "digest"],
       prConcurrentLimit: 1,
@@ -28,6 +23,11 @@
     {
       matchManagers: ["npm", "bun"],
       rangeStrategy: "bump",
+    },
+    {
+      description: "Bypass minimum release age for Convex packages",
+      matchPackageNames: ["convex", "@convex-dev/**"],
+      minimumReleaseAge: null,
     },
   ],
 }
