@@ -61,7 +61,7 @@ function SignInForm() {
         className="flex flex-col gap-2"
         onSubmit={(e) => {
           e.preventDefault();
-          const formData = new FormData(e.target as HTMLFormElement);
+          const formData = new FormData(e.target);
           formData.set("flow", flow);
           void signIn("password", formData).catch((error) => {
             setError(error.message);
