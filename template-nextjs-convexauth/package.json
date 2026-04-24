@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.91",
-    "convex": "^1.35.1",
-    "next": "16.2.3",
+    "convex": "^1.36.1",
+    "next": "16.2.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -22,10 +22,10 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "dotenv": "^17.4.1",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.3",
-    "prettier": "^3.8.2",
+    "eslint-config-next": "16.2.4",
+    "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   }
