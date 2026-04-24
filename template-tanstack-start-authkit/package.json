@@ -38,7 +38,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "dotenv": "^17.4.2",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
