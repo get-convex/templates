@@ -34,7 +34,7 @@
     "autoprefixer": "^10.5.0",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vite": "^7.3.2",
     "vite-tsconfig-paths": "^6.1.1"
   }
