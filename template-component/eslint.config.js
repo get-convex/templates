@@ -32,7 +32,6 @@ export default [
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  ...convexPlugin.configs.recommended,
   // Convex code - Worker environment
   {
     files: ["src/**/*.{ts,tsx}", "example/convex/**/*.{ts,tsx}"],
@@ -40,7 +39,11 @@ export default [
     languageOptions: {
       globals: globals.worker,
     },
+    plugins: {
+      "@convex-dev": convexPlugin,
+    },
     rules: {
+      ...convexPlugin.configs.recommended[0].rules,
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-explicit-any": "off",
       "no-unused-vars": "off",
