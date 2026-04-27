@@ -11,7 +11,7 @@
     "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "@clerk/tanstack-react-start": "^0.29.10",
+    "@clerk/tanstack-react-start": "^1.1.3",
     "@convex-dev/react-query": "0.1.0",
     "@tanstack/react-query": "^5.99.0",
     "@tanstack/react-router-devtools": "^1.166.13",
