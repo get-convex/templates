@@ -1,4 +1,4 @@
-import { api } from 'convex/_generated/api'
+import { api } from '../../convex/_generated/api'
 import { convexQuery } from '@convex-dev/react-query'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useAction } from 'convex/react'
