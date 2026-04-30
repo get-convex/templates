@@ -30,6 +30,6 @@
     "tailwindcss": "^4.2.2",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.58.2",
-    "vite": "^7.3.2"
+    "vite": "^8.0.9"
   }
 }
