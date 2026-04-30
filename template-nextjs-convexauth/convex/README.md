@@ -3,6 +3,8 @@
 Write your Convex functions here.
 See https://docs.convex.dev/functions for more.
 
+Test
+
 A query function that takes two arguments looks like:
 
 ```ts
