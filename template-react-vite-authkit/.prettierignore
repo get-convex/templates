@@ -1,1 +1,4 @@
 convex/_generated/
+.agents/skills/
+.claude/skills/
+example/convex/_generated/
