@@ -1,2 +1,5 @@
 convex/_generated/
+example/convex/_generated/
 routeTree.gen.ts
+.agents/skills/
+.claude/skills/

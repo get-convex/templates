@@ -7,6 +7,9 @@
 **/public
 **/public
 convex/_generated/
+example/convex/_generated/
 convex/README.md
 pnpm-lock.yaml
 routeTree.gen.ts
+.agents/skills/
+.claude/skills/
