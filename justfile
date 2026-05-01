@@ -98,7 +98,7 @@ regenerate-codegen: install-all
         fi
     done
 
-update-ai-files:
+update-ai-files: install-all
     #!/usr/bin/env sh
     set -e
     total=0
