@@ -98,6 +98,31 @@ regenerate-codegen: install-all
         fi
     done
 
+update-ai-files: install-all
+    #!/usr/bin/env sh
+    set -e
+    total=0
+    for dir in template-*; do
+        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
+            total=$((total+1))
+        fi
+    done
+
+    counter=0
+    update_ai_files() {
+        dir="$1"
+
+        counter=$((counter+1))
+        printf "\n\033[35m[%s/%s] Updating AI files in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
+        (cd "$dir" && npx convex ai-files update)
+    }
+
+    for dir in template-*; do
+        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
+            update_ai_files "$(basename $dir)"
+        fi
+    done
+
 # Commit a template change in the `templates` repo
 commit message:
     git add template-*
