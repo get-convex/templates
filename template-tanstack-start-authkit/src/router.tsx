@@ -34,7 +34,9 @@ export function getRouter() {
     defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
     defaultNotFoundComponent: () => <p>not found</p>,
     context: { queryClient, convexClient: convex, convexQueryClient },
-    Wrap: ({ children }) => (
+    // AuthKitProvider uses TanStack Router hooks internally, so it must
+    // render inside router context. InnerWrap renders inside the router.
+    InnerWrap: ({ children }) => (
       <AuthKitProvider>
         <ConvexProviderWithAuth client={convexQueryClient.convexClient} useAuth={useAuthFromWorkOS}>
           {children}
