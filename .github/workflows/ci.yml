@@ -225,7 +225,12 @@ jobs:
         if: matrix.project != 'create-convex'
         working-directory: ${{ matrix.project }}
         run: |
-          npx convex ai-files update
+          # Remove the AI files first and then reinstall them. A plain `update`
+          # would leave behind any AI files we deleted from the defaults, since
+          # it can't tell them apart from third-party files installed by the
+          # user, so deletions would silently pass CI.
+          npx convex ai-files remove
+          npx convex ai-files install
 
           untracked_files="$(git ls-files --others --exclude-standard -- .)"
           if ! git diff --quiet -- . || [ -n "$untracked_files" ]; then

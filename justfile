@@ -114,7 +114,12 @@ update-ai-files: install-all
 
         counter=$((counter+1))
         printf "\n\033[35m[%s/%s] Updating AI files in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        (cd "$dir" && npx convex ai-files update)
+        # Remove the AI files first and then reinstall them. A plain `update`
+        # would leave behind any AI files we deleted from the defaults, since it
+        # can't tell them apart from third-party files installed by the user.
+        # Removing and reinstalling makes deletions show up as a noop only when
+        # nothing changed, and otherwise surfaces them as a diff in CI.
+        (cd "$dir" && npx convex ai-files remove && npx convex ai-files install)
     }
 
     for dir in template-*; do
