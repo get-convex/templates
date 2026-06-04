@@ -108,8 +108,7 @@ function BlogPostComments({ postId }: { postId: string }) {
 
 function App() {
   // Construct the HTTP endpoint URL
-  // Replace .convex.cloud with .convex.site for HTTP endpoints
-  const convexUrl = import.meta.env.VITE_CONVEX_URL.replace(".cloud", ".site");
+  const convexUrl = import.meta.env.VITE_CONVEX_SITE_URL;
 
   return (
     <>
