@@ -1,12 +1,10 @@
-import {
-  actionGeneric,
-  mutationGeneric,
-  queryGeneric,
-} from "convex/server";
+import { actionGeneric, mutationGeneric, queryGeneric } from "convex/server";
 import type {
   Auth,
   GenericActionCtx,
   GenericDataModel,
+  GenericMutationCtx,
+  GenericQueryCtx,
 } from "convex/server";
 import { v } from "convex/values";
 import type { ComponentApi } from "../component/_generated/component.js";
@@ -94,6 +92,16 @@ export function exposeApi(
   };
 }
 
+export async function list(
+  // When a function only needs runQuery, they can pass in any of these for ctx.
+  ctx: QueryCtx | MutationCtx | ActionCtx,
+  component: ComponentApi,
+  args: { targetId: string },
+) {
+  return await ctx.runQuery(component.lib.list, {
+    targetId: args.targetId,
+  });
+}
 
 function getDefaultBaseUrlUsingEnv() {
   return process.env.BASE_URL ?? "https://pirate.monkeyness.com";
@@ -101,11 +109,11 @@ function getDefaultBaseUrlUsingEnv() {
 
 // Convenient types for `ctx` args, that only include the bare minimum.
 
-// type QueryCtx = Pick<GenericQueryCtx<GenericDataModel>, "runQuery">;
-// type MutationCtx = Pick<
-//   GenericMutationCtx<GenericDataModel>,
-//   "runQuery" | "runMutation"
-// >;
+type QueryCtx = Pick<GenericQueryCtx<GenericDataModel>, "runQuery">;
+type MutationCtx = Pick<
+  GenericMutationCtx<GenericDataModel>,
+  "runQuery" | "runMutation"
+>;
 type ActionCtx = Pick<
   GenericActionCtx<GenericDataModel>,
   "runQuery" | "runMutation" | "runAction"
