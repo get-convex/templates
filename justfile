@@ -113,27 +113,53 @@ update-ai-files: _install-all-clean
     just _run-parallel "$names" "$@"
 
 # Run the given commands in parallel, one per template.
-# In an interactive terminal this uses `mprocs` to run them all at once with a
-# live TUI. Since `mprocs` is a TUI that requires a TTY and never auto-exits,
-# non-interactive environments (e.g. CI) fall back to running the commands
-# sequentially so the recipe still terminates on its own.
+#
+# In an interactive terminal this uses `mprocs` to run them all at once in a
+# live TUI, quitting automatically once every command has finished.
+#
+# `mprocs` is unsuitable for CI: it refuses to start without a TTY, renders a
+# TUI (garbled/panics without a real terminal), and always exits 0 regardless
+# of whether a command failed. So in a non-interactive environment we still run
+# everything in parallel, but as plain background jobs: each command's output is
+# captured and printed as a labelled block, and the recipe exits non-zero if any
+# command failed.
 _run-parallel names *commands:
     #!/usr/bin/env sh
     set -e
     # With `positional-arguments`, `$@` also contains `names` as `$1`; drop it
     # so `$@` holds only the per-template commands.
     shift
+
     if [ -t 1 ]; then
-        npx mprocs@latest --names "{{names}}" "$@"
-    else
-        total=$#
-        counter=0
-        for cmd in "$@"; do
-            counter=$((counter+1))
-            printf "\n\033[35m[%s/%s] \033[36m%s\033[0m\n" "$counter" "$total" "$cmd"
-            sh -c "$cmd"
-        done
+        # `--on-all-finished` (mprocs >= 0.9) makes it quit once every command
+        # has exited, so the recipe returns on its own with no keypress.
+        npx mprocs@latest --on-all-finished '{c: force-quit}' --names "{{names}}" "$@"
+        exit $?
     fi
+
+    # Non-interactive (e.g. CI): run all commands in parallel as background jobs.
+    total=$#
+    tmp="$(mktemp -d)"
+    i=0
+    for cmd in "$@"; do
+        i=$((i+1))
+        # `set +e` so a failing command still records its exit code below
+        # (the parent's `set -e` would otherwise abort this subshell first).
+        ( set +e; sh -c "$cmd" > "$tmp/$i.log" 2>&1; echo "$?" > "$tmp/$i.code" ) &
+    done
+    wait
+
+    status=0
+    i=0
+    for cmd in "$@"; do
+        i=$((i+1))
+        code="$(cat "$tmp/$i.code")"
+        printf "\n\033[35m[%s/%s] \033[36m%s\033[35m (exit %s)\033[0m\n" "$i" "$total" "$cmd" "$code"
+        cat "$tmp/$i.log"
+        [ "$code" = "0" ] || status=1
+    done
+    rm -rf "$tmp"
+    exit "$status"
 
 # Commit a template change in the `templates` repo
 commit message:
