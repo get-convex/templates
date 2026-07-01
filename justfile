@@ -1,12 +1,12 @@
 # To run these commands, read CONTRIBUTING.md
-
 # Affects authoring this Justfile:
 # https://github.com/casey/just?tab=readme-ov-file#positional-arguments
-set positional-arguments
+
+set positional-arguments := true
 
 # List all available commands when running `just` without arguments
 _default:
-  @just --list
+    @just --list
 
 rm-lockfiles:
     #!/usr/bin/env sh
@@ -20,6 +20,7 @@ rm-lockfiles:
 # Since the lockfiles are deleted by the CLI tool when the project is downloaded
 # (in order to allow dependencies to be installed through any package manager),
 # it’s a good idea to regenerate them from time to time to ensure that
+
 # templates still work.
 regenerate-lockfiles:
     just rm-lockfiles
@@ -46,6 +47,40 @@ install-all:
             (cd "$dir" && bun install)
         else
             (cd "$dir" && npm install)
+        fi
+    }
+
+    for dir in template-*; do
+        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
+            install_deps "$(basename $dir)"
+        fi
+    done
+
+# Clean install of npm dependencies in all template folders.
+# Unlike `install-all`, this uses `npm ci` / `bun install --frozen-lockfile`,
+# which never rewrite lockfiles. Used by `update-ai-files` so the resulting
+
+# diff contains only AI files and no lockfile churn.
+_install-all-clean:
+    #!/usr/bin/env sh
+    set -e
+    total=0
+    for dir in template-*; do
+        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
+            total=$((total+1))
+        fi
+    done
+
+    counter=0
+    install_deps() {
+        dir="$1"
+
+        counter=$((counter+1))
+        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
+        if [ "$dir" = "template-astro" ]; then
+            (cd "$dir" && bun install --frozen-lockfile)
+        else
+            (cd "$dir" && npm ci)
         fi
     }
 
@@ -98,7 +133,7 @@ regenerate-codegen: install-all
         fi
     done
 
-update-ai-files: install-all
+update-ai-files: _install-all-clean
     #!/usr/bin/env sh
     set -e
     total=0
