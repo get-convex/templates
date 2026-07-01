@@ -3,7 +3,7 @@ name: Update AI files
 on:
   workflow_dispatch: # manual trigger
   schedule:
-    - cron: "0 0 * * 1" # every Monday 00:00 UTC
+    - cron: "0 20 * * 1-5" # every weekday 20:00 UTC
 
 permissions:
   contents: write
