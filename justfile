@@ -30,31 +30,19 @@ regenerate-lockfiles:
 install-all:
     #!/usr/bin/env sh
     set -e
-    total=0
+    names=""
+    set --
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
+            if [ "$dir" = "template-astro" ]; then
+                set -- "$@" "cd $dir && bun install"
+            else
+                set -- "$@" "cd $dir && npm install"
+            fi
+            names="${names:+$names,}$dir"
         fi
     done
-
-    counter=0
-    install_deps() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        if [ "$dir" = "template-astro" ]; then
-            (cd "$dir" && bun install)
-        else
-            (cd "$dir" && npm install)
-        fi
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$(basename $dir)"
-        fi
-    done
+    just _run-parallel "$names" "$@"
 
 # Clean install of npm dependencies in all template folders.
 # Unlike `install-all`, this uses `npm ci` / `bun install --frozen-lockfile`,
@@ -64,41 +52,23 @@ install-all:
 _install-all-clean:
     #!/usr/bin/env sh
     set -e
-    total=0
+    names=""
+    set --
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
+            if [ "$dir" = "template-astro" ]; then
+                set -- "$@" "cd $dir && bun install --frozen-lockfile"
+            else
+                set -- "$@" "cd $dir && npm ci"
+            fi
+            names="${names:+$names,}$dir"
         fi
     done
-
-    counter=0
-    install_deps() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        if [ "$dir" = "template-astro" ]; then
-            (cd "$dir" && bun install --frozen-lockfile)
-        else
-            (cd "$dir" && npm ci)
-        fi
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$(basename $dir)"
-        fi
-    done
+    just _run-parallel "$names" "$@"
 
 regenerate-codegen: install-all
     #!/usr/bin/env sh
     set -e
-    total=0
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
-        fi
-    done
 
     # Set up environment variables in a new dev deployment
     printf "\n\033[35mSetting up environment variables in a dev deployment\033[0m\n"
@@ -111,52 +81,59 @@ regenerate-codegen: install-all
     npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
     cd ..
 
-    counter=0
-    regenerate() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Updating codegen in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        # convex-playground/templates-regenerate-codegen is an empty project that has
-        # mock values for all environment variables used in templates
-        (cd "$dir" && test -f ".env.local" || npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud --skip-push)
-        if [ "$dir" = "template-component" ]; then
-            # The component codegen uses a separate command
-            (cd "$dir" && npm run build:codegen)
-        fi
-        (cd "$dir" && npx convex codegen --init)
-    }
-
+    names=""
+    set --
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            regenerate "$(basename $dir)"
+            # convex-playground/templates-regenerate-codegen is an empty project that has
+            # mock values for all environment variables used in templates
+            cmd="cd $dir && { test -f .env.local || npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud --skip-push; }"
+            if [ "$dir" = "template-component" ]; then
+                # The component codegen uses a separate command
+                cmd="$cmd && npm run build:codegen"
+            fi
+            cmd="$cmd && npx convex codegen --init"
+            set -- "$@" "$cmd"
+            names="${names:+$names,}$dir"
         fi
     done
+    just _run-parallel "$names" "$@"
 
 update-ai-files: _install-all-clean
     #!/usr/bin/env sh
     set -e
-    total=0
+    names=""
+    set --
     for dir in template-*; do
         if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
+            set -- "$@" "cd $dir && npx convex ai-files update"
+            names="${names:+$names,}$dir"
         fi
     done
+    just _run-parallel "$names" "$@"
 
-    counter=0
-    update_ai_files() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Updating AI files in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        (cd "$dir" && npx convex ai-files update)
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            update_ai_files "$(basename $dir)"
-        fi
-    done
+# Run the given commands in parallel, one per template.
+# In an interactive terminal this uses `mprocs` to run them all at once with a
+# live TUI. Since `mprocs` is a TUI that requires a TTY and never auto-exits,
+# non-interactive environments (e.g. CI) fall back to running the commands
+# sequentially so the recipe still terminates on its own.
+_run-parallel names *commands:
+    #!/usr/bin/env sh
+    set -e
+    # With `positional-arguments`, `$@` also contains `names` as `$1`; drop it
+    # so `$@` holds only the per-template commands.
+    shift
+    if [ -t 1 ]; then
+        npx mprocs@latest --names "{{names}}" "$@"
+    else
+        total=$#
+        counter=0
+        for cmd in "$@"; do
+            counter=$((counter+1))
+            printf "\n\033[35m[%s/%s] \033[36m%s\033[0m\n" "$counter" "$total" "$cmd"
+            sh -c "$cmd"
+        done
+    fi
 
 # Commit a template change in the `templates` repo
 commit message:
