@@ -119,10 +119,9 @@ update-ai-files: _install-all-clean
 #
 # `mprocs` is unsuitable for CI: it refuses to start without a TTY, renders a
 # TUI (garbled/panics without a real terminal), and always exits 0 regardless
-# of whether a command failed. So in a non-interactive environment we still run
-# everything in parallel, but as plain background jobs: each command's output is
-# captured and printed as a labelled block, and the recipe exits non-zero if any
-# command failed.
+# of whether a command failed. So in a non-interactive environment (e.g. CI) we
+# use `concurrently` instead, which runs everything in parallel with prefixed
+# output and exits non-zero if any command failed.
 _run-parallel names *commands:
     #!/usr/bin/env sh
     set -e
@@ -134,32 +133,11 @@ _run-parallel names *commands:
         # `--on-all-finished` (mprocs >= 0.9) makes it quit once every command
         # has exited, so the recipe returns on its own with no keypress.
         npx mprocs@latest --on-all-finished '{c: force-quit}' --names "{{names}}" "$@"
-        exit $?
+    else
+        # `concurrently` waits for every command to finish and, with the default
+        # `--success all`, exits non-zero if any of them failed.
+        npx --yes concurrently@latest --names "{{names}}" "$@"
     fi
-
-    # Non-interactive (e.g. CI): run all commands in parallel as background jobs.
-    total=$#
-    tmp="$(mktemp -d)"
-    i=0
-    for cmd in "$@"; do
-        i=$((i+1))
-        # `set +e` so a failing command still records its exit code below
-        # (the parent's `set -e` would otherwise abort this subshell first).
-        ( set +e; sh -c "$cmd" > "$tmp/$i.log" 2>&1; echo "$?" > "$tmp/$i.code" ) &
-    done
-    wait
-
-    status=0
-    i=0
-    for cmd in "$@"; do
-        i=$((i+1))
-        code="$(cat "$tmp/$i.code")"
-        printf "\n\033[35m[%s/%s] \033[36m%s\033[35m (exit %s)\033[0m\n" "$i" "$total" "$cmd" "$code"
-        cat "$tmp/$i.log"
-        [ "$code" = "0" ] || status=1
-    done
-    rm -rf "$tmp"
-    exit "$status"
 
 # Commit a template change in the `templates` repo
 commit message:
