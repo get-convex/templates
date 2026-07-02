@@ -19,7 +19,7 @@ jobs:
       # default GITHUB_TOKEN do not trigger `pull_request` workflows.
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.TEMPLATES_CI_APP_ID }}
           private-key: ${{ secrets.TEMPLATES_CI_APP_PRIVATE_KEY }}
