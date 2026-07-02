@@ -20,7 +20,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@workos-inc/authkit-nextjs": "^2.17.0",
+    "@workos-inc/authkit-nextjs": "^4.1.3",
     "convex": "^1.36.1",
     "next": "^16.2.4",
     "react": "^19.2.5",
