@@ -142,12 +142,23 @@ export const listWithExtraArg = query({
 
 Note: `paginationOpts` is an object with the following properties:
 
-- `numItems`: the maximum number of documents to return (the validator is `v.number()`)
-- `cursor`: the cursor to use to fetch the next page of documents (the validator is `v.union(v.string(), v.null())`)
-- A query that ends in `.paginate()` returns an object that has the following properties:
-- page (contains an array of documents that you fetches)
-- isDone (a boolean that represents whether or not this is the last page of documents)
-- continueCursor (a string that represents the cursor to use to fetch the next page of documents)
+- `numItems`: the initial page-size target — not a guaranteed maximum under reactive pagination (the validator is `v.number()`)
+- `cursor`: the cursor to use to fetch the next page of documents; required (the validator is `v.union(v.string(), v.null())`)
+- `endCursor` (optional): bounds the page to end at a known cursor
+- `maximumRowsRead` (optional): limits how many rows the query may scan before returning a partial page
+- `maximumBytesRead` (optional): limits how many bytes the query may read before returning a partial page
+- `id` (optional): client-managed pagination metadata accepted by `paginationOptsValidator`
+
+Always validate pagination arguments with `paginationOptsValidator` and pass `args.paginationOpts` unchanged to `.paginate()` — do not reconstruct it field by field, or the optional fields lose their native behavior.
+
+A query that ends in `.paginate()` returns an object that has the following properties:
+
+- `page`: an array of the documents fetched for this page
+- `isDone`: a boolean representing whether this is the last page of documents
+- `continueCursor`: a string cursor to fetch the next page of documents
+- `splitCursor` (optional, string or null) and `pageStatus` (optional, `"SplitRecommended"`, `"SplitRequired"`, or null): present when the page was cut short and should be split
+
+For the return validator of a paginated query, use `paginationResultValidator(itemValidator)` from `convex/server` rather than reproducing this shape by hand.
 
 ## Schema guidelines
 
@@ -241,7 +252,7 @@ q.search("body", "hello hi").eq("channel", "#general"),
 
 ## Query guidelines
 
-- Do NOT use `filter` in queries. Instead, define an index in the schema and use `withIndex` instead.
+- Prefer `.withIndex()` and express every predicate supported by the index in its index range. A subsequent `.filter()` is acceptable for additional predicates that cannot be expressed by that index. Filtering happens after the index scan and does not reduce rows read, so it does not make an otherwise unbounded query scalable.
 - If the user does not explicitly tell you to return all results from a query you should ALWAYS return a bounded collection instead. So that is instead of using `.collect()` you should use `.take()` or paginate on database queries. This prevents future performance issues when tables grow in an unbounded way.
 - Never use `.collect().length` to count rows. Convex has no built-in count operator, so if you need a count that stays efficient at scale, maintain a denormalized counter in a separate document and update it in your mutations.
 - Convex queries do NOT support `.delete()`. If you need to delete all documents matching a query, use `.take(n)` to read them in batches, iterate over each batch calling `ctx.db.delete("tasks", row._id)`, and repeat until no more results are returned.
