@@ -25,8 +25,7 @@
     },
     {
       description:
-        "Update the Convex package in its own group, without the minimum release age delay, and automerge it. " +
-        "Its own group (and prConcurrentLimit) keeps it from being bottlenecked behind the single 'Routine updates' PR slot.",
+        "Update the Convex package in its own group, without the minimum release age delay, and automerge it. Its own group (and prConcurrentLimit) keeps it from being bottlenecked behind the single 'Routine updates' PR slot.",
       groupName: "Convex",
       matchPackageNames: ["convex"],
       minimumReleaseAge: null,
