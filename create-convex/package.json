@@ -48,6 +48,6 @@
     "vitest": "^4.1.4"
   },
   "dependencies": {
-    "degit": "^2.8.4"
+    "degit": "^3.4.7"
   }
 }
