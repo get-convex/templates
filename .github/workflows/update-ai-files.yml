@@ -4,6 +4,9 @@ on:
   workflow_dispatch: # manual trigger
   schedule:
     - cron: "0 20 * * 1-5" # every weekday 20:00 UTC
+  pull_request:
+    paths:
+      - .github/workflows/update-ai-files.yml
 
 permissions:
   contents: write
@@ -19,6 +22,7 @@ jobs:
       # default GITHUB_TOKEN do not trigger `pull_request` workflows.
       - name: Generate GitHub App token
         id: app-token
+        if: github.event_name != 'pull_request'
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.TEMPLATES_CI_APP_ID }}
@@ -26,7 +30,7 @@ jobs:
 
       - uses: actions/checkout@v7
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v6
         with:
@@ -41,6 +45,7 @@ jobs:
 
       - name: Create PR if changed
         id: create-pr
+        if: github.event_name != 'pull_request'
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
