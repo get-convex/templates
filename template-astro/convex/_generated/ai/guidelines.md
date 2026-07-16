@@ -265,11 +265,59 @@ q.search("body", "hello hi").eq("channel", "#general"),
 )
 .take(10);
 
+## Vector search guidelines
+
+- Store embeddings in a field validated with `v.array(v.float64())` and declare a vector index on it in the schema:
+
+```ts
+documents: defineTable({
+  title: v.string(),
+  category: v.string(),
+  embedding: v.array(v.float64()),
+}).vectorIndex("by_embedding", {
+  vectorField: "embedding",
+  dimensions: 1536,
+  filterFields: ["category"],
+}),
+```
+
+- `dimensions` must exactly match the length of the vectors you store and search with.
+- `ctx.vectorSearch` is ONLY available in actions - not in queries or mutations:
+
+```ts
+const results = await ctx.vectorSearch("documents", "by_embedding", {
+  vector: args.embedding,
+  limit: 10,
+  filter: (q) => q.eq("category", args.category),
+});
+```
+
+- The vector search `filter` supports only equality on declared `filterFields` and `q.or(...)` - there is no AND across different fields and no inequality. Push what you can into the vector filter and apply any remaining predicates after hydration.
+- Vector search returns only `{ _id, _score }` pairs ordered by descending similarity score - not full documents. Because actions have no `ctx.db`, hydrate the hits through an internal query, preserve the vector search's order, and pair each score with its document by ID.
+
+## Component guidelines
+
+- Convex components are installable building blocks (e.g. `@convex-dev/aggregate`, `@convex-dev/rate-limiter`) with their own isolated tables and functions. Install the npm package, then mount the component in `convex/convex.config.ts`:
+
+```ts
+import { defineApp } from "convex/server";
+import aggregate from "@convex-dev/aggregate/convex.config.js";
+
+const app = defineApp();
+app.use(aggregate);
+export default app;
+```
+
+- After mounting, the generated `components` object in `convex/_generated/api` references the component (e.g. `components.aggregate`), and is passed to the component's client class.
+- Component functions are not exposed to clients; the app's own queries and mutations wrap them. Perform authentication and authorization in the app functions before calling into a component.
+- Component reads and writes participate in the calling mutation's transaction. When a component mirrors state from one of your tables (like an aggregate over a table), update the component in the SAME mutation as every insert, patch, replace, or delete of that table - never from a separate function - so the two can never drift.
+
 ## Query guidelines
 
 - Prefer `.withIndex()` and express every predicate supported by the index in its index range. A subsequent `.filter()` is acceptable for additional predicates that cannot be expressed by that index. Filtering happens after the index scan and does not reduce rows read, so it does not make an otherwise unbounded query scalable.
+- Do not read the wall clock inside a query. Queries are not rerun merely because time advances, so results derived from `Date.now()` or a zero-argument `new Date()` can become stale, and wall-clock reads also reduce query-cache reuse. Instead, pass the current time in as an argument and let the client refresh it, or materialize time-based state with scheduled mutations that update a flag field. (`Date.now()` is fine in mutations and actions.)
 - If the user does not explicitly tell you to return all results from a query you should ALWAYS return a bounded collection instead. So that is instead of using `.collect()` you should use `.take()` or paginate on database queries. This prevents future performance issues when tables grow in an unbounded way.
-- Never use `.collect().length` to count rows. Convex has no built-in count operator, so if you need a count that stays efficient at scale, maintain a denormalized counter in a separate document and update it in your mutations.
+- Never use `.collect().length` to count rows. Convex has no built-in count operator. For a simple total that stays efficient at scale, maintain a denormalized counter in a separate document and update it in your mutations. When you also need ordered aggregation - ranks, leaderboard positions, counts within a key range, sums - use the `@convex-dev/aggregate` component instead of a hand-rolled counter: it provides O(log n) `count`, `sum`, ranking, and range queries, but its aggregate must be updated in the same mutation as every write to the source table to stay in sync.
 - Convex queries do NOT support `.delete()`. If you need to delete all documents matching a query, use `.take(n)` to read them in batches, iterate over each batch calling `ctx.db.delete("tasks", row._id)`, and repeat until no more results are returned.
 - Convex mutations are transactions with limits on the number of documents read and written. If a mutation needs to process more documents than fit in a single transaction (e.g. bulk deletion on a large table), process a batch with `.take(n)` and then call `ctx.scheduler.runAfter(0, api.myModule.myMutation, args)` to schedule itself to continue. This way each invocation stays within transaction limits.
 - Use `.unique()` to get a single document from a query. This method will throw an error if there are multiple documents that match the query.
