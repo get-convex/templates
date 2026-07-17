@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@workos-inc/authkit-react": "^0.16.1",
-    "convex": "^1.36.1",
+    "convex": "^1.42.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

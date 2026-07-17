@@ -22,6 +22,7 @@ http.route({
 });
 ```
 
+- Treat the result of `await req.json()` as `unknown` - narrow each field (e.g. `typeof` checks) before use, and return a 400 response for bodies that fail validation.
 - HTTP endpoints are always registered at the exact path you specify in the `path` field. For example, if you specify `/api/someRoute`, the endpoint will be registered at `/api/someRoute`.
 
 ### Validators
@@ -42,6 +43,7 @@ export default mutation({
 });
 ```
 
+- `v.object(...)` validators compose: `.pick("a", "b")`, `.omit("c")`, `.partial()`, and `.extend({ d: v.string() })` derive new object validators from an existing one - define a shape once and derive variants instead of duplicating fields. Use an object validator's `.fields` to supply function `args`.
 - Below is an example of a schema with validators that codify a discriminated union type:
 
 ```typescript
@@ -81,7 +83,7 @@ export default defineSchema({
 ### Function registration
 
 - Use `internalQuery`, `internalMutation`, and `internalAction` to register internal functions. These functions are private and aren't part of an app's API. They can only be called by other Convex functions. These functions are always imported from `./_generated/server`.
-- Use `query`, `mutation`, and `action` to register public functions. These functions are part of the public API and are exposed to the public Internet. Do NOT use `query`, `mutation`, or `action` to register sensitive internal functions that should be kept private.
+- Use `query`, `mutation`, and `action` to register public functions. These functions are part of the public API and are exposed to the public Internet. Do NOT use `query`, `mutation`, or `action` to register sensitive internal functions that should be kept private. A function invoked only by your own code - e.g. the mutation an HTTP action calls to commit its effects - is internal, not public.
 - You CANNOT register a function through the `api` or `internal` objects.
 - ALWAYS include argument validators for all Convex functions. This includes all of `query`, `internalQuery`, `mutation`, `internalMutation`, `action`, and `internalAction`.
 
@@ -184,6 +186,8 @@ For the return validator of a paginated query, use `paginationResultValidator(it
 - Index fields must be queried in the same order they are defined. If you want to be able to query by "field1" then "field2" and by "field2" then "field1", you must create separate indexes.
 - Do not store unbounded lists as an array field inside a document (e.g. `v.array(v.object({...}))`). As the array grows it will hit the 1MB document size limit, and every update rewrites the entire document. Instead, create a separate table for the child items with a foreign key back to the parent.
 - Separate high-churn operational data (e.g. heartbeats, online status, typing indicators) from stable profile data. Storing frequently updated fields on a shared document forces every write to contend with reads of the entire document. Instead, create a dedicated table for the high-churn data with a foreign key back to the parent record.
+
+- Adding an index to a large existing table blocks the deploy until backfill completes. Declare it staged - `.index("by_field", { fields: ["field"], staged: true })` - to backfill asynchronously without blocking; a staged index cannot be queried until a later deploy removes the flag.
 
 ## Authentication guidelines
 
@@ -301,7 +305,7 @@ const results = await ctx.vectorSearch("documents", "by_embedding", {
 
 ```ts
 import { defineApp } from "convex/server";
-import aggregate from "@convex-dev/aggregate/convex.config.js";
+import aggregate from "@convex-dev/aggregate/convex.config"; // no .js suffix
 
 const app = defineApp();
 app.use(aggregate);
@@ -311,15 +315,19 @@ export default app;
 - After mounting, the generated `components` object in `convex/_generated/api` references the component (e.g. `components.aggregate`), and is passed to the component's client class.
 - Component functions are not exposed to clients; the app's own queries and mutations wrap them. Perform authentication and authorization in the app functions before calling into a component.
 - Component reads and writes participate in the calling mutation's transaction. When a component mirrors state from one of your tables (like an aggregate over a table), update the component in the SAME mutation as every insert, patch, replace, or delete of that table - never from a separate function - so the two can never drift.
+- To author a LOCAL component: a directory under `convex/` with its own `convex.config.ts` (`export default defineComponent("myName");` - the argument is the name string), its own `schema.ts`, and functions built from that directory's own `_generated/server`. Mount it from the root config (`app.use(myName)` - no options), and reference its functions through the generated `components` object INCLUDING the module segment: a function in `convex/myName/index.ts` is `components.myName.index.myFunction`, never `components.myName.myFunction`.
+- For per-key quotas, cooldowns, or throttling (N operations per period, retry-after), use the `@convex-dev/rate-limiter` component - hand-rolled counter or window-scan implementations admit races under concurrency and lose quota when a mutation fails.
+- Calling a component mutation is a subtransaction: if it throws and the caller catches the error, the component's writes roll back while the calling mutation continues and can still commit its own writes.
+- To pass a function across a component boundary, mint a handle in the app: `const handle = await createFunctionHandle(internal.index.myCallback);` (from `convex/server`; async, takes only the function reference - `getFunctionHandle` and `getFunctionName` are not this API). Send it as a string; the receiver casts it back and invokes it: `await ctx.runMutation(args.handle as FunctionHandle<"mutation">, callbackArgs);`.
 
 ## Query guidelines
 
 - Prefer `.withIndex()` and express every predicate supported by the index in its index range. A subsequent `.filter()` is acceptable for additional predicates that cannot be expressed by that index. Filtering happens after the index scan and does not reduce rows read, so it does not make an otherwise unbounded query scalable.
 - Do not read the wall clock inside a query. Queries are not rerun merely because time advances, so results derived from `Date.now()` or a zero-argument `new Date()` can become stale, and wall-clock reads also reduce query-cache reuse. Instead, pass the current time in as an argument and let the client refresh it, or materialize time-based state with scheduled mutations that update a flag field. (`Date.now()` is fine in mutations and actions.)
 - If the user does not explicitly tell you to return all results from a query you should ALWAYS return a bounded collection instead. So that is instead of using `.collect()` you should use `.take()` or paginate on database queries. This prevents future performance issues when tables grow in an unbounded way.
-- Never use `.collect().length` to count rows. Convex has no built-in count operator. For a simple total that stays efficient at scale, maintain a denormalized counter in a separate document and update it in your mutations. When you also need ordered aggregation - ranks, leaderboard positions, counts within a key range, sums - use the `@convex-dev/aggregate` component instead of a hand-rolled counter: it provides O(log n) `count`, `sum`, ranking, and range queries, but its aggregate must be updated in the same mutation as every write to the source table to stay in sync.
-- Convex queries do NOT support `.delete()`. If you need to delete all documents matching a query, use `.take(n)` to read them in batches, iterate over each batch calling `ctx.db.delete("tasks", row._id)`, and repeat until no more results are returned.
-- Convex mutations are transactions with limits on the number of documents read and written. If a mutation needs to process more documents than fit in a single transaction (e.g. bulk deletion on a large table), process a batch with `.take(n)` and then call `ctx.scheduler.runAfter(0, api.myModule.myMutation, args)` to schedule itself to continue. This way each invocation stays within transaction limits.
+- Never use `.collect().length` to count rows. Convex has no built-in count operator. For a simple total, maintain a denormalized counter document updated in your mutations. When queries need aggregates over many rows - counts, sums, ranks/positions, or offset access, whole-table or within a key range - use the `@convex-dev/aggregate` component (O(log n) reads; keep it updated in the same mutation as every source-table write).
+- Convex queries do NOT support `.delete()`. To delete all documents matching a query, read them (in `.take(n)` batches or via async iteration) and call `ctx.db.delete("tasks", row._id)` on each.
+- Convex mutations are transactions with limits on the documents and bytes they read and write. If a mutation needs to process more documents than fit in a single transaction (e.g. bulk deletion on a large table), process one batch, then `await ctx.scheduler.runAfter(0, internal.myModule.myMutation, args)` to continue in a fresh transaction. A fixed `.take(n)` batch is the default when document sizes are uniform; when they vary, iterate with `for await (const row of query)` and after each write `await ctx.meta.getTransactionMetrics()`, scheduling the continuation and returning as soon as any needed `.remaining` metric (e.g. `metrics.bytesRead.remaining`) falls to a safety reserve.
 - Use `.unique()` to get a single document from a query. This method will throw an error if there are multiple documents that match the query.
 - When using async iteration, don't use `.collect()` or `.take(n)` on the result of a query. Instead, use the `for await (const row of query)` syntax.
 
