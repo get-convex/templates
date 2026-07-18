@@ -31,14 +31,14 @@
     "prepare": "patch-package"
   },
   "engines": {
-    "node": "^18.0.0 || >=20.0.0"
+    "node": ">=20.0.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
-    "@types/degit": "^2.8.6",
     "@types/minimist": "^1.2.5",
     "@types/prompts": "^2.4.9",
     "cross-spawn": "^7.0.6",
+    "degit": "^3.6.1",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
     "patch-package": "^8.0.1",
@@ -46,8 +46,5 @@
     "prompts": "^2.4.2",
     "unbuild": "^3.6.1",
     "vitest": "^4.1.4"
-  },
-  "dependencies": {
-    "degit": "^2.8.4"
   }
 }
