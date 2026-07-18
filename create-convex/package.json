@@ -31,7 +31,7 @@
     "prepare": "patch-package"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.18.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
