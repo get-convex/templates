@@ -10,20 +10,20 @@
   },
   "dependencies": {
     "convex": "^1.42.3",
-    "next": "16.2.4",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "next": "16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^2.0.0",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@types/node": "^24.12.2",
-    "@types/react": "^19.2.14",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.4",
-    "prettier": "^3.8.3",
-    "tailwindcss": "^4.2.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.2.10",
+    "prettier": "^3.9.5",
+    "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   }
 }
