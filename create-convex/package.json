@@ -31,7 +31,7 @@
     "prepare": "patch-package"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.20.2"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.6",
@@ -42,9 +42,9 @@
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
     "patch-package": "^8.0.1",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.5",
     "prompts": "^2.4.2",
     "unbuild": "^3.6.1",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.10"
   }
 }
