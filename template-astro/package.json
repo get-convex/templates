@@ -9,10 +9,10 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/react": "^6.0.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.18.1",
+    "astro": "^7.1.1",
     "convex": "^1.42.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
