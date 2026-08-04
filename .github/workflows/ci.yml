@@ -132,7 +132,7 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
-          cache-dependency-path: "${{ matrix.use_bun == true && format('{0}/bun.lockb', matrix.project) || format('{0}/package-lock.json', matrix.project) }}"
+          cache-dependency-path: "${{ matrix.use_bun == true && format('{0}/bun.lock', matrix.project) || format('{0}/package-lock.json', matrix.project) }}"
 
       - name: Install NPM dependencies
         if: matrix.use_bun != true

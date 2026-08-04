@@ -11,9 +11,9 @@ _default:
 rm-lockfiles:
     #!/usr/bin/env sh
     for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package-lock.json" ]; then
+        if [ -d "$dir" ]; then
             rm -f "$dir/package-lock.json"
-            rm -f "$dir/bun.lockb"
+            rm -f "$dir/bun.lock"
         fi
     done
 
