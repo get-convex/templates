@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "convex dev --start 'vite dev'",
-    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && vite build",
     "start": "vite start",
     "format": "prettier --write .",
@@ -44,7 +44,7 @@
     "dotenv": "^17.4.2",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^8.2.0",
     "vite-tsconfig-paths": "^6.1.1"
   }

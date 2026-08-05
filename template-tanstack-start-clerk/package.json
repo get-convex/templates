@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev --start 'vite dev'",
-    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && vite build",
     "start": "node .output/server/index.mjs",
     "format": "prettier --write .",
@@ -36,7 +36,7 @@
     "autoprefixer": "^10.5.0",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^8.2.0",
     "vite-tsconfig-paths": "^6.1.1"
   }
