@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "convex dev --start 'vite --open'",
     "predev": "convex init && node setup.mjs --once",
-    "build": "tsc -b && vite build",
-    "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js -b",
+    "build": "npm run typecheck && vite build",
+    "lint": "npm run typecheck && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.0.2",
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",

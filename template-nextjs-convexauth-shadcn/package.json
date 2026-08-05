@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "convex dev --start 'next dev --turbopack'",
     "predev": "convex init && node setup.mjs --once",
-    "build": "next build",
+    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "build": "npm run typecheck && next build",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -33,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "^16.3.0",

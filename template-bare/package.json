@@ -6,7 +6,8 @@
     "dev": "convex dev",
     "predev": "convex dev --until-success && convex dashboard",
     "logs": "convex logs",
-    "lint": "tsc -p convex && eslint . --report-unused-disable-directives --max-warnings 0"
+    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js -p convex",
+    "lint": "npm run typecheck && eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "convex": "^1.43.0"
@@ -18,6 +19,7 @@
     "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
     "@typescript-eslint/parser": "^8.62.1",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.6.0",
     "globals": "^17.7.0",
     "typescript": "^6.0.3"

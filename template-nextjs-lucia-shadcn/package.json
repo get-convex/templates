@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "convex dev --start 'next dev'",
-    "build": "next build",
+    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "build": "npm run typecheck && next build",
     "start": "next start",
-    "lint": "tsc && eslint convex --ext ts,tsx --max-warnings 0 && next lint --max-warnings 0"
+    "lint": "npm run typecheck && eslint convex --ext ts,tsx --max-warnings 0 && next lint --max-warnings 0"
   },
   "dependencies": {
     "@convex-dev/convex-lucia-auth": "^0.0.5",
@@ -62,5 +63,8 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
     "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2"
   }
 }

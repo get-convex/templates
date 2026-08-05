@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "convex dev --start 'next dev'",
-    "build": "next build",
+    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "build": "npm run typecheck && next build",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -22,6 +23,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.3.0",
     "prettier": "^3.8.3",
