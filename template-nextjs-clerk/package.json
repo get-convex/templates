@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "convex dev --start 'next dev'",
-    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js --noEmit",
+    "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && next build",
     "start": "next start",
     "lint": "eslint ."

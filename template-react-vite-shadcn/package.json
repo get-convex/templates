@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev --start 'vite --open'",
-    "typecheck": "node ./node_modules/@typescript/native/lib/tsc.js -b",
+    "typecheck": "tsc -b",
     "build": "npm run typecheck && vite build",
     "lint": "npm run typecheck && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -41,7 +41,7 @@
     "postcss": "^8.5.25",
     "prettier": "3.6.2",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.2.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^5.3.1"
   }
 }
