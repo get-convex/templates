@@ -75,6 +75,7 @@
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.0.2",
     "chokidar-cli": "3.0.0",
     "convex": "1.43.0",
@@ -88,7 +89,7 @@
     "prettier": "3.8.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "typescript": "6.0.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "8.58.2",
     "vite": "8.2.0",
     "vitest": "4.1.4"

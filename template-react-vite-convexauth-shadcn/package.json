@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "convex dev --start 'vite --open'",
     "predev": "convex init && node setup.mjs --once",
-    "build": "tsc -b && vite build",
-    "lint": "tsc && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc -b",
+    "build": "npm run typecheck && vite build",
+    "lint": "npm run typecheck && eslint .  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "dotenv": "^17.2.3",
@@ -44,7 +46,7 @@
     "postcss": "^8.5.25",
     "prettier": "3.6.2",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.2.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^5.3.1"
   }
 }
