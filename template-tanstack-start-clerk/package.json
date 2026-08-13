@@ -25,7 +25,7 @@
     "redaxios": "^0.5.1"
   },
   "devDependencies": {
-    "@convex-dev/eslint-plugin": "^2.0.0",
+    "@convex-dev/eslint-plugin": "^3.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/eslint-config": "^0.4.0",
     "@types/node": "^24.13.3",
