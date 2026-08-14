@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "convex": "^1.43.0",
+    "convex": "^1.44.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
