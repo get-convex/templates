@@ -27,7 +27,7 @@
     "@tanstack/react-router-ssr-query": "^1.167.1",
     "@tanstack/react-start": "^1.168.36",
     "@workos/authkit-tanstack-react-start": "0.11.0",
-    "convex": "^1.43.0",
+    "convex": "^1.44.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

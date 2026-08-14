@@ -10,7 +10,7 @@
     "lint": "npm run typecheck && eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "convex": "^1.43.0"
+    "convex": "^1.44.0"
   },
   "devDependencies": {
     "@convex-dev/eslint-plugin": "^4.0.0",
