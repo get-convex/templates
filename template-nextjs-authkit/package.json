@@ -28,7 +28,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@convex-dev/eslint-plugin": "^3.0.0",
+    "@convex-dev/eslint-plugin": "^4.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
