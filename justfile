@@ -31,14 +31,16 @@ regenerate-lockfiles *args:
     just rm-lockfiles "$@"
     just install-all "$@"
 
+# Both of the recipes below install first, and unlike `install-all` they use
+# `npm ci` / `bun install --frozen-lockfile`, which never rewrite the lockfiles.
+# `regenerate-lockfiles` is what updates a lockfile; the diff these two leave
+# behind is the generated code alone.
+
 # Regenerate `convex/_generated/` in all template folders
 regenerate-codegen *args:
     {{ templates }} codegen "$@"
 
-# Unlike `install-all`, the install it runs first uses `npm ci` /
-# `bun install --frozen-lockfile`, which never rewrite the lockfiles, thus the
-# resulting diff contains only AI files and no lockfile churn.
-[doc("Update the Convex AI files in all template folders")]
+# Update the Convex AI files in all template folders
 update-ai-files *args:
     {{ templates }} ai-files "$@"
 

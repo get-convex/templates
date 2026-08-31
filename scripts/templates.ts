@@ -15,8 +15,10 @@
 //   install         Install dependencies (`npm install` / `bun install`)
 //   install-clean   Install from the lockfiles, never rewriting them
 //                   (`npm ci` / `bun install --frozen-lockfile`)
-//   codegen         Install, then regenerate `convex/_generated/`
-//   ai-files        Install from the lockfiles, then run `convex ai-files update`
+//   codegen         Install from the lockfiles, then regenerate
+//                   `convex/_generated/`
+//   ai-files        Install from the lockfiles, then run
+//                   `convex ai-files update`
 //   rm-lockfiles    Delete every lockfile
 //
 // Options:
@@ -309,13 +311,16 @@ const tasks: Record<
 > = {
   install: (template, report) => install(template, report, false),
   "install-clean": (template, report) => install(template, report, true),
+  // Both of these install from the lockfiles, thus the diff they leave behind
+  // is the generated code alone. `regenerate-lockfiles` is what updates a
+  // lockfile; a task that regenerates something else has no business doing it
+  // as a side effect, least of all `ai-files`, whose diff the `Update AI files`
+  // workflow turns into a pull request.
   codegen: async (template, report) => {
-    if (!skipInstall) await install(template, report, false);
+    if (!skipInstall) await install(template, report, true);
     await codegen(template, report);
   },
   "ai-files": async (template, report) => {
-    // A clean install keeps the lockfiles out of the resulting diff, which the
-    // `Update AI files` workflow turns into a pull request.
     if (!skipInstall) await install(template, report, true);
     await convex(template, ["ai-files", "update"], report);
   },

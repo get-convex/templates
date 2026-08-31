@@ -39,6 +39,11 @@ The script itself takes a few more options, which the recipes pass through:
 - `--no-install` skips the install step of `regenerate-codegen` and
   `update-ai-files`
 
+`regenerate-codegen` and `update-ai-files` install with `npm ci` /
+`bun install --frozen-lockfile`, which never rewrite the lockfiles, so the diff
+they leave behind is the generated code alone. Use `just regenerate-lockfiles`
+to update a lockfile on purpose.
+
 It is a Bun script, and it declares its own dependencies in its imports
 (`import { Listr } from "listr2@11.0.1"`), thus there is nothing to install
 before running it and the repo root needs no `package.json`.
