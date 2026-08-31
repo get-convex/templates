@@ -4,159 +4,45 @@
 
 set positional-arguments := true
 
+# Every recipe below that touches the templates delegates to
+# `scripts/templates.ts`, which runs the task in all of them at the same time.
+# `--install=fallback` lets Bun install that script's own dependencies into its
+# global cache, thus the repo root needs no `package.json`.
+templates := "bun --install=fallback scripts/templates.ts"
+
 # List all available commands when running `just` without arguments
 _default:
     @just --list
 
-rm-lockfiles:
-    #!/usr/bin/env sh
-    for dir in template-*; do
-        if [ -d "$dir" ]; then
-            rm -f "$dir/package-lock.json"
-            rm -f "$dir/bun.lock"
-        fi
-    done
+# Install npm dependencies in all template folders (`just install-all nextjs` to filter)
+install-all *args:
+    {{ templates }} install "$@"
 
-# Since the lockfiles are deleted by the CLI tool when the project is downloaded
-# (in order to allow dependencies to be installed through any package manager),
-# it’s a good idea to regenerate them from time to time to ensure that
+# Delete the lockfile of every template
+rm-lockfiles *args:
+    {{ templates }} rm-lockfiles "$@"
 
-# templates still work.
-regenerate-lockfiles:
-    just rm-lockfiles
-    just install-all
+# The lockfiles are deleted by the CLI tool when the project is downloaded (in
+# order to allow dependencies to be installed through any package manager), thus
+# it’s a good idea to regenerate them from time to time to ensure that templates
+# still work.
+[doc("Delete and reinstall every lockfile")]
+regenerate-lockfiles *args:
+    just rm-lockfiles "$@"
+    just install-all "$@"
 
-# Install npm dependencies in all template folders
-install-all:
-    #!/usr/bin/env sh
-    set -e
-    total=0
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
-        fi
-    done
+# Both of the recipes below install first, and unlike `install-all` they use
+# `npm ci` / `bun install --frozen-lockfile`, which never rewrite the lockfiles.
+# `regenerate-lockfiles` is what updates a lockfile; the diff these two leave
+# behind is the generated code alone.
 
-    counter=0
-    install_deps() {
-        dir="$1"
+# Regenerate `convex/_generated/` in all template folders
+regenerate-codegen *args:
+    {{ templates }} codegen "$@"
 
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        if [ "$dir" = "template-astro" ]; then
-            (cd "$dir" && bun install)
-        else
-            (cd "$dir" && npm install)
-        fi
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$(basename $dir)"
-        fi
-    done
-
-# Clean install of npm dependencies in all template folders.
-# Unlike `install-all`, this uses `npm ci` / `bun install --frozen-lockfile`,
-# which never rewrite lockfiles. Used by `update-ai-files` so the resulting
-
-# diff contains only AI files and no lockfile churn.
-_install-all-clean:
-    #!/usr/bin/env sh
-    set -e
-    total=0
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
-        fi
-    done
-
-    counter=0
-    install_deps() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Installing dependencies in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        if [ "$dir" = "template-astro" ]; then
-            (cd "$dir" && bun install --frozen-lockfile)
-        else
-            (cd "$dir" && npm ci)
-        fi
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            install_deps "$(basename $dir)"
-        fi
-    done
-
-regenerate-codegen: install-all
-    #!/usr/bin/env sh
-    set -e
-    total=0
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
-        fi
-    done
-
-    # Set up environment variables in a new dev deployment
-    printf "\n\033[35mSetting up environment variables in a dev deployment\033[0m\n"
-    cd template-bare
-    npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud
-    npx convex env set CLERK_JWT_ISSUER_DOMAIN "https://placeholder.authkit.dev/"
-    npx convex env set WORKOS_CLIENT_ID client_placeholder
-    npx convex env set WORKOS_CLIENT_SECRET placeholder
-    npx convex env set WORKOS_ENVIRONMENT_ID environment_placeholder
-    npx convex env set WORKOS_ENVIRONMENT_API_KEY sk_test_placeholder
-    cd ..
-
-    counter=0
-    regenerate() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Updating codegen in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        # convex-playground/templates-regenerate-codegen is an empty project that has
-        # mock values for all environment variables used in templates
-        (cd "$dir" && test -f ".env.local" || npx convex dev --once --configure existing --team convex-playground --project templates-regenerate-codegen --dev-deployment cloud --skip-push)
-        if [ "$dir" = "template-component" ]; then
-            # The component codegen uses a separate command
-            (cd "$dir" && npm run build:codegen)
-        fi
-        (cd "$dir" && npx convex codegen --init)
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            regenerate "$(basename $dir)"
-        fi
-    done
-
-update-ai-files: _install-all-clean
-    #!/usr/bin/env sh
-    set -e
-    total=0
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            total=$((total+1))
-        fi
-    done
-
-    counter=0
-    update_ai_files() {
-        dir="$1"
-
-        counter=$((counter+1))
-        printf "\n\033[35m[%s/%s] Updating AI files in \033[36m%s\033[35m\033[0m\n" "$counter" "$total" "$dir"
-        (cd "$dir" && npx convex ai-files update)
-    }
-
-    for dir in template-*; do
-        if [ -d "$dir" ] && [ -f "$dir/package.json" ]; then
-            update_ai_files "$(basename $dir)"
-        fi
-    done
+# Update the Convex AI files in all template folders
+update-ai-files *args:
+    {{ templates }} ai-files "$@"
 
 # Commit a template change in the `templates` repo
 commit message:
