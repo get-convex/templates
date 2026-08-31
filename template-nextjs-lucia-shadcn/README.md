@@ -9,5 +9,5 @@ See Convex docs at https://docs.convex.dev/home
 ## Setting up
 
 ```
-npm create convex@latest -t nextjs-lucia-shadcn
+npx create-convex@latest -t nextjs-lucia-shadcn
 ```
