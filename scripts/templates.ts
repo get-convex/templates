@@ -29,9 +29,16 @@
 // contains one of the filters run.
 
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 import { Listr } from "listr2@11.0.1";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -68,23 +75,44 @@ const templates: Template[] = readdirSync(root, { withFileTypes: true })
 
 // --- Command line -----------------------------------------------------------
 
-const argv = process.argv.slice(2);
-
-function optionValue(name: string): string | undefined {
-  const index = argv.indexOf(name);
-  return index === -1 ? undefined : argv[index + 1];
+// `parseArgs` is strict, thus a mistyped option is an error rather than an
+// argument that is silently dropped. It throws, and a stack trace is not what a
+// mistyped option deserves.
+function parseCommandLine() {
+  try {
+    return parseArgs({
+      args: process.argv.slice(2),
+      options: {
+        list: { type: "boolean" },
+        serial: { type: "boolean" },
+        "no-install": { type: "boolean" },
+        concurrency: { type: "string" },
+      },
+      allowPositionals: true,
+    });
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
 }
 
-const list = argv.includes("--list");
-const serial = argv.includes("--serial");
-const skipInstall = argv.includes("--no-install");
-const concurrency = serial ? 1 : Number(optionValue("--concurrency") ?? 8);
+const { values: options, positionals } = parseCommandLine();
 
-const positional = argv.filter((arg, index) => {
-  if (arg.startsWith("--")) return false;
-  return argv[index - 1] !== "--concurrency";
-});
-const [task, ...filters] = positional;
+const list = options.list === true;
+const skipInstall = options["no-install"] === true;
+
+// listr2 takes `concurrent` as it comes: `NaN` compares false against the
+// number of running lanes, thus every lane would queue and none would start.
+const concurrency =
+  options.serial === true ? 1 : Number(options.concurrency ?? 8);
+if (!Number.isInteger(concurrency) || concurrency < 1) {
+  console.error(
+    `--concurrency expects a positive integer, got ${options.concurrency}.`,
+  );
+  process.exit(1);
+}
+
+const [task, ...filters] = positionals;
 
 const selected =
   filters.length === 0
@@ -129,10 +157,8 @@ function run(
   report: Report,
   stdin?: string,
 ): Promise<void> {
-  // The lane title already names the template in a terminal. The verbose
-  // renderer writes the lanes interleaved, thus there the line has to name it.
   const label = `${command} ${args.join(" ")}`;
-  report(interactive ? label : `${template.name}$ ${label}`);
+  report(label);
   return new Promise((resolveRun, rejectRun) => {
     const child = spawn(command, args, {
       cwd: template.dir,
@@ -157,12 +183,41 @@ function run(
   });
 }
 
-const convex = (
+// Every `convex` command boots a local backend and stops it again when it
+// exits, thus each one picks a port of its own. The choice is a check followed
+// by a bind, and between the two the port can be taken — by a lane running
+// alongside, or by the backend of the previous command still shutting down.
+// Both were reproducible with two templates.
+const PORT_RACE = new RegExp(
+  [
+    "did not start on port",
+    "port \\d+ is not available",
+    "different local backend is running",
+  ].join("|"),
+  "i",
+);
+
+// Every command this script runs `convex` for is idempotent, thus a lost race
+// costs a retry and nothing else. Anything that is not a lost race fails on the
+// first attempt, so a real error is not hidden behind a minute of retries.
+async function convex(
   template: Template,
   args: string[],
   report: Report,
   stdin?: string,
-) => run(template, "npx", ["convex", ...args], report, stdin);
+): Promise<void> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await run(template, "npx", ["convex", ...args], report, stdin);
+    } catch (error) {
+      const lostRace =
+        error instanceof CommandFailed && PORT_RACE.test(error.message);
+      if (!lostRace || attempt === 3) throw error;
+      report(`port taken, retrying convex ${args[0]} (attempt ${attempt + 1})`);
+      await new Promise((wake) => setTimeout(wake, 1000 * attempt));
+    }
+  }
+}
 
 // --- Tasks ------------------------------------------------------------------
 
@@ -178,11 +233,12 @@ function install(template: Template, report: Report, clean: boolean) {
   return run(template, "npm", [clean ? "ci" : "install"], report);
 }
 
-// Two `convex init` runs that create a local deployment at the same time both
-// pick the first free port, and the second one then fails with "A different
-// local backend is running on selected port". The lanes thus create their
-// deployments one at a time; only the creation is serialized, because the
-// commands that follow use the port that the deployment already holds.
+// A deployment that does not exist yet has no port to suggest, thus every
+// concurrent `convex init` walks up from the same one and all but the first
+// lose. Creation is therefore serialized. It is the only step worth serializing:
+// it happens once per workspace, and afterwards each template suggests the port
+// its own deployment already used, which lanes do not contend over. The
+// collisions that are left are the ones `convex` retries above.
 let deploymentSetup: Promise<unknown> = Promise.resolve();
 function serializeSetup<T>(work: () => Promise<T>): Promise<T> {
   const next = deploymentSetup.then(work, work);
@@ -202,15 +258,21 @@ function selectedDeployment(template: Template): string | undefined {
 // no login and no cloud project, which is both what lets any contributor run
 // this and what `ci.yml` verifies the generated code against.
 //
-// `.env.local` is gitignored and this task is what writes it, thus a stale one
-// — an older cloud deployment from a previous version of this script — is
-// replaced rather than reused.
+// A stale selection — an older cloud deployment from a previous version of this
+// script — is replaced rather than reused. Only the `CONVEX_DEPLOYMENT` line
+// goes: `.env.local` is gitignored, thus it is also where a contributor keeps
+// the real keys they run the template with.
 async function ensureLocalDeployment(template: Template, report: Report) {
   const deployment = selectedDeployment(template);
   if (deployment?.startsWith("anonymous:")) return;
   if (deployment !== undefined) {
     report(`replacing deployment ${deployment} with a local one`);
-    rmSync(join(template.dir, ".env.local"));
+    const path = join(template.dir, ".env.local");
+    const kept = readFileSync(path, "utf8").replace(
+      /^[ \t]*CONVEX_DEPLOYMENT=.*(?:\r?\n|$)/m,
+      "",
+    );
+    writeFileSync(path, kept);
   }
   // Not a TTY, thus `convex init` creates `anonymous-<template>` instead of
   // asking which deployment to use.
@@ -274,8 +336,11 @@ const listr = new Listr(
   selected.map((template) => ({
     title: template.name,
     task: (_context: unknown, listrTask: { output: string }) =>
+      // The lane title already names the template in a terminal. The verbose
+      // renderer writes the lanes interleaved and drops the title, thus there
+      // every line has to name the template itself.
       runTask(template, (line) => {
-        listrTask.output = line;
+        listrTask.output = interactive ? line : `${template.name}$ ${line}`;
       }),
   })),
   {

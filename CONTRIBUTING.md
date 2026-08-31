@@ -51,10 +51,11 @@ each template an anonymous local deployment of its own, the same kind that CI
 uses, by running `npx convex init` in it. No login and no cloud project are
 involved, and the templates cannot race each other over a shared deployment.
 
-The deployment is recorded in each template's gitignored `.env.local`, which the
-recipe owns: a `.env.local` that selects anything other than an anonymous
-deployment (for instance a cloud deployment written by an older version of this
-tooling) is replaced.
+The deployment is recorded in each template's gitignored `.env.local`. A
+`CONVEX_DEPLOYMENT` that selects anything other than an anonymous deployment
+(for instance a cloud deployment written by an older version of this tooling) is
+replaced. Only that line is rewritten, so anything else you keep in the file
+stays.
 
 ## All templates to update
 
