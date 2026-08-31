@@ -22,6 +22,40 @@ npm install -g bun
 
 Run `just` anywhere from this project to see the list of available commands.
 
+Every recipe that touches the templates delegates to `scripts/templates.ts`,
+which runs the task in all of them at the same time and shows one live line per
+template. Each recipe takes optional filters — substrings of a template name —
+so that a single template can be worked on:
+
+```
+just regenerate-codegen nextjs-clerk
+```
+
+The script itself takes a few more options, which the recipes pass through:
+
+- `--list` prints the templates the filters select, then exits
+- `--serial` runs one template at a time
+- `--concurrency <n>` runs at most n templates at a time (8 by default)
+- `--no-install` skips the install step of `regenerate-codegen` and
+  `update-ai-files`
+
+It is a Bun script, and it declares its own dependencies in its imports
+(`import { Listr } from "listr2@11.0.1"`), thus there is nothing to install
+before running it and the repo root needs no `package.json`.
+
+### Convex deployments
+
+`just regenerate-codegen` needs a deployment for each template, because
+`convex codegen` pushes the functions to one in order to analyze them. It gives
+each template an anonymous local deployment of its own, the same kind that CI
+uses, by running `npx convex init` in it. No login and no cloud project are
+involved, and the templates cannot race each other over a shared deployment.
+
+The deployment is recorded in each template's gitignored `.env.local`, which the
+recipe owns: a `.env.local` that selects anything other than an anonymous
+deployment (for instance a cloud deployment written by an older version of this
+tooling) is replaced.
+
 ## All templates to update
 
 Last updated: 2025-03-24
