@@ -92,7 +92,7 @@
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "8.66.0",
     "vite": "8.2.0",
-    "vitest": "4.1.10"
+    "vitest": "4.1.11"
   },
   "types": "./dist/client/index.d.ts",
   "module": "./dist/client/index.js"
