@@ -8,6 +8,7 @@ export default {
       // and configure CLERK_JWT_ISSUER_DOMAIN on the Convex Dashboard
       // See https://docs.convex.dev/auth/clerk#configuring-dev-and-prod-instances
       // Should look similar to 'https://main-swine-30.clerk.accounts.dev'.
+      // eslint-disable-next-line @convex-dev/no-process-env
       domain: process.env.CLERK_JWT_ISSUER_DOMAIN!,
       applicationID: 'convex',
     },
