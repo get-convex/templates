@@ -15,5 +15,5 @@ See Convex docs at https://docs.convex.dev/home
 ## Setting up
 
 ```
-npm create convex@latest -t bare
+npx create-convex@latest -t bare
 ```
