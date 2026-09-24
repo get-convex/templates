@@ -20,7 +20,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro": "^1.0.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3"
   }
