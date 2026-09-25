@@ -45,7 +45,10 @@ package.json.
 │   ├── component/
 │   │   ├── _generated/ Files here are generated for the component.
 │   │   ├── convex.config.ts  Name your component here and use other components
-│   │   ├── lib.ts    Define functions here and in new files in this directory
+│   │   ├── lib.ts    Define functions here. If you add more modules, name
+│   │   │             each after the object it deals with (e.g. jobs.ts,
+│   │   │             messages.ts): apps call them as
+│   │   │             components.<name>.<module>.<fn>.
 │   │   └── schema.ts   schema specific to this component
 │   ├── client/
 │   │   └── index.ts    Code that needs to run in the app that uses the
