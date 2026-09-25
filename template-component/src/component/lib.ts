@@ -1,3 +1,7 @@
+// Apps call these functions as `components.<yourComponent>.lib.<fn>`. If your
+// component grows beyond one module, name each module after the object it
+// deals with (e.g. `jobs.ts`, `messages.ts`) so its API reads as
+// `components.<yourComponent>.jobs.enqueue`.
 import { v } from "convex/values";
 import {
   action,
