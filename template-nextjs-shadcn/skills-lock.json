@@ -113,7 +113,7 @@
       "source": "get-convex/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/convex-improve-convex-plugin/SKILL.md",
-      "computedHash": "35904eaf82eb083e859cfaf6ded5b713a0f1e7104d8b5a560d807994a50416ad"
+      "computedHash": "5933b9b20f3ea687418a5761f2905fccf669402f41d676c104a8804d696231b3"
     },
     "convex-insights": {
       "source": "get-convex/agent-skills",
