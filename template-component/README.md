@@ -28,6 +28,8 @@ Modify the schema and index files in src/component/ to define your component.
 
 Write a client for using this component in src/client/index.ts.
 
+Run `npm test` to test the component, its client, and the example application.
+
 If you won't be adding frontend code (e.g. React components) to this component
 you can delete "./react" references in package.json and "src/react/" directory.
 If you will be adding frontend code, add a peer dependency on React in
