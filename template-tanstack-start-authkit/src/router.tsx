@@ -31,7 +31,7 @@ export function getRouter() {
     defaultPreload: 'intent',
     scrollRestoration: true,
     defaultPreloadStaleTime: 0, // Let React Query handle all caching
-    defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
+    defaultErrorComponent: (err) => <p>{err.error instanceof Error ? err.error.stack : String(err.error)}</p>,
     defaultNotFoundComponent: () => <p>not found</p>,
     context: { queryClient, convexClient: convex, convexQueryClient },
     // AuthKitProvider uses TanStack Router hooks internally, so it must
