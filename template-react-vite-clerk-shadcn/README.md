@@ -10,7 +10,7 @@ See Convex docs at https://docs.convex.dev/home
 ## Setting up
 
 ```
-npm create convex@latest -t react-vite-clerk-shadcn
+npx create-convex@latest -t react-vite-clerk-shadcn
 ```
 
 Then:
