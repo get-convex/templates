@@ -12,14 +12,16 @@ describe("example", () => {
   });
 
   test("addComment and listComments", async () => {
-    const t = initConvexTest();
-    const targetId = "test-subject-1";
+    const t = initConvexTest().withIdentity({
+      subject: "user1",
+    });
+    const postId = "test-subject-1";
     const commentId = await t.mutation(api.example.addComment, {
       text: "My comment",
-      targetId,
+      postId,
     });
     expect(commentId).toBeDefined();
-    const comments = await t.query(api.example.listComments, { targetId });
+    const comments = await t.query(api.example.listComments, { postId });
     expect(comments).toHaveLength(1);
     expect(comments[0].text).toBe("My comment");
   });
